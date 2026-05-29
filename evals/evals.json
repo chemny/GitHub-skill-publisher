@@ -1,0 +1,29 @@
+{
+  "skill_name": "GitHub-skill-publisher",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "把这个本地 skill 整理成一个新的 GitHub 仓库，单 skill 单仓库结构。",
+      "expected_output": "Uses the single-skill repository layout with SKILL.md at root and does not create a skills/<name> wrapper.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "帮我优化这个 skill 的 README，先讨论，不要同步到 GitHub。",
+      "expected_output": "Drafts or discusses bilingual README improvements and does not commit or push.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "检查这个 skill 能不能公开发布到 GitHub。",
+      "expected_output": "Runs publish, Codex/Claude Code/OpenClaw compatibility, portability, and security checklist reasoning before recommending publication.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "帮我给这个 skill 的 README 补充安装说明。",
+      "expected_output": "Adds a complete install section with single-skill repository shape, git clone, placement in skills directory, fresh-session note, verification prompt, and update instructions.",
+      "files": []
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+# Publish Checklist
+
+Run this checklist before publishing a skill repository.
+
+## Repository
+
+- [ ] Repository root is the skill root.
+- [ ] `SKILL.md` is at the root.
+- [ ] `README.md` exists.
+- [ ] `README.zh.md` exists.
+- [ ] `LICENSE` exists.
+- [ ] License is MIT unless the user requested another license.
+- [ ] `.gitignore` exists if generated files may appear.
+- [ ] Folder names are portable.
+
+## Skill metadata
+
+- [ ] `SKILL.md` has valid YAML frontmatter.
+- [ ] Frontmatter includes `name`.
+- [ ] Frontmatter includes a strong `description`.
+- [ ] Description contains trigger phrases and task contexts.
+- [ ] No private `local_updated_at` or machine-specific metadata is required for release.
+
+## README
+
+- [ ] Explains why the skill exists.
+- [ ] Explains who should use or install it.
+- [ ] Names target users, target workflows, and non-target cases.
+- [ ] Explains what problems it solves.
+- [ ] Explains why it is worth installing.
+- [ ] Explains what it can do.
+- [ ] Explains how it works.
+- [ ] Explains design principles and practical advantages.
+- [ ] Reduces comprehension friction: reader can tell what it is and why it matters from the first screen.
+- [ ] Reduces trust friction: mechanism, safety boundaries, and limits of authority are clear.
+- [ ] Reduces action friction: install, verify, and first-use path are easy to follow.
+- [ ] Uses baseline or full structure according to the skill's complexity.
+- [ ] Includes diagrams only when process-oriented.
+- [ ] Includes install instructions beyond a bare `git clone`.
+- [ ] Explains `SKILL.md` must be at the skill root.
+- [ ] Explains that a fresh agent session may be needed after installation.
+- [ ] Includes a verification prompt.
+- [ ] Includes a quick-start or first-success example.
+- [ ] Includes update instructions.
+- [ ] Includes usage examples.
+- [ ] Includes safety boundaries.
+- [ ] Safety boundaries use "will not collect/store/do" language, not vague "should not" wording.
+- [ ] Includes repository structure generated from actual files.
+- [ ] Explains license and copyright limits.
+- [ ] English and Chinese READMEs are aligned.
+- [ ] No default limitations section unless the user asks for one.
+- [ ] Repository structure, if shown, matches actual files.
+
+## Portability
+
+- [ ] Compatibility with Codex, Claude Code, and OpenClaw has been tested where possible.
+- [ ] Any untestable platform is marked `Not tested` with a reason.
+- [ ] Any incompatible platform is marked `Unsupported` and reported to the user before publishing.
+- [ ] Any partially compatible platform is marked `Partial` with exact limitations.
+- [ ] README includes a concise compatibility sentence when publishing for broad use.
+- [ ] Untested platforms are marked `Not tested`, not implied as supported.
+- [ ] No absolute local paths such as `/Users/...`.
+- [ ] No user-specific memory files.
+- [ ] No `.cc-switch`, `.agents/skills`, or local install assumptions unless explicitly documented as optional examples.
+- [ ] Host-specific behavior is isolated in adapters.
+
+## Git
+
+- [ ] `git status` reviewed.
+- [ ] Commit includes only intended files.
+- [ ] Remote points to the intended GitHub repository.
+- [ ] Branch is correct, usually `main`.
+- [ ] Repository visibility matches user intent.
