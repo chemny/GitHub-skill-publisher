@@ -17,6 +17,23 @@ README.zh.md   Chinese
 
 Each README should link to the other near the top.
 
+## README style variants
+
+Use the standard structure by default. It is the safest choice for most public skill repositories because it is clear, easy to scan, and familiar to GitHub users.
+
+Use the hero badge structure when the user wants a more promotional first screen or when the skill has strong product positioning. This style uses a centered opening block, shields.io badges, a bold value statement, quick navigation links, and language links.
+
+Available templates:
+
+```text
+templates/README.md           Standard English README
+templates/README.zh.md        Standard Chinese README
+templates/README.hero.md      Hero/badge English README
+templates/README.hero.zh.md   Hero/badge Chinese README
+```
+
+Do not let the hero block replace substantive documentation. After the hero block, keep the same core sections: audience fit, problems solved, capabilities, design principles, quick start, install, usage, platform compatibility, safety, structure, and license.
+
 ## Required baseline
 
 Every public skill README should quickly answer:

@@ -70,6 +70,8 @@ Use these as starting points, not rigid boilerplate:
 
 - `templates/README.md`
 - `templates/README.zh.md`
+- `templates/README.hero.md`
+- `templates/README.hero.zh.md`
 - `templates/LICENSE-MIT`
 - `templates/gitignore`
 
