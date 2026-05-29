@@ -69,7 +69,7 @@ Run this checklist before publishing a skill repository.
 - [ ] Untested platforms are marked `Not tested`, not implied as supported.
 - [ ] No absolute local paths such as `/Users/...`.
 - [ ] No user-specific memory files.
-- [ ] No `.cc-switch`, `.agents/skills`, or local install assumptions unless explicitly documented as optional examples.
+- [ ] No local tool directories or local install assumptions unless explicitly documented as optional examples.
 - [ ] Host-specific behavior is isolated in adapters.
 
 ## Git
