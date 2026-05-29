@@ -6,9 +6,10 @@ Use this for first-time publishing.
 
 1. Confirm repository name.
 2. Confirm public or private visibility.
-3. Confirm repository root is the skill root.
-4. Run publish, platform compatibility, and security checks.
-5. Review `git status`.
+3. Draft the GitHub repository description.
+4. Confirm repository root is the skill root.
+5. Run publish, platform compatibility, and security checks.
+6. Review `git status`.
 
 ## Authentication
 
@@ -37,6 +38,18 @@ For a new public repository:
 gh repo create <repo-name> --public --source=. --remote=origin --push
 ```
 
+Set or update the repository description:
+
+```bash
+gh repo edit <owner>/<repo> --description "<one-sentence repository description>"
+```
+
+Optionally add topics when useful:
+
+```bash
+gh repo edit <owner>/<repo> --add-topic agent-skills --add-topic codex --add-topic claude-code --add-topic openclaw
+```
+
 For an existing empty repository:
 
 ```bash
@@ -52,7 +65,7 @@ After push:
 git status --short
 git remote -v
 git log --oneline -1
-gh repo view <owner>/<repo> --json url,visibility,defaultBranchRef
+gh repo view <owner>/<repo> --json url,visibility,defaultBranchRef,description
 ```
 
 Return the GitHub URL to the user.

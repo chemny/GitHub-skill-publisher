@@ -42,13 +42,14 @@ Inspect -> Normalize -> Write README -> Vet -> Commit -> Publish or Push -> Veri
 1. Inspect the local skill files and current git state.
 2. Normalize to single-skill repository structure.
 3. Write or update `README.md`, `README.zh.md`, `LICENSE`, and `.gitignore` when useful.
-4. Test platform compatibility where possible, then run portability and security checks.
+4. Generate or update GitHub repository metadata, especially the repository description.
+5. Test platform compatibility where possible, then run portability and security checks.
    - Target platforms are Codex, Claude Code, and OpenClaw.
    - If a platform cannot be tested in the current environment, mark it `Not tested` and explain why.
    - If any platform is incompatible or only partially compatible, tell the user before publishing and pause for confirmation.
-5. Commit only after the user is satisfied, unless the user explicitly asks to publish immediately.
-6. Create the GitHub repository or push to the existing remote.
-7. Verify URL, branch, remote, and clean working tree.
+6. Commit only after the user is satisfied, unless the user explicitly asks to publish immediately.
+7. Create the GitHub repository or push to the existing remote.
+8. Verify URL, branch, remote, repository description, and clean working tree.
 
 ## Required references
 

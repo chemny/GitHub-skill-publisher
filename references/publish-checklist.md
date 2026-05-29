@@ -13,6 +13,14 @@ Run this checklist before publishing a skill repository.
 - [ ] `.gitignore` exists if generated files may appear.
 - [ ] Folder names are portable.
 
+## GitHub repository metadata
+
+- [ ] Repository description is filled in GitHub.
+- [ ] Description explains what the skill does in one sentence.
+- [ ] Description is concrete, not generic, empty, or only the skill name.
+- [ ] Description matches the README value proposition.
+- [ ] Topics are added when useful.
+
 ## Skill metadata
 
 - [ ] `SKILL.md` has valid YAML frontmatter.
@@ -71,3 +79,4 @@ Run this checklist before publishing a skill repository.
 - [ ] Remote points to the intended GitHub repository.
 - [ ] Branch is correct, usually `main`.
 - [ ] Repository visibility matches user intent.
+- [ ] GitHub repository description is verified after publish or update.

@@ -6,6 +6,8 @@ A public skill README is both documentation and a conversion page. Its job is to
 
 Do not use hype. Do actively explain why the skill is worth installing, what it improves, and how the reader can try it quickly.
 
+Also generate a GitHub repository description. GitHub shows this one-line description on profile cards, search results, and repository lists, so it must explain the skill's value before a reader opens the README.
+
 Create both:
 
 ```text
@@ -35,6 +37,28 @@ Every public skill README should quickly answer:
 - what license and copyright limits apply.
 
 If the user does not specify a license, use MIT.
+
+## Repository description
+
+Create a concise GitHub repository description for every published skill.
+
+Rules:
+
+- Keep it to one sentence.
+- Prefer 80-140 characters.
+- Explain what the skill does and why it matters.
+- Avoid generic text such as "Agent skill", "README", or only the repository name.
+- Do not use unsupported compatibility or security claims.
+
+Useful patterns:
+
+```text
+Publish agent skills as clean, portable, GitHub-ready single-skill repositories.
+```
+
+```text
+Turn local agent skills into polished GitHub repositories with README, license, safety, and compatibility checks.
+```
 
 ## Conversion principle
 
