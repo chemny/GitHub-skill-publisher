@@ -40,7 +40,7 @@ Run this checklist before publishing a skill repository.
 - [ ] Explains how it works.
 - [ ] Explains design principles and practical advantages.
 - [ ] Reduces comprehension friction: reader can tell what it is and why it matters from the first screen.
-- [ ] Reduces trust friction: mechanism, safety boundaries, and limits of authority are clear.
+- [ ] Reduces trust friction: mechanism and limits of authority are clear.
 - [ ] Reduces action friction: install, verify, and first-use path are easy to follow.
 - [ ] Uses baseline or full structure according to the skill's complexity.
 - [ ] Includes diagrams only when process-oriented.
@@ -51,11 +51,13 @@ Run this checklist before publishing a skill repository.
 - [ ] Includes a quick-start or first-success example.
 - [ ] Includes update instructions.
 - [ ] Includes usage examples.
-- [ ] Includes safety boundaries.
-- [ ] Safety boundaries use "will not collect/store/do" language, not vague "should not" wording.
 - [ ] Includes repository structure generated from actual files.
 - [ ] Explains license and copyright limits.
-- [ ] English and Chinese READMEs are aligned.
+- [ ] `README.md` is English-only by default, except intentional language-switch labels.
+- [ ] `README.zh.md` is complete Chinese documentation, not a short placeholder.
+- [ ] `README.md` and `README.zh.md` link to each other near the top using a clear language switch.
+- [ ] English and Chinese READMEs are aligned in substance.
+- [ ] No accidental mixed-language README body unless the user explicitly requested a single bilingual README.
 - [ ] No default limitations section unless the user asks for one.
 - [ ] Repository structure, if shown, matches actual files.
 

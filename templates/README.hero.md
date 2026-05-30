@@ -17,7 +17,7 @@
 
 <br />
 
-[Quick Start](#quick-start) · [Install](#install) · [Capabilities](#capabilities) · [How It Works](#how-it-works) · [Safety](#safety-boundaries)
+[Quick Start](#quick-start) · [Install](#install) · [Capabilities](#capabilities) · [How It Works](#how-it-works)
 
 <br />
 <br />
@@ -168,16 +168,6 @@ git pull
 ## Platform Compatibility
 
 Compatible with Codex, Claude Code, and OpenClaw.
-
----
-
-## Safety Boundaries
-
-This skill will not:
-
-- [Collect or store sensitive information, credentials, tokens, or private files]
-- [Publish, push, delete, or modify external systems without explicit user confirmation]
-- [Claim ownership over third-party content, trademarks, or upstream materials]
 
 ---
 

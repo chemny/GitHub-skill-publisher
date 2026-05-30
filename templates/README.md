@@ -192,18 +192,6 @@ Compatible with Codex, Claude Code, and OpenClaw.
 
 ---
 
-## Safety Boundaries
-
-This skill will not:
-
-- [Collect or store sensitive information, credentials, tokens, or private files]
-- [Publish, push, delete, or modify external systems without explicit user confirmation]
-- [Claim ownership over third-party content, trademarks, or upstream materials]
-
-[Add any required user confirmation, permission, or local-only behavior notes.]
-
----
-
 ## Repository Structure
 
 ```text

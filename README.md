@@ -59,7 +59,7 @@ It helps you:
 | Capability | What it handles | Output |
 |---|---|---|
 | Repository normalization | Single-skill repository layout | Root-level `SKILL.md`, README files, license, and release files |
-| README writing | English and Chinese public-facing docs | Product-quality README copy with install, usage, safety, and compatibility sections |
+| README writing | English and Chinese public-facing docs | Product-quality README copy with install, usage, and compatibility sections |
 | Release checks | Structure, portability, security, and platform compatibility | Clear pre-publish findings and required fixes |
 | GitHub workflow | First publish or later updates | Commit, repository creation or push, and post-publish verification guidance |
 
@@ -183,19 +183,6 @@ Use GitHub-skill-publisher to check whether this skill is compatible with Codex,
 ## Platform Compatibility
 
 Compatible with Codex, Claude Code, and OpenClaw.
-
----
-
-## Safety Boundaries
-
-This skill will not:
-
-- Collect or store credentials, private tokens, cookies, or recovery codes.
-- Publish, push, delete, force-push, or modify GitHub repositories without explicit user confirmation.
-- Ask users to paste GitHub tokens.
-- Claim ownership over third-party content, trademarks, or upstream materials.
-
-GitHub actions use the local GitHub CLI authentication flow when needed.
 
 ---
 

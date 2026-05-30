@@ -15,7 +15,29 @@ README.md      English
 README.zh.md   Chinese
 ```
 
-Each README should link to the other near the top.
+Each README must link to the other near the top with an explicit language switch.
+
+Default language switch:
+
+```markdown
+[中文](./README.zh.md) | English
+```
+
+```markdown
+中文 | [English](./README.md)
+```
+
+## README language quality gate
+
+This is a required pre-publish check.
+
+- `README.md` must be English-only except for the intentional language label/link.
+- `README.zh.md` must be Chinese-first and must not contain copied English sections except proper nouns, commands, file paths, code, repository names, or technical terms.
+- Do not use a mixed bilingual body in `README.md` by default.
+- Do not solve missing Chinese documentation by putting Chinese paragraphs into the English README.
+- If the user explicitly requests a single bilingual README, confirm that choice before publishing.
+- If both README files exist, verify their first screen links to each other before publishing.
+- If either language file is missing or obviously thin compared with the other, stop and fix it before publishing.
 
 ## README style variants
 
@@ -32,7 +54,7 @@ templates/README.hero.md      Hero/badge English README
 templates/README.hero.zh.md   Hero/badge Chinese README
 ```
 
-Do not let the hero block replace substantive documentation. After the hero block, keep the same core sections: audience fit, problems solved, capabilities, design principles, quick start, install, usage, platform compatibility, safety, structure, and license.
+Do not let the hero block replace substantive documentation. After the hero block, keep the same core sections: audience fit, problems solved, capabilities, design principles, quick start, install, usage, platform compatibility, structure, and license.
 
 ## Required baseline
 
@@ -50,7 +72,6 @@ Every public skill README should quickly answer:
 - how to use it,
 - whether it supports Codex, Claude Code, and OpenClaw,
 - what the repository contains,
-- what it will not collect, store, or do,
 - what license and copyright limits apply.
 
 If the user does not specify a license, use MIT.
@@ -129,8 +150,7 @@ Use a baseline README for simple skills. Baseline does not mean thin; it means n
 12. Platform Compatibility
 13. Usage Examples
 14. Repository Structure
-15. Safety Boundaries
-16. License
+15. License
 ```
 
 Use a full README for complex or public-facing skills:
@@ -154,8 +174,7 @@ Use a full README for complex or public-facing skills:
 16. Usage Examples
 17. Maintenance, if the skill has a real update or maintenance mechanism
 18. Repository Structure
-19. Safety Boundaries
-20. License
+19. License
 ```
 
 Omit a limitations section by default.
@@ -260,24 +279,6 @@ Compatible with Codex, Claude Code, and OpenClaw.
 
 Do not put internal testing statuses such as `Supported`, `Partial`, `Unsupported`, or `Not tested` in the README unless the user explicitly asks for a detailed compatibility matrix. Keep those statuses in the pre-publish report to the user.
 
-## Safety boundaries section
-
-Write safety boundaries as user-facing trust statements, not vague obligations.
-
-Prefer:
-
-- "This skill will not collect..."
-- "This skill will not store..."
-- "This skill will not publish, push, delete, or send..."
-- "Destructive or external actions require explicit user confirmation."
-
-Avoid:
-
-- "This skill should not..."
-- "The agent should not..."
-
-The goal is to help readers feel safe trying the repository while staying accurate. Do not promise behavior that the skill cannot technically enforce.
-
 ## License and copyright section
 
 Use the heading `License`. Include an explicit license section. If the user does not specify a license, use MIT and state that the repository is provided under the MIT License. Put copyright, third-party content, trademark, and upstream reference notes inside this section instead of using a separate heading. Do not claim that bundled third-party content, public references, brand names, or upstream materials are relicensed unless that is true.
@@ -296,7 +297,6 @@ Use the heading `License`. Include an explicit license section. If the user does
 - Diagrams explain the workflow when the skill is process-oriented.
 - Examples are copy-pasteable.
 - Platform compatibility with Codex, Claude Code, and OpenClaw is tested where possible and stated accurately.
-- Safety boundaries use "will not collect/store/do" language and avoid vague "should not" wording.
 - Repository structure matches actual files.
 - Installation assumes a public GitHub repo.
 - MIT is used when the user has not requested another license.
