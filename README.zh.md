@@ -2,7 +2,7 @@
 
 > 把 agent skill 发布成结构清晰、可安装、适合公开推广的 GitHub 单 skill 仓库。
 
-中文 · [English README](README.md)
+中文 · [English](README.md)
 
 GitHub-skill-publisher 帮助 skill 作者把本地 agent skill 整理成可公开发布的 GitHub 仓库，包括双语 README、目录结构、协议、GitHub metadata、完整性检查、敏感信息检查、平台兼容性检查，以及 GitHub 发布和更新流程。
 

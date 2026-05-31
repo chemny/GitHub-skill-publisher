@@ -2,7 +2,7 @@
 
 > [一句话价值主张。]
 
-中文 · [English README](README.md)
+中文 · [English](README.md)
 
 [简短定位：这个 skill 是什么，适合谁使用。]
 

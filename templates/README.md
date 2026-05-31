@@ -2,7 +2,7 @@
 
 > [One-sentence value proposition.]
 
-[中文 README](README.zh.md) · English
+[中文](README.zh.md) · English
 
 [Short positioning paragraph: what this skill is and who it is for.]
 

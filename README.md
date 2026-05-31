@@ -2,7 +2,7 @@
 
 > Publish an agent skill as a clean, portable, GitHub-ready single-skill repository.
 
-[中文 README](README.zh.md) · English
+[中文](README.zh.md) · English
 
 GitHub-skill-publisher helps skill authors turn a local agent skill into a polished public repository with clear README copy, correct structure, GitHub metadata, completeness checks, sensitive-data review, compatibility testing, and publish/update workflow support.
 

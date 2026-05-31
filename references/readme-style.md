@@ -27,6 +27,8 @@ Default language switch:
 中文 | [English](./README.md)
 ```
 
+Use only the language names in the switch labels: `中文` and `English`. Do not write `中文 README`, `English README`, or any label that includes the word `README`; it is visually redundant on GitHub.
+
 ## README language quality gate
 
 This is a required pre-publish check.
