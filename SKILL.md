@@ -43,13 +43,18 @@ Inspect -> Normalize -> Write README -> Vet -> Commit -> Publish or Push -> Veri
 2. Normalize to single-skill repository structure.
 3. Write or update `README.md`, `README.zh.md`, `LICENSE`, and `.gitignore` when useful.
 4. Generate or update GitHub repository metadata, especially the repository description.
-5. Test platform compatibility where possible, then run portability and security checks.
+5. Run completeness, dependency, sensitive-data, portability, and security checks.
+   - Check for API keys, user accounts, private tokens, local paths, private files, and machine-specific assumptions.
+   - Redact or replace sensitive/local-only content before publishing.
+   - Check whether the skill is complete and whether it has hard dependencies on other skills or private local resources.
+   - If a dependency is required, document it clearly or bundle/adapter-isolate it before publishing.
+6. Test platform compatibility where possible.
    - Target platforms are Codex, Claude Code, and OpenClaw.
    - If a platform cannot be tested in the current environment, mark it `Not tested` and explain why.
    - If any platform is incompatible or only partially compatible, tell the user before publishing and pause for confirmation.
-6. Commit only after the user is satisfied, unless the user explicitly asks to publish immediately.
-7. Create the GitHub repository or push to the existing remote.
-8. Verify URL, branch, remote, repository description, and clean working tree.
+7. Commit only after the user is satisfied, unless the user explicitly asks to publish immediately.
+8. Create the GitHub repository or push to the existing remote.
+9. Verify URL, branch, remote, repository description, and clean working tree.
 
 ## Required references
 
@@ -58,6 +63,7 @@ Read only what is needed:
 - `references/repo-structure.md` for repository layout rules.
 - `references/readme-style.md` for the bilingual README style.
 - `references/install-section.md` for skill installation instructions that README files should include.
+- `references/skill-completeness.md` before public release.
 - `references/platform-compatibility.md` before public release.
 - `references/publish-checklist.md` before publishing.
 - `references/security-checklist.md` before public release.

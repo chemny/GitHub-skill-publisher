@@ -29,6 +29,25 @@ Run this checklist before publishing a skill repository.
 - [ ] Description contains trigger phrases and task contexts.
 - [ ] No private `local_updated_at` or machine-specific metadata is required for release.
 
+## Completeness and dependencies
+
+- [ ] Required files are present: `SKILL.md`, `README.md`, `README.zh.md`, `LICENSE`.
+- [ ] Every reference, template, script, adapter, or asset mentioned by `SKILL.md` exists or is explicitly optional.
+- [ ] Relative paths resolve from the skill root.
+- [ ] The skill does not silently depend on another private skill.
+- [ ] Required public dependencies are documented.
+- [ ] Optional dependencies are marked optional.
+- [ ] Private, local-only, or user-specific dependencies are removed or replaced before publishing.
+
+## Sensitive data and local information
+
+- [ ] API keys, passwords, private tokens, cookies, recovery codes, and webhook URLs are absent.
+- [ ] User accounts, private emails, tenant IDs, cloud account IDs, and internal handles are absent or redacted.
+- [ ] Local absolute paths and private workspace paths are absent or replaced with generic examples.
+- [ ] Private memory files, session logs, caches, database paths, and history files are absent.
+- [ ] Any redaction preserves useful installation or usage guidance.
+- [ ] Sensitive-data scan was re-run after redaction.
+
 ## README
 
 - [ ] Explains why the skill exists.

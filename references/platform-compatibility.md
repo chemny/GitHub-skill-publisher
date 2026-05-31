@@ -36,6 +36,8 @@ If compatibility is partial or broken, tell the user before publishing and pause
 - [ ] Any scripts use portable relative paths.
 - [ ] Any scripts document runtime requirements such as Node.js, Python, `gh`, or shell tools.
 - [ ] Network, filesystem, browser, email, Slack, Lark, GitHub, or other connector requirements are explicit.
+- [ ] Dependencies on other skills are absent, optional, bundled, or documented.
+- [ ] The skill can be installed without private user memory, local-only folders, or unpublished companion skills.
 - [ ] Platform-specific capabilities are isolated in adapters or clearly marked sections.
 - [ ] README includes a verification prompt that can be tried after a fresh session.
 

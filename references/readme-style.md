@@ -54,6 +54,12 @@ templates/README.hero.md      Hero/badge English README
 templates/README.hero.zh.md   Hero/badge Chinese README
 ```
 
+Full README reference example:
+
+```text
+references/readme-full-agent-evolution.md
+```
+
 Do not let the hero block replace substantive documentation. After the hero block, keep the same core sections: audience fit, problems solved, capabilities, design principles, quick start, install, usage, platform compatibility, structure, and license.
 
 ## Required baseline
