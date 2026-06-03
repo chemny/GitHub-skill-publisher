@@ -24,7 +24,7 @@
 
 **其他语言 / Other Languages:**
 
-中文 · [English](README.md)
+中文 · [English](README.en.md)
 
 </div>
 
@@ -177,7 +177,7 @@ git pull
 [repo]/
 ├── SKILL.md
 ├── README.md
-├── README.zh.md
+├── README.en.md
 └── LICENSE
 ```
 

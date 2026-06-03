@@ -52,7 +52,7 @@ function listFiles() {
 const trackedFiles = git(["ls-files"]).split("\n").filter(Boolean);
 const files = listFiles();
 
-for (const rel of ["SKILL.md", "README.md", "README.zh.md", "LICENSE"]) {
+for (const rel of ["SKILL.md", "README.md", "README.en.md", "LICENSE"]) {
   if (!exists(rel)) add("FAIL", "Missing required file", rel);
 }
 

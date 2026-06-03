@@ -14,7 +14,7 @@ If a required dependency is missing, private, or platform-specific, tell the use
 - [ ] `SKILL.md` has valid YAML frontmatter.
 - [ ] Frontmatter includes `name`, `description`, and `version` when available.
 - [ ] `README.md` exists for public repositories.
-- [ ] `README.zh.md` exists when bilingual publishing is required.
+- [ ] `README.en.md` exists when bilingual publishing is required.
 - [ ] `LICENSE` exists.
 - [ ] `.gitignore` exists when generated files, build output, local caches, or package managers may appear.
 

@@ -13,7 +13,7 @@ flowchart TD
     E -- "Yes" --> F["Ask user to confirm cleanup"]
     E -- "No" --> G["Gitignore / Env Check"]
     F --> G
-    G["Gitignore / Env Check<br/>Check .gitignore, .env, .env.example, tracked files"] --> H["Generate / Finalize README<br/>Complete README.md and README.zh.md"]
+    G["Gitignore / Env Check<br/>Check .gitignore, .env, .env.example, tracked files"] --> H["Generate / Finalize README<br/>Complete README.md and README.en.md"]
     H --> I0["Smoke Test<br/>Run scripts/smoke-test.mjs when available"]
     I0 --> I["Automated Publish Check<br/>Run scripts/publish-check.mjs when available"]
     I --> J{"Result"}
@@ -45,11 +45,13 @@ High-risk cleanup confirmation:
 - Ask before deleting files, moving files, redacting content, or changing generated output that may be useful to the user.
 - Do not treat `.gitignore` as enough. Check tracked files with Git because ignored files can already be committed.
 
-Final publish confirmation:
+Final publish authorization:
 
 - After all content, including README files, has been generated and checked, list the final publish summary.
-- Ask the user explicitly whether to publish to GitHub.
-- Only `commit`, `push`, `sync`, `gh repo create`, or `gh repo edit` after the user clearly confirms the publish action.
+- Ask the user explicitly whether to publish to GitHub when the current request did not already include explicit publish authorization.
+- If the user already said "修改并发布", "更新并同步到 GitHub", or equivalent edit-plus-publish wording, run checks and publish after success without a second confirmation.
+- Only `commit`, `push`, `sync`, `gh repo create`, or `gh repo edit` when explicit publish authorization exists.
+- Apply this authorization gate to every skill repository, not only to GitHub-skill-publisher itself.
 
 ## Final pre-publish summary
 

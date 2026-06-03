@@ -44,7 +44,7 @@ function expectFile(relativePath) {
 for (const relativePath of [
   "SKILL.md",
   "README.md",
-  "README.zh.md",
+  "README.en.md",
   "LICENSE",
   ".gitignore",
   "references/pre-publish-flow.md",
@@ -54,7 +54,7 @@ for (const relativePath of [
   "references/update-workflow.md",
   "references/github-workflow.md",
   "templates/README.md",
-  "templates/README.zh.md",
+  "templates/README.en.md",
   "templates/README.hero.md",
   "templates/README.hero.zh.md",
   "templates/LICENSE-MIT",
@@ -94,9 +94,9 @@ if (exists("SKILL.md")) {
 
 const languageSwitchFiles = [
   "README.md",
-  "README.zh.md",
+  "README.en.md",
   "templates/README.md",
-  "templates/README.zh.md",
+  "templates/README.en.md",
   "templates/README.hero.md",
   "templates/README.hero.zh.md",
 ];
@@ -127,7 +127,8 @@ if (exists("references/publish-checklist.md")) {
     "node scripts/smoke-test.mjs",
     "node scripts/publish-check.mjs",
     ".env.example",
-    "User explicitly confirmed publishing",
+    "Explicit publish authorization exists",
+    "edit-plus-publish wording",
   ];
   const missing = requiredItems.filter((item) => !checklist.includes(item));
   if (missing.length === 0) pass("publish checklist contains release gates");

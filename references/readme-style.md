@@ -8,11 +8,13 @@ Do not use hype. Do actively explain why the skill is worth installing, what it 
 
 Also generate a GitHub repository description. GitHub shows this one-line description on profile cards, search results, and repository lists, so it must explain the skill's value before a reader opens the README.
 
+Use Chinese as the default GitHub repository description language, because `README.md` is Chinese by default and GitHub profile cards should match the repository homepage. Use English only when the user explicitly requests an English or international-facing repository.
+
 Create both:
 
 ```text
-README.md      English
-README.zh.md   Chinese
+README.md      Chinese, default GitHub repository homepage
+README.en.md   English
 ```
 
 Each README must link to the other near the top with an explicit language switch.
@@ -20,11 +22,11 @@ Each README must link to the other near the top with an explicit language switch
 Default language switch:
 
 ```markdown
-[中文](./README.zh.md) | English
+中文 | [English](./README.en.md)
 ```
 
 ```markdown
-中文 | [English](./README.md)
+[中文](./README.md) | English
 ```
 
 Use only the language names in the switch labels: `中文` and `English`. Do not write `中文 README`, `English README`, or any label that includes the word `README`; it is visually redundant on GitHub.
@@ -33,9 +35,9 @@ Use only the language names in the switch labels: `中文` and `English`. Do not
 
 This is a required pre-publish check.
 
-- `README.md` must be English-only except for the intentional language label/link.
-- `README.zh.md` must be Chinese-first and must not contain copied English sections except proper nouns, commands, file paths, code, repository names, or technical terms.
-- Do not use a mixed bilingual body in `README.md` by default.
+- `README.md` must be Chinese-first because GitHub displays it by default.
+- `README.en.md` must be English-only except for the intentional language label/link.
+- Do not use a mixed bilingual body in either README by default.
 - Do not solve missing Chinese documentation by putting Chinese paragraphs into the English README.
 - If the user explicitly requests a single bilingual README, confirm that choice before publishing.
 - If both README files exist, verify their first screen links to each other before publishing.
@@ -90,8 +92,8 @@ Use the hero badge structure when the user wants a more promotional first screen
 Available templates:
 
 ```text
-templates/README.md           Standard English README
-templates/README.zh.md        Standard Chinese README
+templates/README.md           Standard Chinese README, GitHub default
+templates/README.en.md        Standard English README
 templates/README.hero.md      Hero/badge English README
 templates/README.hero.zh.md   Hero/badge Chinese README
 ```
@@ -133,19 +135,21 @@ Create a concise GitHub repository description for every published skill.
 Rules:
 
 - Keep it to one sentence.
-- Prefer 80-140 characters.
+- Use Chinese by default.
+- Prefer 35-80 Chinese characters, or 80-140 English characters when the user explicitly requests English.
 - Explain what the skill does and why it matters.
 - Avoid generic text such as "Agent skill", "README", or only the repository name.
 - Do not use unsupported compatibility or security claims.
+- Match the first-screen value proposition in `README.md`.
 
 Useful patterns:
 
 ```text
-Publish agent skills as clean, portable, GitHub-ready single-skill repositories.
+把本地 agent skill 发布成结构清晰、可安装、适合公开推广的 GitHub 单 skill 仓库。
 ```
 
 ```text
-Turn local agent skills into polished GitHub repositories with README, license, safety, and compatibility checks.
+把本地 skill 整理成带 README、协议、安全检查和兼容性检查的 GitHub 仓库。
 ```
 
 ## Conversion principle

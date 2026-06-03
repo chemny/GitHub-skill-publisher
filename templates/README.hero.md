@@ -24,7 +24,7 @@
 
 **Other Languages:**
 
-[中文](README.zh.md) · English
+[中文](README.md) · English
 
 </div>
 
@@ -177,7 +177,7 @@ Compatible with Codex, Claude Code, and OpenClaw.
 [repo]/
 ├── SKILL.md
 ├── README.md
-├── README.zh.md
+├── README.en.md
 └── LICENSE
 ```
 

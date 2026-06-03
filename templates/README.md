@@ -1,106 +1,106 @@
 # {{Skill Name}}
 
-[中文](./README.zh.md) | English
+中文 | [English](./README.en.md)
 
-{{One-sentence value proposition: explain what this skill turns into what useful result.}}
+{{一句话价值：用一句话说明这个 skill 能把什么问题变成什么有用结果。}}
 
-## What It Is
+## 它是什么
 
-{{Explain the product positioning in 2-3 short sentences. Write for first-time users, not maintainers.}}
+{{用 2-3 句说明产品定位。写给第一次看到项目的用户，不要写给维护者。}}
 
-It is not {{non-target-1}}, and it is not {{non-target-2}}. Its core job is to {{core-job}}.
+它不是 {{非目标 1}}，也不是 {{非目标 2}}。它的核心作用是：{{核心作用}}。
 
-## What Problem It Solves
+## 它解决什么问题
 
-{{Use 4-6 bullets to name the user's real pain. Keep this practical and concrete.}}
+{{用 4-6 个 bullet 打中用户真实痛点。少讲技术，多讲困扰。}}
 
-- {{Pain point 1}}
-- {{Pain point 2}}
-- {{Pain point 3}}
-- {{Pain point 4}}
-- {{Pain point 5, optional}}
+- {{痛点 1}}
+- {{痛点 2}}
+- {{痛点 3}}
+- {{痛点 4}}
+- {{痛点 5，可选}}
 
-## Product Highlights
+## 产品特色
 
-{{Use dense, high-signal bullets. Each item should explain why the skill is worth installing.}}
+{{用高密度短句说明为什么值得安装。}}
 
-- **{{Highlight 1}}**: {{One-sentence explanation}}
-- **{{Highlight 2}}**: {{One-sentence explanation}}
-- **{{Highlight 3}}**: {{One-sentence explanation}}
-- **{{Highlight 4}}**: {{One-sentence explanation}}
-- **{{Highlight 5, optional}}**: {{One-sentence explanation}}
+- **{{特色 1}}**：{{一句话解释}}
+- **{{特色 2}}**：{{一句话解释}}
+- **{{特色 3}}**：{{一句话解释}}
+- **{{特色 4}}**：{{一句话解释}}
+- **{{特色 5，可选}}**：{{一句话解释}}
 
-## Workflow
+## 整体流程
 
 ```mermaid
 flowchart TD
-    A["{{User input}}"] --> B["{{Understand / analyze}}"]
-    B --> C["{{Create core content}}"]
-    C --> D["{{Run key workflow}}"]
-    D --> E["{{Preview / verify}}"]
-    E --> F{"{{Approved?}}"}
-    F -- "Revise" --> C
-    F -- "Approve" --> G["{{Generate final result}}"]
-    G --> H["{{Package / deliver}}"]
+    A["{{用户输入}}"] --> B["{{理解 / 分析}}"]
+    B --> C["{{生成核心内容}}"]
+    C --> D["{{执行关键流程}}"]
+    D --> E["{{预览 / 验证}}"]
+    E --> F{"{{是否确认?}}"}
+    F -- "调整" --> C
+    F -- "确认" --> G["{{生成最终结果}}"]
+    G --> H["{{交付 / 打包}}"]
 ```
 
-{{Explain the workflow in 1-2 sentences. Do not expand into implementation details.}}
+{{用 1-2 句话解释流程，不展开实现细节。}}
 
-<!-- Optional: show this section only when the repository has screenshots, cover images, first-frame previews, UI images, or other persuasive visuals.
-## Preview
+<!-- 可选：只有当仓库有截图、封面、首帧预览、界面图或其他能增强说服力的图片时才展示这一节。
+## 效果预览
 
-![{{Preview image alt text}}](./assets/{{preview-image}})
+![{{预览图说明}}](./assets/{{preview-image}})
 -->
 
-## One-Line Install
+## 一行安装
 
 ```bash
 {{one-line-install-command}}
 ```
 
-After installation, start a fresh agent session so it can reload the skill.
+安装后，重新打开一个 agent 会话，让它重新加载 skill。
 
-## Use It Directly
-
-```text
-{{A copy-ready prompt the user can paste into Codex, Claude Code, OpenClaw, or another compatible agent.}}
-```
-
-{{Optional next-step prompt after approval or confirmation.}}
-
-## Default Configuration
-
-{{Only include the configuration users must know. Keep provider lists and environment variables short.}}
-
-- {{Default behavior 1}}
-- {{Default behavior 2}}
-- {{Optional provider or integration 1}}
-- {{Optional provider or integration 2}}
-- Keep real credentials in local environment variables or a private `.env`; never commit them.
-
-## What You Get
-
-{{Describe the final result in user-facing language before listing files or artifacts.}}
+## 直接使用
 
 ```text
-{{result-1}}     {{Short explanation}}
-{{result-2}}     {{Short explanation}}
-{{result-3}}     {{Short explanation}}
-{{result-4}}     {{Short explanation}}
+{{给用户一段可以直接复制到 Codex、Claude Code、OpenClaw 或其他兼容 agent 里的使用 prompt。}}
 ```
 
-{{One-sentence final value summary.}}
+{{可选：需要确认或继续执行时，补一句下一步指令。}}
 
-## Compatibility
+## 默认配置
+
+{{只写用户必须知道的配置。供应商列表和环境变量要保持简短。}}
+
+- {{默认能力 1}}
+- {{默认能力 2}}
+- {{可选供应商或集成 1}}
+- {{可选供应商或集成 2}}
+- 真实密钥只放在本地环境变量或私有 `.env` 中，不要提交到仓库。
+
+## 最终你会得到
+
+{{先用用户能理解的语言描述最终结果，再列文件或交付物。}}
 
 ```text
-Codex: {{Supported / Tested / Designed to support / Not tested}}
-Claude Code: {{Supported / Tested / Designed to support / Not tested}}
-OpenClaw: {{Supported / Tested / Designed to support / Not tested}}
+{{结果 1}}     {{简短说明}}
+{{结果 2}}     {{简短说明}}
+{{结果 3}}     {{简短说明}}
+{{结果 4}}     {{简短说明}}
 ```
 
-Do not claim full compatibility for platforms that have not been tested.
+{{一句话总结最终交付价值。}}
 
-## License
+## 兼容性
+
+```text
+Codex: {{已支持 / 已实测 / 设计上支持 / 未实测}}
+Claude Code: {{已支持 / 已实测 / 设计上支持 / 未实测}}
+OpenClaw: {{已支持 / 已实测 / 设计上支持 / 未实测}}
+```
+
+不要给未实测平台写“完全兼容”。
+
+## 许可证
 
 MIT

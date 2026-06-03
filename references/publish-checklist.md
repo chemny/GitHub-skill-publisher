@@ -7,7 +7,7 @@ Run this checklist before publishing a skill repository.
 - [ ] Repository root is the skill root.
 - [ ] `SKILL.md` is at the root.
 - [ ] `README.md` exists.
-- [ ] `README.zh.md` exists.
+- [ ] `README.en.md` exists.
 - [ ] `LICENSE` exists.
 - [ ] License is MIT unless the user requested another license.
 - [ ] `.gitignore` exists if generated files may appear.
@@ -27,6 +27,7 @@ Run this checklist before publishing a skill repository.
 ## GitHub repository metadata
 
 - [ ] Repository description is filled in GitHub.
+- [ ] Repository description is Chinese by default unless the user explicitly requested English.
 - [ ] Description explains what the skill does in one sentence.
 - [ ] Description is concrete, not generic, empty, or only the skill name.
 - [ ] Description matches the README value proposition.
@@ -42,7 +43,7 @@ Run this checklist before publishing a skill repository.
 
 ## Completeness and dependencies
 
-- [ ] Required files are present: `SKILL.md`, `README.md`, `README.zh.md`, `LICENSE`.
+- [ ] Required files are present: `SKILL.md`, `README.md`, `README.en.md`, `LICENSE`.
 - [ ] Every reference, template, script, adapter, or asset mentioned by `SKILL.md` exists or is explicitly optional.
 - [ ] Relative paths resolve from the skill root.
 - [ ] The skill does not silently depend on another private skill.
@@ -92,9 +93,9 @@ Run this checklist before publishing a skill repository.
 - [ ] Includes usage examples.
 - [ ] Includes repository structure generated from actual files.
 - [ ] Explains license and copyright limits.
-- [ ] `README.md` is English-only by default, except intentional language-switch labels.
-- [ ] `README.zh.md` is complete Chinese documentation, not a short placeholder.
-- [ ] `README.md` and `README.zh.md` link to each other near the top using a clear language switch.
+- [ ] `README.md` is Chinese by default because GitHub uses it as the repository homepage.
+- [ ] `README.en.md` is complete English documentation, not a short placeholder.
+- [ ] `README.md` and `README.en.md` link to each other near the top using a clear language switch.
 - [ ] English and Chinese READMEs are aligned in substance.
 - [ ] No accidental mixed-language README body unless the user explicitly requested a single bilingual README.
 - [ ] No default limitations section unless the user asks for one.
@@ -127,4 +128,7 @@ Run this checklist before publishing a skill repository.
 - [ ] All content, including README files, has been generated and checked.
 - [ ] Final pre-publish summary was shown to the user.
 - [ ] Summary included target repository, remote URL, branch, visibility, file list, README status, security result, completeness result, dependency result, compatibility result, GitHub metadata, warnings, and remaining risks.
-- [ ] User explicitly confirmed publishing to GitHub before any commit, push, repository creation, sync, or GitHub metadata update.
+- [ ] Explicit publish authorization exists before any commit, push, repository creation, sync, or GitHub metadata update.
+- [ ] If the current request used edit-only wording, the user was asked before publishing.
+- [ ] If the current request used explicit edit-plus-publish wording, publishing proceeded after successful checks without a second confirmation.
+- [ ] Publishing was paused if checks failed, sensitive data was found, cleanup was destructive or ambiguous, compatibility was partial/unsupported, remote/branch/visibility was ambiguous, or the action was destructive.
