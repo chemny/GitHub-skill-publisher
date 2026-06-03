@@ -12,6 +12,17 @@ Run this checklist before publishing a skill repository.
 - [ ] License is MIT unless the user requested another license.
 - [ ] `.gitignore` exists if generated files may appear.
 - [ ] Folder names are portable.
+- [ ] Tracked files have been reviewed with Git, not only filtered by `.gitignore`.
+- [ ] Drafts, caches, logs, generated output, and local-only files are either removed, ignored, or intentionally retained.
+
+## Cleanup and environment files
+
+- [ ] A cleanup plan was created before deletion, redaction, file moves, or high-risk cleanup.
+- [ ] User confirmed any destructive or ambiguous cleanup before it was performed.
+- [ ] `.env` is absent from tracked files.
+- [ ] `.env.example`, if present, contains placeholders only, not real credentials or account values.
+- [ ] `.gitignore` covers common generated output, dependency directories, local caches, and OS files.
+- [ ] Ignored files were checked when relevant to make sure no sensitive generated output remains staged or tracked.
 
 ## GitHub repository metadata
 
@@ -47,6 +58,15 @@ Run this checklist before publishing a skill repository.
 - [ ] Private memory files, session logs, caches, database paths, and history files are absent.
 - [ ] Any redaction preserves useful installation or usage guidance.
 - [ ] Sensitive-data scan was re-run after redaction.
+
+## Automated publish check
+
+- [ ] `node scripts/smoke-test.mjs` was run when available.
+- [ ] Smoke test result is passing, or failures were fixed and the smoke test was re-run.
+- [ ] `node scripts/publish-check.mjs` was run when available.
+- [ ] Automated check result is `PASS` or all `FAIL` items have been fixed and the check was re-run.
+- [ ] Any `WARNING` items were reviewed and either fixed or included in the final pre-publish summary.
+- [ ] The automated checks did not publish, push, commit, delete files, or mutate GitHub state.
 
 ## README
 
@@ -101,3 +121,10 @@ Run this checklist before publishing a skill repository.
 - [ ] Branch is correct, usually `main`.
 - [ ] Repository visibility matches user intent.
 - [ ] GitHub repository description is verified after publish or update.
+
+## Final publish confirmation
+
+- [ ] All content, including README files, has been generated and checked.
+- [ ] Final pre-publish summary was shown to the user.
+- [ ] Summary included target repository, remote URL, branch, visibility, file list, README status, security result, completeness result, dependency result, compatibility result, GitHub metadata, warnings, and remaining risks.
+- [ ] User explicitly confirmed publishing to GitHub before any commit, push, repository creation, sync, or GitHub metadata update.

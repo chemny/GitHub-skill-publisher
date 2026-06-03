@@ -1,213 +1,106 @@
-# [Skill Name]
+# {{Skill Name}}
 
-> [One-sentence value proposition.]
+[中文](./README.zh.md) | English
 
-[中文](README.zh.md) · English
+{{One-sentence value proposition: explain what this skill turns into what useful result.}}
 
-[Short positioning paragraph: what this skill is and who it is for.]
+## What It Is
 
----
+{{Explain the product positioning in 2-3 short sentences. Write for first-time users, not maintainers.}}
 
-## Who Is This For?
+It is not {{non-target-1}}, and it is not {{non-target-2}}. Its core job is to {{core-job}}.
 
-This skill is designed for:
+## What Problem It Solves
 
-- [Target user or role 1]
-- [Target user or role 2]
-- [Target workflow or team scenario]
+{{Use 4-6 bullets to name the user's real pain. Keep this practical and concrete.}}
 
-It is less useful if:
+- {{Pain point 1}}
+- {{Pain point 2}}
+- {{Pain point 3}}
+- {{Pain point 4}}
+- {{Pain point 5, optional}}
 
-- [Non-target use case or wrong expectation]
+## Product Highlights
 
----
+{{Use dense, high-signal bullets. Each item should explain why the skill is worth installing.}}
 
-## What It Does
+- **{{Highlight 1}}**: {{One-sentence explanation}}
+- **{{Highlight 2}}**: {{One-sentence explanation}}
+- **{{Highlight 3}}**: {{One-sentence explanation}}
+- **{{Highlight 4}}**: {{One-sentence explanation}}
+- **{{Highlight 5, optional}}**: {{One-sentence explanation}}
 
-[Explain the concrete job this skill performs.]
-
----
-
-## When To Use
-
-- [Use case 1]
-- [Use case 2]
-- [Use case 3]
-
----
-
-## Problems It Solves
-
-[Explain the real user pain this skill removes. Keep this practical.]
-
----
-
-## Why Install It?
-
-[Explain why this skill is worth installing instead of handling the task manually or with ad hoc prompting.]
-
-It helps you:
-
-- [Benefit 1: save time, reduce repeated work, improve consistency, lower risk, or make a workflow reusable]
-- [Benefit 2]
-- [Benefit 3]
-
----
-
-## Capabilities
-
-| Capability | What it handles | Output |
-|---|---|---|
-| [Capability] | [Input/context] | [Result] |
-
----
-
-## Design Principles
-
-[Explain the core design choices behind this skill.]
-
-Advantages:
-
-- [Advantage 1]
-- [Advantage 2]
-- [Advantage 3]
-
----
-
-## Quick Start
-
-After installing, try this prompt:
-
-```text
-[First successful use prompt]
-```
-
-Expected result:
-
-```text
-[What success looks like]
-```
-
----
-
-<!-- Optional: include this section only when a broader engineering idea helps users understand the skill.
-## Design Philosophy
-
-[Explain the design ideas, references, and why the approach is trustworthy. Avoid implying endorsement.]
-
----
--->
-
-<!-- Optional: include this section only when the skill has a meaningful process.
-## Core Workflow
+## Workflow
 
 ```mermaid
 flowchart TD
-    A["Input"] --> B["Classify"]
-    B --> C["Act"]
-    C --> D["Verify"]
+    A["{{User input}}"] --> B["{{Understand / analyze}}"]
+    B --> C["{{Create core content}}"]
+    C --> D["{{Run key workflow}}"]
+    D --> E["{{Preview / verify}}"]
+    E --> F{"{{Approved?}}"}
+    F -- "Revise" --> C
+    F -- "Approve" --> G["{{Generate final result}}"]
+    G --> H["{{Package / deliver}}"]
 ```
 
----
+{{Explain the workflow in 1-2 sentences. Do not expand into implementation details.}}
+
+<!-- Optional: show this section only when the repository has screenshots, cover images, first-frame previews, UI images, or other persuasive visuals.
+## Preview
+
+![{{Preview image alt text}}](./assets/{{preview-image}})
 -->
 
-<!-- Optional: include this section for full READMEs when the skill needs deeper mechanism explanation.
-## How It Works
-
-[Explain the working mechanism.]
-
----
--->
-
-<!-- Optional: include only when the skill has a real update, validation, promotion, pruning, adapter, or maintenance mechanism.
-## Maintenance
-
-[Explain concrete maintenance or update instructions.]
-
----
--->
-
-## Install
-
-[Skill Name] is published as a single-skill repository. The repository root is the skill root.
-
-Required shape:
-
-```text
-[repo]/
-└── SKILL.md
-```
-
-### 1. Clone
+## One-Line Install
 
 ```bash
-git clone https://github.com/[owner]/[repo].git
+{{one-line-install-command}}
 ```
 
-### 2. Place It In Your Agent's Skills Directory
+After installation, start a fresh agent session so it can reload the skill.
 
-Copy or symlink the cloned directory into the skills directory used by your agent.
-
-Example:
+## Use It Directly
 
 ```text
-skills/
-└── [repo]/
-    └── SKILL.md
+{{A copy-ready prompt the user can paste into Codex, Claude Code, OpenClaw, or another compatible agent.}}
 ```
 
-### 3. Start A Fresh Agent Session
+{{Optional next-step prompt after approval or confirmation.}}
 
-Many agents scan skill metadata when a new session starts. After installing, open a fresh session so the agent can read `SKILL.md`.
+## Default Configuration
 
-### 4. Verify
+{{Only include the configuration users must know. Keep provider lists and environment variables short.}}
 
-Try a short prompt that should trigger this skill:
+- {{Default behavior 1}}
+- {{Default behavior 2}}
+- {{Optional provider or integration 1}}
+- {{Optional provider or integration 2}}
+- Keep real credentials in local environment variables or a private `.env`; never commit them.
+
+## What You Get
+
+{{Describe the final result in user-facing language before listing files or artifacts.}}
 
 ```text
-[Verification prompt]
+{{result-1}}     {{Short explanation}}
+{{result-2}}     {{Short explanation}}
+{{result-3}}     {{Short explanation}}
+{{result-4}}     {{Short explanation}}
 ```
 
-### Update
+{{One-sentence final value summary.}}
 
-If installed with Git:
-
-```bash
-git pull
-```
-
----
-
-## Usage Examples
+## Compatibility
 
 ```text
-[Example prompt]
+Codex: {{Supported / Tested / Designed to support / Not tested}}
+Claude Code: {{Supported / Tested / Designed to support / Not tested}}
+OpenClaw: {{Supported / Tested / Designed to support / Not tested}}
 ```
 
----
-
-## Platform Compatibility
-
-Compatible with Codex, Claude Code, and OpenClaw.
-
----
-
-## Repository Structure
-
-```text
-[repo]/
-├── SKILL.md
-├── README.md
-├── README.zh.md
-└── LICENSE
-```
-
----
+Do not claim full compatibility for platforms that have not been tested.
 
 ## License
 
-This repository is provided under the MIT License unless a different license is explicitly stated.
-
 MIT
-
-[Add any copyright, third-party content, trademark, or upstream reference notes here. Do not claim rights over third-party materials.]

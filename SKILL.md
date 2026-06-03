@@ -36,31 +36,46 @@ Use this skill when the user asks to:
 ## Standard workflow
 
 ```text
-Inspect -> Normalize -> Write README -> Vet -> Commit -> Publish or Push -> Verify
+Inspect -> Normalize -> Write README -> Pre-publish cleanup -> Smoke test -> Publish check -> Final summary -> User confirmation -> Commit -> Publish or Push -> Verify
 ```
 
 1. Inspect the local skill files and current git state.
 2. Normalize to single-skill repository structure.
 3. Write or update `README.md`, `README.zh.md`, `LICENSE`, and `.gitignore` when useful.
 4. Generate or update GitHub repository metadata, especially the repository description.
-5. Run completeness, dependency, sensitive-data, portability, and security checks.
+5. Create a pre-publish cleanup plan for drafts, caches, logs, generated output, and local-only files.
+   - Do not automatically delete or move files when the action is destructive or ambiguous.
+   - Ask the user before deletion, redaction, file moves, or any high-risk cleanup.
+   - Use `.gitignore` as prevention, but also check tracked files with Git because `.gitignore` does not protect files already committed.
+6. Run automated quality checks when possible.
+   - Prefer `node scripts/smoke-test.mjs` from the skill repository when available.
+   - Use the smoke test to verify the skill's own required files, references, templates, language switch style, and publish-check script.
+7. Run automated publish checks when possible.
+   - Prefer `node scripts/publish-check.mjs` from the skill repository when available.
+   - The script must report `PASS`, `WARNING`, or `FAIL`; it must not commit, push, create repositories, or publish.
+   - Treat `FAIL` as a hard stop until fixed.
+8. Run completeness, dependency, sensitive-data, portability, and security checks.
    - Check for API keys, user accounts, private tokens, local paths, private files, and machine-specific assumptions.
    - Redact or replace sensitive/local-only content before publishing.
    - Check whether the skill is complete and whether it has hard dependencies on other skills or private local resources.
    - If a dependency is required, document it clearly or bundle/adapter-isolate it before publishing.
-6. Test platform compatibility where possible.
+9. Test platform compatibility where possible.
    - Target platforms are Codex, Claude Code, and OpenClaw.
    - If a platform cannot be tested in the current environment, mark it `Not tested` and explain why.
    - If any platform is incompatible or only partially compatible, tell the user before publishing and pause for confirmation.
-7. Commit only after the user is satisfied, unless the user explicitly asks to publish immediately.
-8. Create the GitHub repository or push to the existing remote.
-9. Verify URL, branch, remote, repository description, and clean working tree.
+10. Present a final pre-publish summary after all content, including README files, has been generated and checked.
+   - Include target repository, remote URL, branch, visibility, files to publish, README status, security result, completeness result, dependency result, compatibility result, GitHub metadata, warnings, and remaining risks.
+   - Ask explicitly whether to publish to GitHub.
+11. Commit, create repositories, push, sync, or update GitHub metadata only after the user explicitly confirms the final publish action.
+12. Create the GitHub repository or push to the existing remote.
+13. Verify URL, branch, remote, repository description, and clean working tree.
 
 ## Required references
 
 Read only what is needed:
 
 - `references/repo-structure.md` for repository layout rules.
+- `references/pre-publish-flow.md` for the full publish flow and confirmation gates.
 - `references/readme-style.md` for the bilingual README style.
 - `references/install-section.md` for skill installation instructions that README files should include.
 - `references/skill-completeness.md` before public release.
@@ -69,6 +84,19 @@ Read only what is needed:
 - `references/security-checklist.md` before public release.
 - `references/github-workflow.md` for first-time GitHub publishing.
 - `references/update-workflow.md` for later updates.
+
+## Scripts
+
+Optional helper scripts:
+
+```bash
+node scripts/smoke-test.mjs
+node scripts/publish-check.mjs
+```
+
+The smoke test script is a local quality gate. It verifies that this skill's own files, references, templates, and publish-check script are coherent.
+
+The publish check script is a reporting gate only. It must never publish, push, commit, delete files, or mutate GitHub state.
 
 ## Templates
 
@@ -80,6 +108,8 @@ Use these as starting points, not rigid boilerplate:
 - `templates/README.hero.zh.md`
 - `templates/LICENSE-MIT`
 - `templates/gitignore`
+
+Use `templates/README.md` and `templates/README.zh.md` as the default Standard high-conversion README templates. They prioritize user value, product pain, product highlights, workflow, optional preview, one-line installation, direct-use prompt, default configuration, final result, compatibility, and license.
 
 The README templates intentionally omit a limitations section by default.
 Use MIT for `LICENSE` unless the user requests another license.
@@ -96,7 +126,7 @@ Before consequential GitHub actions, explain:
 - files being committed,
 - expected result.
 
-Proceed directly only when the user clearly asks to execute.
+For final publishing, also provide the final pre-publish summary and ask whether to publish. Proceed only when the user clearly confirms the publish/sync/push action.
 
 ## Safety boundaries
 

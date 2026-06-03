@@ -8,8 +8,21 @@ Use this for first-time publishing.
 2. Confirm public or private visibility.
 3. Draft the GitHub repository description.
 4. Confirm repository root is the skill root.
-5. Run publish, platform compatibility, and security checks.
-6. Review `git status`.
+5. Create a cleanup plan for drafts, caches, logs, generated output, local-only files, and environment files.
+6. Check `.gitignore`, `.env`, `.env.example`, and tracked files.
+7. Run smoke test and automated publish check when available:
+
+```bash
+node scripts/smoke-test.mjs
+node scripts/publish-check.mjs
+```
+
+8. Run publish, platform compatibility, completeness, dependency, portability, and security checks.
+9. Review `git status`.
+10. Show the final pre-publish summary after all content, including README files, has been generated and checked.
+11. Ask the user whether to publish to GitHub.
+
+Do not create repositories, commit, push, sync, or edit GitHub metadata until the user explicitly confirms the final publish action.
 
 ## Authentication
 

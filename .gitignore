@@ -4,3 +4,5 @@ node_modules/
 dist/
 build/
 drafts/
+smoke-test-report.json
+publish-check-report.json

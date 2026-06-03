@@ -7,6 +7,8 @@ If a finding includes sensitive or local-only content, fix it before publishing.
 ## Reject or fix immediately
 
 - [ ] API keys, passwords, private tokens, cookies, recovery codes.
+- [ ] Tracked `.env` files or environment files containing real credentials.
+- [ ] `.env.example` files containing real credentials instead of placeholders.
 - [ ] User account identifiers that should not be public, such as private email addresses, phone numbers, internal usernames, cloud account IDs, tenant IDs, or organization-only handles.
 - [ ] Local absolute paths such as `/Users/...`, `/home/...`, `/Volumes/...`, drive-letter paths, private vault paths, or workspace-only directories.
 - [ ] Machine-specific config files, cache paths, database paths, logs, session files, history files, or memory files.
@@ -29,6 +31,7 @@ When sensitive or local-only content is found:
 - [ ] Remove private memory, session, log, cache, or history content from public files.
 - [ ] Confirm the replacement still teaches the user what to do.
 - [ ] Re-run the scan after redaction.
+- [ ] Ask the user before destructive deletion, ambiguous redaction, or moving files that may contain useful work.
 
 Useful scan patterns:
 
@@ -39,6 +42,8 @@ absolute local paths
 hidden local directories
 private memory/session/log files
 internal URLs and webhooks
+tracked `.env` files
+`.env.example` values that are not placeholders
 ```
 
 ## Script safety

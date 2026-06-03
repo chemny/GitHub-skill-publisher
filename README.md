@@ -106,11 +106,15 @@ flowchart TD
     A["Inspect skill files"] --> B["Normalize repository"]
     B --> C["Write bilingual README"]
     C --> D["Generate GitHub metadata"]
-    D --> E["Check completeness and dependencies"]
-    E --> F["Scan and redact sensitive/local-only data"]
-    F --> G["Test platform compatibility"]
-    G --> H["Commit and publish after confirmation"]
-    H --> I["Verify GitHub repository"]
+    D --> E["Create cleanup plan"]
+    E --> F["Run smoke test"]
+    F --> G["Run publish check"]
+    G --> H["Check completeness, dependencies, security, and compatibility"]
+    H --> I["Show final pre-publish summary"]
+    I --> J{"User confirms publish?"}
+    J -- "No" --> K["Stop before GitHub changes"]
+    J -- "Yes" --> L["Commit and publish"]
+    L --> M["Verify GitHub repository"]
 ```
 
 ---
@@ -122,8 +126,17 @@ The skill uses reference checklists and templates stored in `references/` and `t
 It separates the release process into three layers:
 
 - Public documentation: README files, repository description, install instructions, usage examples, platform compatibility, repository structure, and license.
-- Release readiness: required files, referenced assets, dependency assumptions, sensitive-data scan, platform compatibility, portability, Git status, and metadata completeness.
+- Release readiness: required files, referenced assets, dependency assumptions, smoke test, publish check, sensitive-data scan, platform compatibility, portability, Git status, and metadata completeness.
 - GitHub actions: repository creation, metadata update, push, and post-publish verification.
+
+The local check scripts are reporting gates:
+
+```bash
+node scripts/smoke-test.mjs
+node scripts/publish-check.mjs
+```
+
+They validate the repository and write local reports, but they do not commit, push, create repositories, delete files, or mutate GitHub state.
 
 ---
 
@@ -203,11 +216,12 @@ Use GitHub-skill-publisher to scan this skill for API keys, user accounts, local
 When updating a published skill repository:
 
 - Review `git status` and include only intended files.
-- Re-run completeness, dependency, sensitive-data, portability, and compatibility checks when public files change.
+- Re-run smoke test, publish check, completeness, dependency, sensitive-data, portability, and compatibility checks when public files change.
 - Redact API keys, user account details, private URLs, local paths, logs, caches, and machine-specific assumptions before publishing.
 - Report required, optional, adapter-only, or private dependencies before publishing.
 - Update GitHub repository description when the README value proposition changes.
-- Commit, push, or update GitHub metadata only when the user explicitly asks to sync or publish.
+- Show the final pre-publish summary after README and checks are complete.
+- Commit, push, or update GitHub metadata only after the user explicitly confirms the final publish action.
 
 ---
 
@@ -228,6 +242,12 @@ GitHub-skill-publisher/
 ├── .gitignore
 ├── evals/
 ├── references/
+│   ├── pre-publish-flow.md
+│   ├── publish-checklist.md
+│   └── ...
+├── scripts/
+│   ├── smoke-test.mjs
+│   └── publish-check.mjs
 └── templates/
 ```
 

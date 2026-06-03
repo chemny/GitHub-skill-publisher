@@ -43,7 +43,47 @@ This is a required pre-publish check.
 
 ## README style variants
 
-Use the standard structure by default. It is the safest choice for most public skill repositories because it is clear, easy to scan, and familiar to GitHub users.
+Use the Standard high-conversion structure by default. It is the safest choice for most public skill repositories because it helps users quickly understand, trust, install, and use the skill without reading implementation details first.
+
+Standard is not a traditional technical README. It is a user-facing product README. Its default decision path is:
+
+```text
+What is this product?
+What user pain does it solve?
+How does it solve it?
+How do I install and use it?
+```
+
+The default Standard section order is:
+
+```text
+1. Title
+2. Language switch
+3. One-sentence value proposition
+4. What It Is
+5. What Problem It Solves
+6. Product Highlights
+7. Workflow
+8. Preview, optional
+9. One-Line Install
+10. Use It Directly
+11. Default Configuration
+12. What You Get
+13. Compatibility
+14. License
+```
+
+Standard writing rules:
+
+- Lead with user value, not repository structure.
+- Explain pain and outcome before inputs, outputs, schemas, dependencies, or implementation details.
+- Use short, concept-dense language.
+- Prefer user-facing results over internal file names.
+- Make installation as close to one command as practical.
+- Provide a copy-ready prompt for direct use.
+- Include a Mermaid workflow for process-oriented skills.
+- Include a preview image section only when real screenshots, cover images, first-frame previews, UI images, or other persuasive visuals are available.
+- Move technical details, long configuration matrices, and repository internals behind the main value path or into references/docs.
 
 Use the hero badge structure when the user wants a more promotional first screen or when the skill has strong product positioning. This style uses a centered opening block, shields.io badges, a bold value statement, quick navigation links, and language links.
 
@@ -83,6 +123,8 @@ Every public skill README should quickly answer:
 - what license and copyright limits apply.
 
 If the user does not specify a license, use MIT.
+
+For Standard READMEs, answer these baseline questions through the user decision path rather than a long technical checklist. Do not force sections like `Repository Structure`, `Capabilities`, or `Usage Examples` into the top-level README when they make the page feel slower or more technical than needed.
 
 ## Repository description
 
@@ -141,27 +183,26 @@ Use concrete language. Avoid generic statements such as "for anyone who uses AI.
 
 Choose the smallest README structure that explains the skill clearly.
 
-Use a baseline README for simple skills. Baseline does not mean thin; it means no unnecessary workflow diagrams, maintenance mechanism, or conceptual references.
+Use the Standard high-conversion README by default:
 
 ```text
 1. Title
-2. One-sentence value proposition
-3. Language switch link
-4. Who Is This For?
-5. What It Does
-6. Problems It Solves
-7. Why Install It?
-8. Capabilities
-9. Design Principles
-10. Quick Start
-11. Install
-12. Platform Compatibility
-13. Usage Examples
-14. Repository Structure
-15. License
+2. Language switch
+3. One-sentence value proposition
+4. What It Is
+5. What Problem It Solves
+6. Product Highlights
+7. Workflow
+8. Preview, optional
+9. One-Line Install
+10. Use It Directly
+11. Default Configuration
+12. What You Get
+13. Compatibility
+14. License
 ```
 
-Use a full README for complex or public-facing skills:
+Use a fuller README only when the skill truly needs more detail:
 
 ```text
 1. Title
@@ -210,8 +251,8 @@ Every README should include a short path to the first useful result. This can be
 
 The first-use path should include:
 
-- the minimum install step,
-- the prompt or command to run,
+- the simplest install step, ideally one line,
+- a copy-ready prompt or command to run,
 - what success looks like,
 - where to go next for normal usage.
 
@@ -238,7 +279,9 @@ Signal -> Triage -> Route -> Store -> Validate -> Promote -> Prune
 
 Read `references/install-section.md` before writing the installation section.
 
-The install section should not only say "git clone". It should explain:
+The Standard README should prefer one-line installation when practical. Avoid making first-time users run `cd`, `git clone`, and another `cd` as separate steps when one copyable command can do the job.
+
+The install section should still make these facts clear:
 
 - single-skill repository structure,
 - `SKILL.md` at repository root,
@@ -246,6 +289,8 @@ The install section should not only say "git clone". It should explain:
 - why a fresh agent session may be needed,
 - a short verification prompt,
 - how to update later.
+
+If details would slow the README down, keep the Standard section short and move deeper installation variants into references/docs.
 
 ## Design philosophy section
 
@@ -265,11 +310,11 @@ Be careful:
 - Add a disclaimer when naming public figures or companies.
 - Do not let references displace practical installation and usage guidance.
 
-## Update or maintenance section
+## Forbidden top-level README sections
 
-This section is optional. Include it only when the skill has a real update, validation, promotion, pruning, adapter, or maintenance mechanism.
+Standard skill READMEs must not include top-level `Update`, `Updating`, `Publish`, `Publishing`, `更新`, `更新方式`, or `发布` sections.
 
-For ordinary skills, omit it or use a short `Maintenance` section only if there are concrete instructions.
+Keep update, release, and publishing instructions inside the publisher workflow, release checklist, or internal references. The target skill README should stay focused on what the product is, what pain it solves, how it works, how to install it, and how to use it.
 
 ## Repository structure section
 

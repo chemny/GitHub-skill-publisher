@@ -105,11 +105,15 @@ flowchart TD
     A["检查 skill 文件"] --> B["规范仓库结构"]
     B --> C["撰写双语 README"]
     C --> D["生成 GitHub metadata"]
-    D --> E["检查完整性和依赖"]
-    E --> F["扫描并脱敏敏感或本地信息"]
-    F --> G["测试平台兼容性"]
-    G --> H["确认后提交并发布"]
-    H --> I["验证 GitHub 仓库"]
+    D --> E["生成清理计划"]
+    E --> F["运行 smoke test"]
+    F --> G["运行 publish check"]
+    G --> H["检查完整性、依赖、安全和兼容性"]
+    H --> I["展示最终发布清单"]
+    I --> J{"用户确认发布？"}
+    J -- "否" --> K["停止，不修改 GitHub"]
+    J -- "是" --> L["提交并发布"]
+    L --> M["验证 GitHub 仓库"]
 ```
 
 ---
@@ -121,8 +125,17 @@ flowchart TD
 它把发布流程分成三层：
 
 - 公开文档：README、仓库描述、安装说明、使用示例、平台兼容性、仓库结构和协议。
-- 发布准备：必需文件、引用资源、依赖假设、敏感信息扫描、平台兼容性、可移植性、Git 状态和 metadata 完整度。
+- 发布准备：必需文件、引用资源、依赖假设、smoke test、publish check、敏感信息扫描、平台兼容性、可移植性、Git 状态和 metadata 完整度。
 - GitHub 动作：创建仓库、更新 metadata、push 和发布后验证。
+
+本地检查脚本只作为报告闸门：
+
+```bash
+node scripts/smoke-test.mjs
+node scripts/publish-check.mjs
+```
+
+它们会检查仓库并生成本地报告，但不会 commit、push、创建仓库、删除文件或修改 GitHub。
 
 ---
 
@@ -202,11 +215,12 @@ Use GitHub-skill-publisher to scan this skill for API keys, user accounts, local
 更新已发布的 skill 仓库时：
 
 - 先检查 `git status`，只包含预期文件。
-- 公开文件变化后，重新执行完整性、依赖、敏感信息、可移植性和兼容性检查。
+- 公开文件变化后，重新执行 smoke test、publish check、完整性、依赖、敏感信息、可移植性和兼容性检查。
 - 发布前脱敏 API key、用户账号、私有 URL、本地路径、日志、缓存和机器特定假设。
 - 发布前报告 required、optional、adapter-only 或 private 依赖。
 - 当 README 价值主张变化时，同步更新 GitHub 仓库描述。
-- 只有用户明确要求同步或发布时，才执行 commit、push 或 GitHub metadata 更新。
+- README 和检查都完成后，先展示最终发布清单。
+- 只有用户明确确认最终发布动作后，才执行 commit、push 或 GitHub metadata 更新。
 
 ---
 
@@ -227,6 +241,12 @@ GitHub-skill-publisher/
 ├── .gitignore
 ├── evals/
 ├── references/
+│   ├── pre-publish-flow.md
+│   ├── publish-checklist.md
+│   └── ...
+├── scripts/
+│   ├── smoke-test.mjs
+│   └── publish-check.mjs
 └── templates/
 ```
 
