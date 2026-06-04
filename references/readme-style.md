@@ -94,6 +94,8 @@ Available templates:
 ```text
 templates/README.md           Standard Chinese README, GitHub default
 templates/README.en.md        Standard English README
+templates/README.practical-tool.md     Practical utility Chinese README for rule/checklist/example-heavy skills
+templates/README.practical-tool.en.md  Practical utility English README for rule/checklist/example-heavy skills
 templates/README.hero.md      Hero/badge English README
 templates/README.hero.zh.md   Hero/badge Chinese README
 ```
@@ -105,6 +107,33 @@ references/readme-full-agent-evolution.md
 ```
 
 Do not let the hero block replace substantive documentation. After the hero block, keep the same core sections: audience fit, problems solved, capabilities, design principles, quick start, install, usage, platform compatibility, structure, and license.
+
+Use the practical utility structure when a skill is more useful as a manual or rulebook than as a short product page. This pattern works well for rewriting tools, review tools, lint/check tools, prompt tools, and skills with many examples or detectable patterns.
+
+Practical utility structure:
+
+```text
+1. Title
+2. Language switch
+3. Optional source/adaptation statement
+4. Project overview
+5. Installation
+6. Installation verification
+7. Basic usage
+8. Usage scenarios with input/output examples
+9. Detected patterns, rule categories, or capability taxonomy
+10. File guide
+11. Manual workflow
+12. Key principles
+13. Before/after example comparison
+14. Warning list, checklist, or FAQ
+15. Contribution
+16. References
+17. License
+18. Final usage note
+```
+
+This structure was inspired by the public README of `op7418/Humanizer-zh`, which is effective because it combines installation, direct usage, concrete scenarios, rule categories, manual workflow, example comparison, references, and license in a single readable document.
 
 ## Required baseline
 

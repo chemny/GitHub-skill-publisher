@@ -122,12 +122,16 @@ Use these as starting points, not rigid boilerplate:
 
 - `templates/README.md`
 - `templates/README.en.md`
+- `templates/README.practical-tool.md`
+- `templates/README.practical-tool.en.md`
 - `templates/README.hero.md`
 - `templates/README.hero.zh.md`
 - `templates/LICENSE-MIT`
 - `templates/gitignore`
 
 Use `templates/README.md` and `templates/README.en.md` as the default Standard high-conversion README templates. `README.md` is Chinese by default for GitHub's repository homepage, and `README.en.md` is the English switch page. They prioritize user value, product pain, product highlights, workflow, optional preview, one-line installation, direct-use prompt, default configuration, final result, compatibility, and license.
+
+Use `templates/README.practical-tool.md` and `templates/README.practical-tool.en.md` when a skill is a practical utility with rich usage examples, rule categories, manual workflows, before/after examples, warning lists, references, and source attribution.
 
 The README templates intentionally omit a limitations section by default.
 Use MIT for `LICENSE` unless the user requests another license.
