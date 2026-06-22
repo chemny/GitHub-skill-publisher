@@ -53,8 +53,37 @@ function listFiles() {
 const trackedFiles = git(["ls-files"]).split("\n").filter(Boolean);
 const files = listFiles();
 
-for (const rel of ["SKILL.md", "README.md", "LICENSE"]) {
+// A repository can be a single-skill repo (root SKILL.md) or a marketplace /
+// collection repo (.claude-plugin/marketplace.json declaring one or more
+// plugins). Requiring a root SKILL.md in the marketplace case is a structural
+// false positive — those repos correctly have no root SKILL.md.
+const isMarketplace = exists(".claude-plugin/marketplace.json");
+let marketplace = null;
+const requiredFiles = isMarketplace
+  ? [".claude-plugin/marketplace.json", "README.md", "LICENSE"]
+  : ["SKILL.md", "README.md", "LICENSE"];
+for (const rel of requiredFiles) {
   if (!exists(rel)) add("FAIL", "Missing required file", rel);
+}
+
+if (isMarketplace) {
+  try {
+    marketplace = JSON.parse(read(".claude-plugin/marketplace.json"));
+  } catch {
+    add("FAIL", "marketplace.json is not valid JSON", ".claude-plugin/marketplace.json");
+  }
+  const plugins = Array.isArray(marketplace?.plugins) ? marketplace.plugins : [];
+  if (marketplace && plugins.length === 0) {
+    add("FAIL", "marketplace.json declares no plugins", ".claude-plugin/marketplace.json");
+  }
+  for (const p of plugins) {
+    const src = (p?.source ? String(p.source) : "").replace(/^\.\//, "").replace(/\/$/, "");
+    if (!src) {
+      add("FAIL", "Plugin missing source", `${p?.name ?? "(unnamed)"}`);
+    } else if (!exists(src)) {
+      add("FAIL", "Plugin source directory missing", `${p?.name ?? src}: ${src}`);
+    }
+  }
 }
 
 const hasReadme = exists("README.md");
@@ -261,12 +290,17 @@ for (const rel of trackedFiles) {
 // Engineering-quality checks (feed both the release gate and the scorecard).
 // ---------------------------------------------------------------------------
 
-// Frontmatter facts reused below.
+// Identity facts. For a single-skill repo they come from SKILL.md frontmatter;
+// for a marketplace repo they come from the marketplace manifest.
 let fmName = "";
 let fmDescription = "";
 let fmVersion = "";
 let skillBodyLines = 0;
-if (exists("SKILL.md")) {
+if (isMarketplace && marketplace) {
+  fmName = String(marketplace.name ?? "").trim();
+  fmDescription = String(marketplace.description ?? "").replace(/\s+/g, " ").trim();
+  fmVersion = String(marketplace.version ?? "").trim();
+} else if (exists("SKILL.md")) {
   const skill = read("SKILL.md");
   const fm = skill.match(/^---\n([\s\S]*?)\n---/);
   const block = fm ? fm[1] : "";
@@ -279,7 +313,9 @@ if (exists("SKILL.md")) {
 // 1. description quality — the single most important field for triggering.
 const descTriggerRe = /(use this skill when|use this when|use when|use this to|when the user|当用户|使用此|触发|use it to)/i;
 const descLenOk = fmDescription.length >= 40 && fmDescription.length <= 1024;
-const descTriggerOk = descTriggerRe.test(fmDescription);
+// Trigger phrasing matters for a skill's own description; a marketplace manifest
+// describes a collection, so it is N/A there.
+const descTriggerOk = isMarketplace ? true : descTriggerRe.test(fmDescription);
 if (fmDescription && !descLenOk) {
   add("WARNING", "description length is off", `${fmDescription.length} chars; aim for 40-1024 with concrete trigger conditions.`);
 }
@@ -294,9 +330,10 @@ if (fmVersion && !semverOk) {
 }
 
 // 3. SKILL.md body weight — bloated SKILL.md hurts load and triggering.
+// N/A for a marketplace repo (no root SKILL.md), so treat as satisfied there.
 const SKILL_BODY_BUDGET = 400;
-const skillWeightOk = skillBodyLines > 0 && skillBodyLines <= SKILL_BODY_BUDGET;
-if (skillBodyLines > SKILL_BODY_BUDGET) {
+const skillWeightOk = isMarketplace ? true : skillBodyLines > 0 && skillBodyLines <= SKILL_BODY_BUDGET;
+if (!isMarketplace && skillBodyLines > SKILL_BODY_BUDGET) {
   add("WARNING", "SKILL.md is heavy", `${skillBodyLines} non-empty body lines (budget ${SKILL_BODY_BUDGET}); push detail into references/.`);
 }
 
@@ -344,7 +381,10 @@ for (const rel of shellAndNodeScripts) {
     add("WARNING", "Script missing shebang", rel);
   }
 }
-const evalsPresent = files.some((rel) => /^evals\//.test(rel)) || exists("scripts/smoke-test.mjs");
+const evalsPresent =
+  files.some((rel) => /^evals\//.test(rel)) ||
+  exists("scripts/smoke-test.mjs") ||
+  files.some((rel) => /(?:^|\/)validate[^/]*\.(py|mjs|js)$/i.test(rel));
 
 const fail = results.filter((r) => r.level === "FAIL");
 const warning = results.filter((r) => r.level === "WARNING");

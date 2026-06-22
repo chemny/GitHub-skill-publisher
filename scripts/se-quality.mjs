@@ -73,6 +73,20 @@ const templateFiles = files.filter((r) => /^templates\//.test(r));
 const scriptFiles = files.filter((r) => /^scripts\/.*\.(mjs|js|cjs)$/.test(r));
 const referencedPaths = new Set(allText.match(/\b(?:references|templates|scripts|assets)\/[A-Za-z0-9._/-]+/g) || []);
 
+// A repo is either a single-skill repo (root SKILL.md) or a marketplace/collection
+// repo (.claude-plugin/marketplace.json). Single-skill-only metrics are marked N/A
+// (excluded from the denominator) when they do not apply.
+const isMarketplace = exists(".claude-plugin/marketplace.json");
+let marketplace = null;
+if (isMarketplace) {
+  try {
+    marketplace = JSON.parse(read(".claude-plugin/marketplace.json"));
+  } catch {
+    marketplace = null;
+  }
+}
+const hasJsScripts = scriptFiles.length > 0; // JS helper scripts we can statically assess
+
 // ---- helpers for individual signals -------------------------------------
 
 function nodeChecks(rel) {
@@ -100,10 +114,11 @@ function crossScriptImports() {
 }
 
 const permissiveLicense = /\b(MIT License|Apache License|BSD \d-Clause|ISC License|Mozilla Public License)\b/i.test(readSafe("LICENSE"));
-const onlyOpenFormats = files.every((rel) =>
-  /\.(md|markdown|txt|json|ya?ml|mjs|cjs|js|ts|sh|toml|csv)$/i.test(rel) ||
-  /(?:^|\/)(LICENSE|LICENSE-[A-Z]+|\.gitignore|gitignore|\.editorconfig)$/.test(rel)
-);
+// Openness about formats means "no proprietary / editor-locked / binary blobs",
+// captured better by a denylist than by trying to enumerate every open extension
+// (markdown, source, images, html, etc. are all fine).
+const proprietaryFormat = /\.(docx?|xlsx?|pptx?|key|pages|numbers|sketch|fig|psd|ai|indd|cdr|exe|dll|so|dylib|class|jar|bin)$/i;
+const onlyOpenFormats = files.every((rel) => !proprietaryFormat.test(rel));
 const hardDepPhrase = /\b(?:requires? the [A-Za-z0-9_-]+ skill|depends on the [A-Za-z0-9_-]+ skill|必须(?:先)?安装[^\n]{0,20}skill|依赖[^\n]{0,20}skill)\b/i.test(allText);
 // Exclude this checker from pattern-literal scans: its own source contains every
 // detection regex, so scanning it would always self-match (false positive).
@@ -135,10 +150,12 @@ const drySplit = (skillBody.split(/\r?\n/).filter((l) => l.trim()).length <= 400
 // [det] deterministic · [proxy] heuristic signal
 const spec = [
   ["完整性 Completeness", [
-    ["required artifacts (SKILL/README/LICENSE/.gitignore)", "det", ["SKILL.md", "README.md", "LICENSE", ".gitignore"].filter(exists).length / 4, 4],
+    ["required artifacts present", "det", (isMarketplace
+      ? [".claude-plugin/marketplace.json", "README.md", "LICENSE", ".gitignore"]
+      : ["SKILL.md", "README.md", "LICENSE", ".gitignore"]).filter(exists).length / 4, 4],
     ["no broken references", "det", brokenRefCount === 0, 4],
     ["no orphan files", "det", orphanCount === 0, 4],
-    ["self-test / evals present", "det", exists("scripts/smoke-test.mjs") || files.some((r) => /^evals\//.test(r)), 3],
+    ["self-test / evals present", "det", exists("scripts/smoke-test.mjs") || files.some((r) => /^evals\//.test(r)) || files.some((r) => /(?:^|\/)validate[^/]*\.(py|mjs|js)$/i.test(r)), 3],
     ["install + usage documented", "det", (readmeHasInstall ? 0.5 : 0) + (readmeHasUsage ? 0.5 : 0), 3],
   ]],
   ["开放性 Openness / Extensibility", [
@@ -149,7 +166,7 @@ const spec = [
     ["external deps standard & declared", "proxy", depsDeclared && !hardDepPhrase, 2],
   ]],
   ["复用性 Reusability", [
-    ["reusable templates provided", "det", templateFiles.length > 0, 4],
+    ["reusable units provided (templates/skills)", "det", isMarketplace ? files.some((r) => /skills\/.+\/SKILL\.md$/.test(r) || /commands\/.+\.md$/.test(r)) : templateFiles.length > 0, 4],
     ["scripts parameterized (CLI/env)", "proxy", scriptsTakeArgs, 4],
     ["self-contained (no hard skill/private dep)", "proxy", !hardDepPhrase, 4],
     ["DRY: detail pushed to references", "proxy", drySplit, 4],
@@ -158,7 +175,7 @@ const spec = [
     ["single responsibility (one skill = one repo)", "det", !nestedSkillWrapper, 4],
     ["references split into focused files", "proxy", refFiles.length >= 4 && avgRefLines <= 250, 4],
     ["scripts single-responsibility (split by role)", "proxy", scriptFiles.length >= 2, 4],
-    ["SKILL.md sectioned by concern (>=5 sections)", "det", skillSections >= 5, 4],
+    ["SKILL.md sectioned by concern (>=5 sections)", "det", exists("SKILL.md") ? skillSections >= 5 : null, 4],
   ]],
   ["低耦合 Coupling", [
     ["no hard cross-skill dependency", "proxy", !hardDepPhrase, 5],
@@ -167,10 +184,12 @@ const spec = [
     ["no required network/service at runtime", "proxy", !networkCall, 4],
   ]],
   ["健壮性 Robustness", [
-    ["scripts parse (node --check)", "det", allScriptsParse, 4],
-    ["error handling present (try/catch)", "det", scriptsHaveTryCatch, 4],
-    ["graceful on missing inputs (guards)", "det", scriptsGuardInputs, 4],
-    ["meaningful failure signaling", "det", scriptsSignalFailure, 4],
+    // N/A when there are no JS helper scripts to assess (e.g. a pure-markdown
+    // skill, or a marketplace repo whose tooling is non-JS) — excluded, not failed.
+    ["scripts parse (node --check)", "det", hasJsScripts ? allScriptsParse : null, 4],
+    ["error handling present (try/catch)", "det", hasJsScripts ? scriptsHaveTryCatch : null, 4],
+    ["graceful on missing inputs (guards)", "det", hasJsScripts ? scriptsGuardInputs : null, 4],
+    ["meaningful failure signaling", "det", hasJsScripts ? scriptsSignalFailure : null, 4],
   ]],
 ];
 
@@ -186,6 +205,10 @@ const scorecard = spec.map(([category, items]) => {
   let cDetEarned = 0;
   let cDetMax = 0;
   const detailed = items.map(([label, kind, val, pts]) => {
+    if (val === null) {
+      // N/A — does not apply to this repo; excluded from score and proxy counts.
+      return { label, kind, counted: false, na: true, earned: null, pts, ok: true };
+    }
     const frac = typeof val === "number" ? Math.max(0, Math.min(1, val)) : val ? 1 : 0;
     const ok = frac >= 1;
     if (kind === "det") {
@@ -210,8 +233,9 @@ const band =
   score >= 60 ? "C · 有待加固" :
   "D · 工程薄弱";
 
+const mode = isMarketplace ? "marketplace" : "single-skill";
 const report = {
-  summary: { score, band, deterministicPoints: `${detEarned}/${detMax}`, proxySignals: `${proxyPositive}/${proxyTotal}`, checkedAt: new Date().toISOString() },
+  summary: { score, band, mode, deterministicPoints: `${detEarned}/${detMax}`, proxySignals: `${proxyPositive}/${proxyTotal}`, checkedAt: new Date().toISOString() },
   scorecard,
 };
 fs.writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`, "utf8");
@@ -219,12 +243,16 @@ fs.writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`, "utf8");
 if (jsonOnly) {
   console.log(JSON.stringify(report, null, 2));
 } else {
-  console.log(`SE quality score: ${score}/100  (${band})  — deterministic core only`);
+  console.log(`SE quality score: ${score}/100  (${band})  — deterministic core only · ${mode} repo`);
   console.log(`- proxy signals (advisory, not scored): ${proxyPositive}/${proxyTotal} positive`);
   console.log(`- report: ${path.relative(root, reportPath)}`);
   for (const cat of scorecard) {
     console.log(`\n[${cat.category}] ${cat.detEarned}/${cat.detMax}`);
     for (const it of cat.items) {
+      if (it.na) {
+        console.log(`   – ${it.label} [n/a]`);
+        continue;
+      }
       const tag = it.counted ? `[det]  ${it.earned}/${it.pts}` : "[proxy · advisory]";
       console.log(`   ${it.ok ? "✓" : "✗"} ${it.label} ${tag}`);
     }
