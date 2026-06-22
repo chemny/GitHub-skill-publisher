@@ -146,6 +146,66 @@ const extensionDocs = templateFiles.length > 0 && /(starting point|template|起�
 const depsDeclared = /(?:\bgit\b)/.test(allText) && /\bnode(?:\.js)?\b/i.test(allText);
 const drySplit = (skillBody.split(/\r?\n/).filter((l) => l.trim()).length <= 400) && refFiles.length >= 3;
 
+// ---- content-craftsmanship signals (borrowed from skill-validator-style
+// content metrics) ---------------------------------------------------------
+// These measure how the SKILL.md reads, not just whether sections exist —
+// catching thin/placeholder sections, narrative-not-instructional prose, and
+// vague-not-specific guidance. Reported as advisory (proxy), per the earlier
+// "proxy out of total score" decision; flip to [det] to make them count.
+function sectionWordCounts(body) {
+  const sections = [];
+  let cur = null;
+  for (const ln of body.split(/\r?\n/)) {
+    const h = ln.match(/^#{2,3}\s+(.+)/);
+    if (h) {
+      cur = { title: h[1].trim(), words: 0 };
+      sections.push(cur);
+    } else if (cur) {
+      cur.words += (ln.trim().match(/\S+/g) || []).length;
+    }
+  }
+  return sections;
+}
+const skillSections2 = exists("SKILL.md") ? sectionWordCounts(skillBody) : [];
+// A section with almost no body is a placeholder — exactly the gap a
+// "section exists" structure check would wave through.
+const noThinSections = exists("SKILL.md") ? skillSections2.every((s) => s.words >= 8) : null;
+
+const bulletLines = skillBody.split(/\r?\n/).filter((l) => /^\s*(?:[-*]|\d+\.)\s+\S/.test(l));
+const imperativeLed = /^\s*(?:[-*]|\d+\.)\s+(?:use|run|check|add|remove|avoid|do|don'?t|ensure|read|write|create|set|keep|prefer|treat|validate|generate|report|ask|confirm|skip|stop|normalize|migrate|never|always|call|pass|return|include|exclude|verify|review|update|fix|build|test|follow|apply)\b/i;
+const imperativeRatio = bulletLines.length ? bulletLines.filter((l) => imperativeLed.test(l)).length / bulletLines.length : 0;
+const instructional = exists("SKILL.md") ? bulletLines.length >= 5 && imperativeRatio >= 0.3 : null;
+
+const codeBlocks = (skillBody.match(/```/g) || []).length / 2;
+const pathTokens = (skillBody.match(/[\w.-]+\/[\w./-]+\.\w+/g) || []).length;
+const exampleMarkers = (skillBody.match(/\b(?:example|e\.g\.)\b|例如|示例/gi) || []).length;
+const hasSpecifics = exists("SKILL.md") ? codeBlocks + pathTokens + exampleMarkers >= 3 : null;
+
+// Borrowed from darwin-skill / SkillLens rubric (arXiv 2605.23899):
+// dim5 actionable specificity — vague hedging ("视情况而定 / as appropriate")
+// dilutes instructions; >=3 occurrences reads as too soft.
+const hedgePhrase = /建议|可以考虑|酌情|视情况(?:而定)?|根据情况|灵活(?:把握|应用|运用)|看情况|尽量|\bas appropriate\b|\bas needed\b|\bif appropriate\b|\buse (?:your )?judg?ment\b|\byou (?:might|may) (?:want|consider)\b|\bfeel free\b|\bwhere possible\b/gi;
+const hedgeCount = exists("SKILL.md") ? (skillBody.match(hedgePhrase) || []).length : 0;
+const lowHedging = exists("SKILL.md") ? hedgeCount < 3 : null;
+
+// dim3 failure-mode encoding — a skill should encode "if X fails -> Y" branches,
+// not only the happy path.
+const encodesFailureModes = exists("SKILL.md")
+  ? /如果[^\n]{0,40}(?:失败|不行|没有|无法|出错)|否则|回滚|fall ?back|on failure|if [^\n]{0,40}\bfails?\b|when [^\n]{0,40}\bfails?\b|hard stop|stop and ask|退化为/i.test(skillBody)
+  : null;
+
+// dim9 anti-examples / blacklist — a skill should say what NOT to do, not only
+// what to do.
+const hasAntiExamples = exists("SKILL.md")
+  ? /不要|避免|禁止|反例|黑名单|\bdo not\b|\bdon'?t\b|\bnever\b|\bavoid\b|安全边界|safety boundar/i.test(skillBody)
+  : null;
+
+// Runtime-neutrality (darwin runtime red-flag) — phrasing that locks the skill to
+// one runtime makes other agents reject it. Platform LISTS and install paths are
+// fine; only single-runtime EXCLUSIVITY is flagged.
+const runtimeLockText = [skill, readSafe("README.md"), readSafe("README.en.md")].join("\n");
+const runtimeNeutral = !/在\s*Claude Code\s*(?:里|中)|Claude Code skill\b|仅(?:适用于?|支持)\s*(?:Claude Code|Cursor|Codex)|(?:Cursor|Codex|Claude Code)\s+only\b|only works (?:in|with)\s+(?:Claude Code|Cursor|Codex)|只能在\s*(?:Claude Code|Cursor|Codex)/i.test(runtimeLockText);
+
 // ---- rubric --------------------------------------------------------------
 // [det] deterministic · [proxy] heuristic signal
 const spec = [
@@ -164,6 +224,7 @@ const spec = [
     ["documented extension points", "proxy", extensionDocs, 4],
     ["bilingual docs", "det", exists("README.md") && exists("README.en.md"), 2],
     ["external deps standard & declared", "proxy", depsDeclared && !hardDepPhrase, 2],
+    ["runtime-neutral phrasing (cross-agent portable)", "proxy", runtimeNeutral, 0],
   ]],
   ["复用性 Reusability", [
     ["reusable units provided (templates/skills)", "det", isMarketplace ? files.some((r) => /skills\/.+\/SKILL\.md$/.test(r) || /commands\/.+\.md$/.test(r)) : templateFiles.length > 0, 4],
@@ -190,6 +251,17 @@ const spec = [
     ["error handling present (try/catch)", "det", hasJsScripts ? scriptsHaveTryCatch : null, 4],
     ["graceful on missing inputs (guards)", "det", hasJsScripts ? scriptsGuardInputs : null, 4],
     ["meaningful failure signaling", "det", hasJsScripts ? scriptsSignalFailure : null, 4],
+  ]],
+  // Borrowed content-quality signals. Advisory (proxy): they enrich the readout
+  // with how the docs READ, without moving the deterministic score. N/A for a
+  // marketplace repo (no root SKILL.md to assess).
+  ["文档质量 Doc craftsmanship (advisory)", [
+    ["no thin/placeholder sections", "proxy", noThinSections, 0],
+    ["instructional (imperative-led steps)", "proxy", instructional, 0],
+    ["concrete specifics (code/paths/examples)", "proxy", hasSpecifics, 0],
+    ["low hedging language (actionable, not vague)", "proxy", lowHedging, 0],
+    ["encodes failure modes (if X fails -> Y)", "proxy", encodesFailureModes, 0],
+    ["lists anti-examples / what not to do", "proxy", hasAntiExamples, 0],
   ]],
 ];
 
