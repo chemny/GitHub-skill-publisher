@@ -2,105 +2,91 @@
 
 [中文](./README.md) | English
 
-{{One-sentence value proposition: explain what this skill turns into what useful result.}}
+{{Skill Name}} is a {{product positioning}} for {{audience 1}}, {{audience 2}}, {{audience 3}}, and agent users. It turns {{scattered or inefficient user inputs/assets}} into {{reusable/traceable/deliverable results}} so later {{follow-up task 1}}, {{follow-up task 2}}, and {{follow-up task 3}} have a clearer starting point.
 
-## What It Is
+It supports {{core capability 1}}, {{core capability 2}}, and {{core capability 3}}, and it can also {{fuller workflow capability}}.
 
-{{Explain the product positioning in 2-3 short sentences. Write for first-time users, not maintainers.}}
+## Who Is This For?
 
-It is not {{non-target-1}}, and it is not {{non-target-2}}. Its core job is to {{core-job}}.
+This skill is designed for:
 
-## What Problem It Solves
+- {{Audience 1}}
+- {{Audience 2}}
+- {{Target workflow or team scenario}}
 
-{{Use 4-6 bullets to name the user's real pain. Keep this practical and concrete.}}
+## What It Does
 
-- {{Pain point 1}}
-- {{Pain point 2}}
-- {{Pain point 3}}
-- {{Pain point 4}}
-- {{Pain point 5, optional}}
+{{Explain in 1-2 natural paragraphs what this skill does and what result users get. Avoid hype and vague adjectives.}}
 
-## Product Highlights
+## Capabilities
 
-{{Use dense, high-signal bullets. Each item should explain why the skill is worth installing.}}
+List capabilities in order of user importance. Put the capabilities that decide whether the skill is worth installing and whether it can complete its main job first; put supporting capabilities later.
 
-- **{{Highlight 1}}**: {{One-sentence explanation}}
-- **{{Highlight 2}}**: {{One-sentence explanation}}
-- **{{Highlight 3}}**: {{One-sentence explanation}}
-- **{{Highlight 4}}**: {{One-sentence explanation}}
-- **{{Highlight 5, optional}}**: {{One-sentence explanation}}
+| Capability | What it handles | Output |
+|---|---|---|
+| {{Capability 1}} | {{Handled input/context 1}} | {{Output 1}} |
+| {{Capability 2}} | {{Handled input/context 2}} | {{Output 2}} |
+| {{Capability 3}} | {{Handled input/context 3}} | {{Output 3}} |
 
-## Workflow
+## Platform Compatibility
 
-```mermaid
-flowchart TD
-    A["{{User input}}"] --> B["{{Understand / analyze}}"]
-    B --> C["{{Create core content}}"]
-    C --> D["{{Run key workflow}}"]
-    D --> E["{{Preview / verify}}"]
-    E --> F{"{{Approved?}}"}
-    F -- "Revise" --> C
-    F -- "Approve" --> G["{{Generate final result}}"]
-    G --> H["{{Package / deliver}}"]
-```
+{{One-sentence platform compatibility note. Do not claim full compatibility for platforms that have not been tested.}}
 
-{{Explain the workflow in 1-2 sentences. Do not expand into implementation details.}}
-
-<!-- Optional: show this section only when the repository has screenshots, cover images, first-frame previews, UI images, or other persuasive visuals.
-## Preview
-
-![{{Preview image alt text}}](./assets/{{preview-image}})
--->
-
-## One-Line Install
+## Install
 
 ```bash
-{{one-line-install-command}}
+git clone {{repo-url}}
 ```
 
-After installation, start a fresh agent session so it can reload the skill.
+Place the cloned folder in the skills directory used by your agent, or import it using your agent's own skill installation flow. Keep `SKILL.md` at the root of that skill folder.
 
-## Use It Directly
+After installing, start a fresh agent session so it can rescan skills.
+
+## Quick Start
+
+Ask your agent:
 
 ```text
-{{A copy-ready prompt the user can paste into Codex, Claude Code, OpenClaw, or another compatible agent.}}
+{{Write an English prompt the user can paste into Codex, Claude Code, OpenClaw, or another compatible agent.}}
 ```
 
-{{Optional next-step prompt after approval or confirmation.}}
-
-## Default Configuration
-
-{{Only include the configuration users must know. Keep provider lists and environment variables short.}}
-
-- {{Default behavior 1}}
-- {{Default behavior 2}}
-- {{Optional provider or integration 1}}
-- {{Optional provider or integration 2}}
-- Keep real credentials in local environment variables or a private `.env`; never commit them.
-
-## What You Get
-
-{{Describe the final result in user-facing language before listing files or artifacts.}}
+Expected result:
 
 ```text
-{{result-1}}     {{Short explanation}}
-{{result-2}}     {{Short explanation}}
-{{result-3}}     {{Short explanation}}
-{{result-4}}     {{Short explanation}}
+{{What the user should see or receive after the first successful use.}}
 ```
 
-{{One-sentence final value summary.}}
-
-## Compatibility
+## Usage Examples
 
 ```text
-Codex: {{Supported / Tested / Designed to support / Not tested}}
-Claude Code: {{Supported / Tested / Designed to support / Not tested}}
-OpenClaw: {{Supported / Tested / Designed to support / Not tested}}
+{{English example prompt 1}}
 ```
 
-Do not claim full compatibility for platforms that have not been tested.
+```text
+{{English example prompt 2}}
+```
+
+## How It Works
+
+{{Briefly explain how this skill uses repository files, scripts, templates, or references to complete the task. Keep it short for simple skills.}}
+
+## Repository Structure
+
+```text
+{{repo-name}}/
+├── SKILL.md
+├── README.md
+├── README.en.md
+└── {{Core file}}
+```
+
+## Requirements
+
+- {{Requirement 1}}
+- {{Requirement 2}}
+- {{Requirement 3}}
+- Optional: {{Optional dependency or integration}}
 
 ## License
 
-MIT
+MIT. See [LICENSE](./LICENSE).

@@ -31,8 +31,6 @@ Run this checklist before publishing a skill repository.
 - [ ] Description explains what the skill does in one sentence.
 - [ ] Description is concrete, not generic, empty, or only the skill name.
 - [ ] Description matches the README value proposition.
-- [ ] Topics are added when useful.
-
 ## Skill metadata
 
 - [ ] `SKILL.md` has valid YAML frontmatter.
@@ -60,6 +58,15 @@ Run this checklist before publishing a skill repository.
 - [ ] Any redaction preserves useful installation or usage guidance.
 - [ ] Sensitive-data scan was re-run after redaction.
 
+## Third-party and copyright review
+
+- [ ] Public files were checked for third-party names, brand names, platform names, copyright notices, trademark notices, upstream-source statements, and external license limits.
+- [ ] Findings were not removed automatically.
+- [ ] Findings were listed for the user with file paths and short context.
+- [ ] User chose whether to keep, rewrite, add attribution, or remove each finding before publishing.
+- [ ] Any retained third-party references are necessary for compatibility, installation, usage, attribution, or license clarity.
+- [ ] No third-party endorsement, ownership, relicensing, or affiliation is implied unless documented.
+
 ## Automated publish check
 
 - [ ] `node scripts/smoke-test.mjs` was run when available.
@@ -71,31 +78,36 @@ Run this checklist before publishing a skill repository.
 
 ## README
 
+- [ ] Existing README was evaluated against the current default README structure before publishing.
+- [ ] README template compliance was treated as a release quality gate, not only as writing guidance.
+- [ ] Missing key modules were added unless the user explicitly requested a pass-through release.
 - [ ] Explains why the skill exists.
 - [ ] Explains who should use or install it.
-- [ ] Names target users, target workflows, and non-target cases.
-- [ ] Explains what problems it solves.
-- [ ] Explains why it is worth installing.
+- [ ] Names target users and target workflows.
 - [ ] Explains what it can do.
 - [ ] Explains how it works.
-- [ ] Explains design principles and practical advantages.
 - [ ] Reduces comprehension friction: reader can tell what it is and why it matters from the first screen.
 - [ ] Reduces trust friction: mechanism and limits of authority are clear.
 - [ ] Reduces action friction: install, verify, and first-use path are easy to follow.
 - [ ] Uses baseline or full structure according to the skill's complexity.
 - [ ] Includes diagrams only when process-oriented.
-- [ ] Includes install instructions beyond a bare `git clone`.
+- [ ] Includes a low-friction install path: usually a bare `git clone` plus one short sentence about placing/importing the folder into the user's own agent skills location.
 - [ ] Explains `SKILL.md` must be at the skill root.
 - [ ] Explains that a fresh agent session may be needed after installation.
 - [ ] Includes a verification prompt.
 - [ ] Includes a quick-start or first-success example.
-- [ ] Includes update instructions.
 - [ ] Includes usage examples.
+- [ ] Includes core capabilities.
+- [ ] Includes requirements, configuration, or dependency assumptions when relevant.
 - [ ] Includes repository structure generated from actual files.
 - [ ] Explains license and copyright limits.
+- [ ] Release surface was normalized by default for publisher-managed release.
 - [ ] `README.md` is Chinese by default because GitHub uses it as the repository homepage.
 - [ ] `README.en.md` is complete English documentation, not a short placeholder.
 - [ ] `README.md` and `README.en.md` link to each other near the top using a clear language switch.
+- [ ] Legacy `README.zh.md` is absent unless the user explicitly requested a pass-through release that preserves old README files.
+- [ ] If pass-through was explicitly requested, legacy `README.md` English + `README.zh.md` Chinese was reported as a warning and `--allow-legacy-readme` was used.
+- [ ] If pass-through was explicitly requested for any old README structure, missing current-template modules were reported as warnings.
 - [ ] English and Chinese READMEs are aligned in substance.
 - [ ] No accidental mixed-language README body unless the user explicitly requested a single bilingual README.
 - [ ] No default limitations section unless the user asks for one.
@@ -127,7 +139,7 @@ Run this checklist before publishing a skill repository.
 
 - [ ] All content, including README files, has been generated and checked.
 - [ ] Final pre-publish summary was shown to the user.
-- [ ] Summary included target repository, remote URL, branch, visibility, file list, README status, security result, completeness result, dependency result, compatibility result, GitHub metadata, warnings, and remaining risks.
+- [ ] Summary included target repository, remote URL, branch, visibility, file list, README status, security result, third-party/copyright review result, completeness result, dependency result, compatibility result, GitHub metadata, warnings, and remaining risks.
 - [ ] Explicit publish authorization exists before any commit, push, repository creation, sync, or GitHub metadata update.
 - [ ] If the current request used edit-only wording, the user was asked before publishing.
 - [ ] If the current request used explicit edit-plus-publish wording, publishing proceeded after successful checks without a second confirmation.

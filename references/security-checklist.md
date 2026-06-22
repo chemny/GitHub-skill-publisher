@@ -65,3 +65,15 @@ If scripts write files:
 - [ ] Do not publish private memory files.
 - [ ] Do not include local-only credentials or paths in examples.
 - [ ] Report any redactions or removals to the user before publishing.
+
+## Third-party names and copyright review
+
+If public files mention third-party names, brand names, platform names, upstream projects, copyright notices, trademark notices, or external license limits:
+
+- [ ] Do not remove or rewrite the content automatically.
+- [ ] List the exact files and short finding descriptions in the final pre-publish summary.
+- [ ] Ask the user whether each finding should be kept, rewritten, attributed more clearly, or removed.
+- [ ] Keep neutral product/platform names only when they are necessary for installation, compatibility, attribution, or usage.
+- [ ] Do not claim ownership of third-party materials, platform names, brand names, examples, templates, or upstream references.
+- [ ] Do not imply third-party endorsement unless it is explicitly documented.
+- [ ] If upstream content or adapted material is included, make attribution and license boundaries clear before publishing.

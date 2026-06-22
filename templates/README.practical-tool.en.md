@@ -10,7 +10,7 @@
 
 ## Overview
 
-{{Explain in 2-3 sentences what this skill is, what problem it solves, and what useful result users get.}}
+{{Explain in 2-3 sentences what this skill is, who it is for, and what useful result users get.}}
 
 This project is useful for:
 
@@ -20,31 +20,11 @@ This project is useful for:
 
 ## Installation
 
-### Method 1: One-line install, recommended
-
 ```bash
-{{one-line-install-command}}
+git clone {{repo-url}}
 ```
 
-{{Explain why this is the simplest installation path.}}
-
-### Method 2: Git clone
-
-```bash
-git clone {{repo-url}} {{target-skill-dir}}
-```
-
-### Method 3: Manual install
-
-1. Download or clone this project.
-2. Copy the project folder into your agent's skills directory.
-3. Make sure the folder structure looks like this:
-
-```text
-{{skill-name}}/
-├── SKILL.md
-└── README.md
-```
+Place the cloned folder in the skills directory used by your agent, or import it using your agent's own skill installation flow. Keep `SKILL.md` at the root of that skill folder.
 
 ### Verify Installation
 

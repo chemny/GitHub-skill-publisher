@@ -36,6 +36,31 @@ Local edits and GitHub publication are separate actions. Use two authorization m
 
 Always run the relevant pre-publish checks and provide a publish summary before or during the final response.
 
+## Release surface normalization rule
+
+Any skill published through GitHub-skill-publisher is a publisher-managed release by default. Before publishing, normalize the public release surface:
+
+```text
+README.md      Chinese, GitHub default
+README.en.md   English
+GitHub description: Chinese by default
+```
+
+Old projects may still have the legacy layout:
+
+```text
+README.md      English
+README.zh.md   Chinese
+```
+
+Do not silently keep this layout during a publisher-managed release. Migrate it by default before publishing.
+
+Only keep the legacy layout when the user explicitly says to preserve the old README, not migrate README, or publish the current files as-is. In that pass-through case, report the legacy layout as a warning and run:
+
+```bash
+node scripts/publish-check.mjs --allow-legacy-readme
+```
+
 ## When to use
 
 Use this skill when the user asks to:
@@ -58,6 +83,10 @@ Inspect -> Normalize -> Write README -> Pre-publish cleanup -> Smoke test -> Pub
 1. Inspect the local skill files and current git state.
 2. Normalize to single-skill repository structure.
 3. Write or update `README.md`, `README.en.md`, `LICENSE`, and `.gitignore` when useful.
+   - Treat the README template as a release quality gate, not only as writing guidance.
+   - For publisher-managed releases, evaluate any existing README against the current default README structure before publishing.
+   - Do not blindly overwrite old READMEs, but if the user did not explicitly ask to preserve the current README as-is, upgrade missing key modules before publishing.
+   - Required README modules include audience fit, what it does, core capabilities, platform compatibility, install, quick start, usage examples, how it works, repository/file structure, requirements or configuration, and license.
 4. Generate or update GitHub repository metadata, especially the repository description.
    - Use a Chinese repository description by default unless the user explicitly requests English or an international-facing repository.
    - The description should match the first-screen value proposition in `README.md`.
@@ -70,11 +99,16 @@ Inspect -> Normalize -> Write README -> Pre-publish cleanup -> Smoke test -> Pub
    - Use the smoke test to verify the skill's own required files, references, templates, language switch style, and publish-check script.
 7. Run automated publish checks when possible.
    - Prefer `node scripts/publish-check.mjs` from the skill repository when available.
+   - By default, `node scripts/publish-check.mjs` requires the normalized release surface: Chinese `README.md`, English `README.en.md`, and no legacy `README.zh.md`.
+   - The publish check must validate README structure, not only README language layout. A README that is Chinese by default but misses required product/documentation modules is not release-ready.
+   - Use `node scripts/publish-check.mjs --allow-legacy-readme` only when the user explicitly requests a pass-through release that preserves old README files.
    - The script must report `PASS`, `WARNING`, or `FAIL`; it must not commit, push, create repositories, or publish.
    - Treat `FAIL` as a hard stop until fixed.
 8. Run completeness, dependency, sensitive-data, portability, and security checks.
    - Check for API keys, user accounts, private tokens, local paths, private files, and machine-specific assumptions.
    - Redact or replace sensitive/local-only content before publishing.
+   - Check for third-party names, brand names, platform names, copyright notices, trademark notices, upstream-source statements, and external license-limit notes.
+   - If third-party or copyright-related content is found, do not remove it automatically. List the findings and ask the user whether to keep, rewrite, add attribution, or remove them before publishing.
    - Check whether the skill is complete and whether it has hard dependencies on other skills or private local resources.
    - If a dependency is required, document it clearly or bundle/adapter-isolate it before publishing.
 9. Test platform compatibility where possible.
@@ -82,7 +116,7 @@ Inspect -> Normalize -> Write README -> Pre-publish cleanup -> Smoke test -> Pub
    - If a platform cannot be tested in the current environment, mark it `Not tested` and explain why.
    - If any platform is incompatible or only partially compatible, tell the user before publishing and pause for confirmation.
 10. Present a final pre-publish summary after all content, including README files, has been generated and checked.
-   - Include target repository, remote URL, branch, visibility, files to publish, README status, security result, completeness result, dependency result, compatibility result, GitHub metadata, warnings, and remaining risks.
+   - Include target repository, remote URL, branch, visibility, files to publish, README status, security result, third-party/copyright review result, completeness result, dependency result, compatibility result, GitHub metadata, warnings, and remaining risks.
    - Ask explicitly whether to publish to GitHub only when the user's current request did not already include explicit edit-plus-publish authorization.
 11. Commit, create repositories, push, sync, or update GitHub metadata only after explicit publish authorization exists.
 12. Create the GitHub repository or push to the existing remote.
@@ -110,11 +144,16 @@ Optional helper scripts:
 ```bash
 node scripts/smoke-test.mjs
 node scripts/publish-check.mjs
+node scripts/se-quality.mjs
 ```
 
 The smoke test script is a local quality gate. It verifies that this skill's own files, references, templates, and publish-check script are coherent.
 
-The publish check script is a reporting gate only. It must never publish, push, commit, delete files, or mutate GitHub state.
+The publish check script is a reporting gate only. It must never publish, push, commit, delete files, or mutate GitHub state. It reports a release gate (PASS/WARNING/FAIL) plus an engineering-hygiene score covering metadata, documentation, structure, security, and tooling.
+
+The se-quality script reports a separate software-engineering quality score (completeness, openness/extensibility, reusability, cohesion, coupling, robustness). Like publish-check, it only reports and never mutates state. Each sub-metric is tagged deterministic or proxy so the score stays honest.
+
+Run order: `publish-check` is the release gate — run it first. `se-quality` assumes that gate has passed; it does not re-detect blockers (secrets, broken references, missing license, unparseable scripts are caught by `publish-check`, not duplicated here). A high se-quality score is only meaningful once `publish-check` reports PASS.
 
 ## Templates
 

@@ -13,11 +13,11 @@
 
 **[Bold value statement: what this skill helps users achieve.]**
 
-[Short positioning paragraph: what this skill is, who it is for, and why it is worth installing.]
+[Short positioning paragraph: what this skill is, who it is for, and what result it helps users get.]
 
 <br />
 
-[Quick Start](#quick-start) · [Install](#install) · [Capabilities](#capabilities) · [How It Works](#how-it-works)
+[Quick Start](#quick-start) · [Install](#install) · [Capabilities](#capabilities)
 
 <br />
 <br />
@@ -38,10 +38,6 @@ This skill is designed for:
 - [Target user or role 2]
 - [Target workflow or team scenario]
 
-It is less useful if:
-
-- [Non-target use case or wrong expectation]
-
 ---
 
 ## What It Does
@@ -50,49 +46,11 @@ It is less useful if:
 
 ---
 
-## When To Use
-
-- [Use case 1]
-- [Use case 2]
-- [Use case 3]
-
----
-
-## Problems It Solves
-
-[Explain the real user pain this skill removes. Keep this practical.]
-
----
-
-## Why Install It?
-
-[Explain why this skill is worth installing instead of handling the task manually or with ad hoc prompting.]
-
-It helps you:
-
-- [Benefit 1: save time, reduce repeated work, improve consistency, lower risk, or make a workflow reusable]
-- [Benefit 2]
-- [Benefit 3]
-
----
-
 ## Capabilities
 
 | Capability | What it handles | Output |
 |---|---|---|
 | [Capability] | [Input/context] | [Result] |
-
----
-
-## Design Principles
-
-[Explain the core design choices behind this skill.]
-
-Advantages:
-
-- [Advantage 1]
-- [Advantage 2]
-- [Advantage 3]
 
 ---
 
@@ -120,30 +78,15 @@ Expected result:
 
 ## Install
 
-[Skill Name] is published as a single-skill repository. The repository root is the skill root.
-
-Required shape:
-
-```text
-[repo]/
-└── SKILL.md
-```
-
-### 1. Clone
-
 ```bash
 git clone https://github.com/[owner]/[repo].git
 ```
 
-### 2. Place It In Your Agent's Skills Directory
+Place the cloned folder in the skills directory used by your agent, or import it using your agent's own skill installation flow. Keep `SKILL.md` at the root of that skill folder.
 
-Copy or symlink the cloned directory into the skills directory used by your agent.
+After installing, start a fresh agent session so it can rescan skills.
 
-### 3. Start A Fresh Agent Session
-
-Many agents scan skill metadata when a new session starts. After installing, open a fresh session so the agent can read `SKILL.md`.
-
-### 4. Verify
+### Verify
 
 ```text
 [Verification prompt]

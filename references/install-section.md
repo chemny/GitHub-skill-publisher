@@ -6,43 +6,29 @@ Use this reference when writing installation instructions for a public skill rep
 
 Every published skill README should explain:
 
-1. The repository is a single-skill repository.
-2. `SKILL.md` must stay at the skill root.
-3. How to clone the repository.
-4. Where to place or symlink the directory.
-5. Why a fresh agent session may be needed.
-6. How to verify the skill is loaded.
-7. How to update after installation.
+1. How to clone or install the repository with the least friction.
+2. The cloned repository folder should be placed where the user's agent scans skills.
+3. `SKILL.md` must stay at the skill root.
+4. Why a fresh agent session may be needed.
+5. How to verify the skill is loaded.
+6. How to update after installation when useful.
+
+Do not make first-time users read repository-shape theory before installing. Keep those details to one short sentence unless the skill has unusual packaging requirements.
 
 ## Standard install structure
 
 ````markdown
 ## Install
 
-[Skill Name] is published as a single-skill repository. The repository root is the skill root.
-
-Required shape:
-
-```text
-skill-name/
-└── SKILL.md
-````
-
-### 1. Clone
-
 ```bash
 git clone https://github.com/[owner]/[repo].git
 ```
 
-### 2. Place It In Your Agent's Skills Directory
+Place the cloned folder in the skills directory used by your agent, or import it using your agent's own skill installation flow. Keep `SKILL.md` at the root of that skill folder.
 
-Copy or symlink the cloned directory into the skills directory used by your agent.
+After installing, start a fresh agent session so it can rescan skills.
 
-### 3. Start A Fresh Agent Session
-
-Many agents scan skill metadata when a new session starts. After installing, open a fresh session so the agent can read `SKILL.md`.
-
-### 4. Verify
+## Quick Start
 
 Try a short prompt that should trigger the skill.
 
@@ -60,30 +46,15 @@ git pull
 ````markdown
 ## 怎么安装？
 
-[Skill Name] 是一个「单 skill 单仓库」。仓库根目录就是 skill 根目录。
-
-必须满足这个结构：
-
-```text
-skill-name/
-└── SKILL.md
-````
-
-### 1. 克隆仓库
-
 ```bash
 git clone https://github.com/[owner]/[repo].git
 ```
 
-### 2. 放到你的 Agent skills 目录
+把克隆后的目录放到你的 Agent 会扫描的 skills 目录里，或按你的 Agent 的安装方式导入。确保 `SKILL.md` 位于该 skill 目录根部。
 
-把克隆下来的目录复制或软链接到你的 Agent skills 目录里。
+安装后开一个新的 Agent 会话，让它重新扫描 skills。
 
-### 3. 开一个新会话
-
-很多 Agent 会在新会话启动时扫描 skill metadata。安装后建议重新开启一个新会话。
-
-### 4. 验证是否生效
+## 快速开始
 
 输入一个应该触发该 skill 的短 prompt。
 
@@ -96,10 +67,36 @@ git pull
 ```
 ```
 
+## Multi-plugin marketplace repos (Claude Code)
+
+When the repository is a Claude Code plugin marketplace (it has `.claude-plugin/marketplace.json` and multiple plugins), do NOT use the single-skill `git clone` structure above, and do NOT list one `claude plugin install` line per plugin — a long list looks unusable.
+
+Give a single one-line command that adds the marketplace and installs every plugin in one shot:
+
+````markdown
+## Install / 安装（Claude Code）
+
+```bash
+claude plugin marketplace add [owner]/[repo] && \
+for p in plugin-a plugin-b plugin-c plugin-d; \
+do claude plugin install $p@[marketplace-name]; done
+```
+````
+
+Rules:
+
+- Use the repo's `owner/repo` shorthand as the default marketplace source — do not leave a `<...>` placeholder.
+- `[marketplace-name]` is the `name` field in `.claude-plugin/marketplace.json` (often equals the repo name).
+- List the plugin names inside the loop, not as separate install lines.
+- This whole block must be ONE pasteable command, so a user installs the entire suite in one step.
+
 ## Notes
 
 - Avoid hardcoded local paths.
 - Avoid assuming one specific agent's skills directory.
+- Do not use the publisher author's local install path as the default command.
+- `~/.agents/skills/...` can appear only as an explicitly labeled example, not as the universal install path.
+- Prefer a bare `git clone https://github.com/[owner]/[repo].git` command when no cross-agent installer exists.
 - Use host-neutral language unless the README has adapter-specific subsections.
 - If the skill supports GitHub-based installation through a skill manager, mention it as an optional path.
 - If giving examples, keep them generic or clearly marked as examples, such as `$CODEX_HOME/skills/`.

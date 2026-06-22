@@ -84,29 +84,6 @@ References:
 
 ---
 
-## Core Workflow
-
-```mermaid
-flowchart TD
-  A["User signal<br/>preference, correction, reflection, repeated failure"] --> B["Triage<br/>classify signal type and risk"]
-  B --> C{"Explicit low-risk preference?"}
-  C -->|Yes| D["Direct memory<br/>store without slow validation"]
-  C -->|No| E{"Repeated or high impact?"}
-  E -->|Yes| F["Candidate review<br/>write to evolution-candidates.md"]
-  E -->|No| G["Lightweight learning<br/>keep as task reflection or low-risk memory"]
-  F --> H["Validate<br/>manual review or eval loop"]
-  H --> I{"Stable and useful?"}
-  I -->|Yes| J["Promote<br/>write durable operating rule"]
-  I -->|No| K["Archive or discard<br/>avoid noisy memory growth"]
-  D --> L["Apply in future work"]
-  G --> L
-  J --> L
-  L --> M["Prune<br/>merge, demote, archive, or remove stale rules"]
-  M --> B
-```
-
----
-
 ## Self-Running Mechanism
 
 Agent Evolution has three startup levels:
@@ -154,7 +131,7 @@ Example:
 
 ```markdown
 Rule:
-- When installing user-managed skills, default to `~/.agents/skills` unless the user explicitly names another directory.
+- When installing user-managed skills in public documentation, do not present `~/.agents/skills` as the universal default. Use the user's own agent skills directory or install flow, and show `~/.agents/skills` only as a clearly labeled example when needed.
 ```
 
 ### Medium Risk: Candidate Review

@@ -17,8 +17,13 @@ Inspect -> Edit -> Smoke test -> Pre-publish check -> Final summary -> Commit or
    - Redact or replace sensitive/local-only content before commit.
    - Check whether new text, templates, scripts, references, or adapters create a hard dependency on another skill or private resource.
    - If a hard dependency exists, document it, make it optional, bundle it, or pause and report it to the user before publishing.
+   - If README files are present, evaluate them against the current default README structure, not only the language layout.
+   - If the user did not explicitly ask to preserve the current README as-is, upgrade missing README modules before publishing.
 4. Run `node scripts/smoke-test.mjs` when available.
 5. Run `node scripts/publish-check.mjs` when available.
+   - By default this requires normalized release surface: Chinese `README.md`, English `README.en.md`, and no legacy `README.zh.md`.
+   - By default this also checks required README structure modules for publisher-managed releases.
+   - Use `--allow-legacy-readme` only when the user explicitly asks to preserve old README files or publish current files as-is.
 6. Show the final pre-publish summary after all content, including README files, has been generated and checked.
 7. If the user's current request already included explicit edit-plus-publish authorization, commit and push after successful checks. Otherwise ask whether to publish to GitHub.
 8. Commit with a clear message only after explicit publish authorization exists.

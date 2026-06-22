@@ -61,8 +61,9 @@ Include:
 - Files that will be committed or published.
 - README status, including whether README files are complete and aligned.
 - Security result: secrets, API keys, tokens, accounts, local paths, private files, logs, and caches.
+- Third-party/copyright review: third-party names, platform names, copyright notices, trademark notices, upstream references, and license-limit notes that require a user decision.
 - Completeness result: `SKILL.md`, README files, `LICENSE`, references, templates, scripts, and assets.
 - Dependency result: other skills, private directories, unpublished scripts, and platform-specific assumptions.
 - Compatibility result for Codex, Claude Code, and OpenClaw.
-- GitHub metadata: repository description, license, and topics when useful.
+- GitHub metadata: repository description and license.
 - Warnings, failures, and remaining risks.

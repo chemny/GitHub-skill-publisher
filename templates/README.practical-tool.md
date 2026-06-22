@@ -10,7 +10,7 @@
 
 ## 项目简介
 
-{{用 2-3 句话说明这个 skill 是什么、解决什么问题、最终帮助用户得到什么结果。}}
+{{用 2-3 句话说明这个 skill 是什么、适合谁使用、最终帮助用户得到什么结果。}}
 
 本项目适用于：
 
@@ -20,33 +20,13 @@
 
 ## 安装
 
-### 方法一：一键安装（推荐）
-
 ```bash
-{{one-line-install-command}}
+git clone {{repo-url}}
 ```
 
-{{说明为什么这是最简单的安装方式。}}
+把克隆后的目录放到你的 Agent 会扫描的 skills 目录里，或按你的 Agent 的安装方式导入。确保 `SKILL.md` 位于该 skill 目录根部。
 
-### 方法二：通过 Git 克隆
-
-```bash
-git clone {{repo-url}} {{target-skill-dir}}
-```
-
-### 方法三：手动安装
-
-1. 下载或克隆本项目。
-2. 将项目文件夹复制到 agent 的 skills 目录。
-3. 确保文件夹结构如下：
-
-```text
-{{skill-name}}/
-├── SKILL.md
-└── README.md
-```
-
-### 验证安装
+### 验证是否生效
 
 重新打开 agent 会话后，输入：
 
@@ -54,7 +34,7 @@ git clone {{repo-url}} {{target-skill-dir}}
 {{verification-prompt}}
 ```
 
-如果安装成功，agent 会识别并使用这个 skill。
+如果安装成功，Agent 会识别并使用这个 skill。
 
 ## 使用
 

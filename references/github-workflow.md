@@ -59,12 +59,6 @@ Set or update the repository description:
 gh repo edit <owner>/<repo> --description "<一句中文仓库描述>"
 ```
 
-Optionally add topics when useful:
-
-```bash
-gh repo edit <owner>/<repo> --add-topic agent-skills --add-topic codex --add-topic claude-code --add-topic openclaw
-```
-
 For an existing empty repository:
 
 ```bash

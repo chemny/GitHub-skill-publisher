@@ -22,7 +22,7 @@
     {
       "id": 4,
       "prompt": "帮我给这个 skill 的 README 补充安装说明。",
-      "expected_output": "Adds a complete install section with single-skill repository shape, git clone, placement in skills directory, fresh-session note, verification prompt, and update instructions.",
+      "expected_output": "Adds a concise install section with a bare git clone command, generic placement in the user's agent skills directory or install flow, SKILL.md-at-root note, fresh-session note, verification prompt, and update instructions when useful. It must not hardcode the publisher author's local skills path as the default install target.",
       "files": []
     }
   ]
