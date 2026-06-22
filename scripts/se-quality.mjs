@@ -181,28 +181,29 @@ const pathTokens = (skillBody.match(/[\w.-]+\/[\w./-]+\.\w+/g) || []).length;
 const exampleMarkers = (skillBody.match(/\b(?:example|e\.g\.)\b|例如|示例/gi) || []).length;
 const hasSpecifics = exists("SKILL.md") ? codeBlocks + pathTokens + exampleMarkers >= 3 : null;
 
-// Borrowed from darwin-skill / SkillLens rubric (arXiv 2605.23899):
-// dim5 actionable specificity — vague hedging ("视情况而定 / as appropriate")
+// Content-craftsmanship signals — how the SKILL.md reads, not just whether
+// sections exist.
+// Actionable specificity — vague hedging ("视情况而定 / as appropriate")
 // dilutes instructions; >=3 occurrences reads as too soft.
 const hedgePhrase = /建议|可以考虑|酌情|视情况(?:而定)?|根据情况|灵活(?:把握|应用|运用)|看情况|尽量|\bas appropriate\b|\bas needed\b|\bif appropriate\b|\buse (?:your )?judg?ment\b|\byou (?:might|may) (?:want|consider)\b|\bfeel free\b|\bwhere possible\b/gi;
 const hedgeCount = exists("SKILL.md") ? (skillBody.match(hedgePhrase) || []).length : 0;
 const lowHedging = exists("SKILL.md") ? hedgeCount < 3 : null;
 
-// dim3 failure-mode encoding — a skill should encode "if X fails -> Y" branches,
+// Failure-mode encoding — a skill should encode "if X fails -> Y" branches,
 // not only the happy path.
 const encodesFailureModes = exists("SKILL.md")
   ? /如果[^\n]{0,40}(?:失败|不行|没有|无法|出错)|否则|回滚|fall ?back|on failure|if [^\n]{0,40}\bfails?\b|when [^\n]{0,40}\bfails?\b|hard stop|stop and ask|退化为/i.test(skillBody)
   : null;
 
-// dim9 anti-examples / blacklist — a skill should say what NOT to do, not only
+// Anti-examples / blacklist — a skill should say what NOT to do, not only
 // what to do.
 const hasAntiExamples = exists("SKILL.md")
   ? /不要|避免|禁止|反例|黑名单|\bdo not\b|\bdon'?t\b|\bnever\b|\bavoid\b|安全边界|safety boundar/i.test(skillBody)
   : null;
 
-// Runtime-neutrality (darwin runtime red-flag) — phrasing that locks the skill to
-// one runtime makes other agents reject it. Platform LISTS and install paths are
-// fine; only single-runtime EXCLUSIVITY is flagged.
+// Runtime-neutrality red-flag — phrasing that locks the skill to one runtime
+// makes other agents reject it. Platform LISTS and install paths are fine;
+// only single-runtime EXCLUSIVITY is flagged.
 const runtimeLockText = [skill, readSafe("README.md"), readSafe("README.en.md")].join("\n");
 const runtimeNeutral = !/在\s*Claude Code\s*(?:里|中)|Claude Code skill\b|仅(?:适用于?|支持)\s*(?:Claude Code|Cursor|Codex)|(?:Cursor|Codex|Claude Code)\s+only\b|only works (?:in|with)\s+(?:Claude Code|Cursor|Codex)|只能在\s*(?:Claude Code|Cursor|Codex)/i.test(runtimeLockText);
 

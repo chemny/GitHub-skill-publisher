@@ -2,39 +2,44 @@
 
 [中文](README.md) · English
 
-GitHub-skill-publisher turns a local agent skill into a single-skill GitHub repository that is ready for others to inspect, install, and reuse. It checks the README, license, repository shape, GitHub description, sensitive data, and platform compatibility. When publishing is involved, it shows the final release list first and waits for explicit approval.
+Publish a local agent skill to GitHub **safely and consistently**, and give it a **quantified engineering-quality check** before release. It inspects the real files, runs three layers of checks, lays out a release checklist, and only commits and pushes after you confirm — it never publishes on its own.
 
 ## Who Is This For?
 
-This skill is designed for:
+- Authors who have written an agent skill and want to publish it to GitHub.
+- Maintainers of several skill repositories who want README / license / structure / checks to stay consistent.
+- Anyone who wants to scan for secrets, local paths, and private dependencies before release — and to know whether the skill is actually well built.
 
-- Skill authors who want to publish a local agent skill to GitHub.
-- Maintainers who manage several skill repositories.
-- Teams that want README, license, structure, and release checks to stay consistent.
-- Users who want to check API keys, local paths, private files, and hidden dependencies before publishing.
+## What Problem It Solves
 
-## What It Does
+Publishing a skill by hand hits three traps: **inconsistent quality** (thin README, drifting structure, forgotten license, empty repo description), **security leaks** (API keys, local paths, private files, or someone else's copyrighted content in examples), and **no objective gauge** (nobody can say whether it's good before it ships). This skill turns those into a repeatable flow plus automated checks and quantified scores.
 
-It inspects the actual local files instead of relying on a verbal summary. That includes `SKILL.md`, README files, LICENSE, references, templates, scripts, `.env.example`, `.gitignore`, and Git state.
-
-If the README is too thin, the default language is wrong, the English companion is missing, the repository description is empty, or the files contain tokens, local paths, account details, or private dependencies, it reports those issues before release. It only commits, pushes, or updates GitHub metadata after explicit publish authorization.
-
-## Capabilities
+## Core Capabilities
 
 | Capability | What it handles | Output |
 |---|---|---|
-| Pre-publish review | README, required files, Git state, sensitive data, dependencies, compatibility | A final checklist for deciding whether the skill is ready to publish |
-| README writing | Chinese default README, English companion, first-screen copy, install and usage docs | Public documentation that works better on GitHub and is easier to install from |
-| Sensitive-data review | API keys, tokens, accounts, local paths, logs, caches | Redaction, replacement, or removal before publishing |
-| Completeness and dependency check | `SKILL.md`, references, templates, scripts, assets, dependencies on other skills | Missing-file, broken-reference, and hidden-dependency findings |
-| Platform compatibility check | Codex, Claude Code, and OpenClaw installation/runtime assumptions | Clear compatibility notes and unverified risks before release |
-| Repository structure check | Single-skill layout, root files, referenced paths | A repository others can install and understand |
-| GitHub repository description | One-line GitHub profile and list-page description | Chinese by default, concrete, aligned with the README opening |
-| Publish confirmation | File list, check results, remote target, remaining risks | Commit, push, or metadata updates only after user approval |
+| Pre-publish review | README, required files, Git state, sensitive data, dependencies, compatibility | A final checklist that answers "can I publish?" |
+| Three-layer scoring | Self-consistency + release hygiene + software-engineering quality | A PASS/FAIL release gate plus two reproducible 0–100 scores |
+| Sensitive-data scan | API keys, tokens, accounts, local absolute paths, logs, caches | Redact, replace, or remove before release |
+| Third-party / attribution review | Upstream references, copyright/trademark notices, external license terms | Lists items for your decision; never auto-deletes |
+| Bilingual README + repo description | Chinese-default README, English companion, one-line first-screen pitch | Public docs ready for GitHub display and install |
+| Multi-shape support | Single-skill repo / marketplace collection repo; cross-agent portability | Detects the repo shape; flags phrasing other agents would reject |
+
+## Three-Layer Quality Check (the core value)
+
+Three checks run before release, each answering a different question — all **report-only, never push**:
+
+| Tool | Question it answers | Output |
+|---|---|---|
+| `smoke-test.mjs` | Is the package self-consistent? | Per-item self-check of required files / references / templates (PASS/FAIL) |
+| `publish-check.mjs` | **Can I publish?** | Release gate `PASS/WARNING/FAIL` + engineering-hygiene score (metadata / docs / structure / security / tooling, 5 groups, 0–100) |
+| `se-quality.mjs` | **As software, is it well built?** | Software-engineering quality score (completeness / openness / reusability / cohesion / coupling / robustness, 0–100) |
+
+The scoring stays **honest**: only deterministic checks (`det`) count toward the number; heuristic signals (`proxy`) are advisory and never scored; inapplicable items are marked `N/A` and excluded; and it states plainly that it **does not test functional correctness** — so the score never gives false confidence.
 
 ## Platform Compatibility
 
-This workflow is intended for Codex, Claude Code, and OpenClaw skill repositories. For each target skill, compatibility still needs to be checked against its actual files, scripts, and dependencies.
+Works with Codex, Claude Code, OpenClaw, and 50+ skills-compatible runtimes. It recognizes both **single-skill repos** and **marketplace collection repos** (`.claude-plugin/marketplace.json`), and flags "only works in runtime X" phrasing that would make other agents refuse to install the skill.
 
 ## Install
 
@@ -42,92 +47,86 @@ This workflow is intended for Codex, Claude Code, and OpenClaw skill repositorie
 git clone https://github.com/chemny/GitHub-skill-publisher.git
 ```
 
-Place the cloned folder in the skills directory used by your agent, or import it using your agent's own skill installation flow. Keep `SKILL.md` at the root of that skill folder.
-
-After installing, start a fresh agent session so it can rescan skills.
+Put the directory in the skills folder your Agent scans, keep `SKILL.md` at the skill root, then start a new session so the Agent re-scans.
 
 ## Quick Start
 
-Ask your agent:
+Tell your Agent:
 
 ```text
-Use GitHub-skill-publisher to check whether the current skill is ready to publish on GitHub.
+Use GitHub-skill-publisher to check whether the current skill is ready to publish to GitHub.
 ```
 
-You should receive a pre-publish review covering README status, repository structure, required files, sensitive data, dependencies, platform compatibility, Git state, and recommended next steps.
+You get a pre-publish result: the release-gate verdict, both quality scores, README/structure/required-file status, sensitive data, dependencies, compatibility, Git state, and next steps.
 
 ## Usage Examples
 
-Prepare a public release:
+Prepare a publishable repo:
 
 ```text
-Use GitHub-skill-publisher to prepare the current skill as a public GitHub repository.
+Use GitHub-skill-publisher to turn the current skill into a publishable GitHub repository.
 ```
 
-Improve README files without publishing:
+Just see the scores, do not publish:
 
 ```text
-Use GitHub-skill-publisher to rewrite this skill's Chinese README and English README with the current default structure, but do not publish yet.
+Use GitHub-skill-publisher to run publish-check and se-quality and show me the scores and deductions — do not publish yet.
 ```
 
-Check release risks:
+Check risks before release:
 
 ```text
-Use GitHub-skill-publisher to check whether this skill contains API keys, user accounts, local paths, private files, or hard dependencies on other skills.
+Use GitHub-skill-publisher to check this skill for API keys, accounts, local paths, private files, or hard dependencies on other skills.
 ```
 
 Edit and publish:
 
 ```text
-Use GitHub-skill-publisher to update and publish this skill to GitHub.
+Use GitHub-skill-publisher to edit and publish this skill to GitHub.
 ```
 
 ## How It Works
 
-The skill relies on three groups of files:
+It relies on three kinds of files:
 
-- README and LICENSE templates in `templates/`.
-- Release rules, README guidance, compatibility checks, and security checklists in `references/`.
-- Local report scripts in `scripts/`.
-
-The local scripts only report findings:
+- `templates/` — README and LICENSE templates.
+- `references/` — publish flow, README style, compatibility and security checklists.
+- `scripts/` — local check scripts that **only report problems, never change anything**:
 
 ```bash
-node scripts/smoke-test.mjs
-node scripts/publish-check.mjs
+node scripts/smoke-test.mjs      # package self-consistency
+node scripts/publish-check.mjs   # release gate + engineering-hygiene score
+node scripts/se-quality.mjs      # software-engineering quality score
 ```
 
-They do not commit, push, create repositories, delete files, or change GitHub state. Publishing always requires explicit user authorization.
+These scripts never commit, push, create repos, delete files, or touch GitHub. Any publish action requires your explicit authorization, with one more confirmation before pushing.
 
 ## Repository Structure
 
 ```text
 GitHub-skill-publisher/
 ├── SKILL.md
-├── README.md
-├── README.en.md
+├── README.md / README.en.md
 ├── LICENSE
 ├── .gitignore
 ├── evals/
-├── references/
-│   ├── pre-publish-flow.md
-│   ├── publish-checklist.md
-│   └── ...
+├── references/        # publish flow, README style, security/compat/completeness checklists
 ├── scripts/
 │   ├── smoke-test.mjs
-│   └── publish-check.mjs
-└── templates/
+│   ├── publish-check.mjs
+│   └── se-quality.mjs
+└── templates/         # README / LICENSE / .gitignore templates
 ```
 
 ## Requirements
 
-- An agent environment that can read local `SKILL.md` files, such as Codex, Claude Code, or OpenClaw.
-- `git` for repository status, commit history, and remote checks.
-- Node.js for `scripts/smoke-test.mjs` and `scripts/publish-check.mjs`.
-- GitHub CLI `gh` only when creating repositories, updating GitHub metadata, or pushing to GitHub.
+- An Agent environment that can read a local `SKILL.md` (Codex, Claude Code, OpenClaw, etc.).
+- `git` — to inspect repo state, commit history, and remotes.
+- Node.js — to run the check scripts under `scripts/`.
+- GitHub CLI `gh` — only for creating repos, updating metadata, or pushing.
 
 ## License
 
-This repository is provided under the MIT License.
+This repository uses the MIT License.
 
 Third-party names, platform names, and upstream references remain subject to their original terms.
