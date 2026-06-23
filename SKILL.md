@@ -87,6 +87,7 @@ Inspect -> Normalize -> Write README -> Pre-publish cleanup -> Smoke test -> Pub
    - For publisher-managed releases, evaluate any existing README against the current default README structure before publishing.
    - Do not blindly overwrite old READMEs, but if the user did not explicitly ask to preserve the current README as-is, upgrade missing key modules before publishing.
    - Required README modules include audience fit, what it does, core capabilities, platform compatibility, install, quick start, usage examples, how it works, repository/file structure, requirements or configuration, and license.
+   - Productize README copy before release: use a two-column user-facing core-capabilities table, keep the main install section to one primary command, and remove internal collaboration/setup phrasing from public docs.
 4. Generate or update GitHub repository metadata, especially the repository description.
    - Use a Chinese repository description by default unless the user explicitly requests English or an international-facing repository.
    - The description should match the first-screen value proposition in `README.md`.

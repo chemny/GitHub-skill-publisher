@@ -68,6 +68,11 @@ Required structure modules:
 - repository/file structure: enough for users to understand what is included,
 - license: MIT by default unless the user requests another license.
 
+Product-page quality gates:
+
+- Core capabilities must be easy for a normal user to scan. Prefer a two-column table: `Capability` + `What it helps you do` (Chinese: `能力` + `它能帮你做什么`). Do not use three-column implementation tables such as `能力 / 处理内容 / 输出结果`, `Capability / Input / Output`, or `Capability / What it handles / Output` as the main capability table.
+- README copy must describe the public product, not the authoring conversation. Remove internal collaboration wording such as "after asking", "with your consent", "add this rule to your prompt/instructions", "rerun setup", "征得你同意", "加进提示词", or "重跑 setup". Product docs can say what the installer does and what result the user gets, but should not narrate our back-and-forth or expose implementation chores as user work.
+
 Root-cause rule from the `ai-image-generator` case: a README that has Chinese `README.md`, English `README.en.md`, and Chinese GitHub metadata can still be incomplete if it was only normalized for language layout. Future publisher-managed releases must either upgrade it to the current README structure or explicitly report the preserved structure as pass-through.
 
 ## Release surface normalization policy
@@ -122,7 +127,7 @@ The default Standard section order is:
 5. What It Does
 6. Core Capabilities
 7. Platform Compatibility
-8. Install
+8. One-command Install / Install
 9. Quick Start
 10. Usage Examples
 11. How It Works
@@ -141,7 +146,8 @@ Standard writing rules:
 - Prefer user-facing results over internal file names.
 - Sort core capabilities by real user importance, from highest to lowest. Do not list them by implementation order unless that order matches user value.
 - In Chinese READMEs, quick-start prompts and usage examples must be written in Chinese. In English READMEs, quick-start prompts and usage examples must be written in English.
-- Make installation as close to a bare `git clone` as practical, then explain generic placement/import into the user's own agent skills location.
+- Installation must be one primary copyable command. A bare `git clone <repo-url>` is acceptable for simple skills. If installation requires extra setup such as a Python venv, package installation, cache generation, hook registration, config writing, or agent-instruction updates, provide an installer/bootstrap script and make the README's primary install block call that installer in one command.
+- Do not make first-time users run `git clone`, `cd`, `./setup.sh`, `pip install`, `python -m venv`, or `node scripts/...` as a multi-command install block. Those steps belong inside the installer or setup script.
 - Provide a copy-ready prompt for direct use.
 - Put deeper CLI details in usage examples or reference docs, not in the main README unless the command is part of first successful use.
 - Include a preview image section only when real screenshots, cover images, first-frame previews, UI images, or other persuasive visuals are available.
@@ -363,9 +369,11 @@ Signal -> Triage -> Route -> Store -> Validate -> Promote -> Prune
 
 Read `references/install-section.md` before writing the installation section.
 
-The Standard README should prefer one-line installation when practical. Avoid making first-time users run `cd`, `git clone`, and another `cd` as separate steps when one copyable command can do the job.
+The Standard README should use one-line installation as the release default. Avoid making first-time users run `git clone`, `cd`, and another command as separate steps when one copyable command can do the job.
 
 Do not hardcode the publisher author's local skills directory as the default install target. For public skills, prefer a bare `git clone <repo-url>` command plus one short sentence telling users to place or import the cloned folder wherever their own agent scans skills. Use paths such as `~/.agents/skills/...` only as clearly labeled examples.
+
+If setup is more complex than cloning/importing a skill folder, the README should expose a single installer command and describe the result in product terms. The installer should handle dependencies, environment creation, config/cache generation, hook wiring, validation, and final feedback where applicable.
 
 The install section should still make these facts clear:
 

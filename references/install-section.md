@@ -15,6 +15,10 @@ Every published skill README should explain:
 
 Do not make first-time users read repository-shape theory before installing. Keep those details to one short sentence unless the skill has unusual packaging requirements.
 
+The primary install block must be one copyable command. For simple skills, one `git clone` command is enough. For skills that need more than cloning, publish an installer/bootstrap script and make the README call that installer in one command.
+
+Do not put a multi-step command block such as `git clone`, `cd`, `./setup.sh`, `python -m venv`, `pip install`, or `node scripts/...` in the main install section. Those steps should be inside the installer.
+
 ## Standard install structure
 
 ````markdown
@@ -97,6 +101,7 @@ Rules:
 - Do not use the publisher author's local install path as the default command.
 - `~/.agents/skills/...` can appear only as an explicitly labeled example, not as the universal install path.
 - Prefer a bare `git clone https://github.com/[owner]/[repo].git` command when no cross-agent installer exists.
+- If an installer exists, prefer one installer command over showing clone/setup internals.
 - Use host-neutral language unless the README has adapter-specific subsections.
 - If the skill supports GitHub-based installation through a skill manager, mention it as an optional path.
 - If giving examples, keep them generic or clearly marked as examples, such as `$CODEX_HOME/skills/`.

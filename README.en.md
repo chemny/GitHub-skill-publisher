@@ -16,14 +16,14 @@ Publishing a skill by hand hits three traps: **inconsistent quality** (thin READ
 
 ## Core Capabilities
 
-| Capability | What it handles | Output |
-|---|---|---|
-| Pre-publish review | README, required files, Git state, sensitive data, dependencies, compatibility | A final checklist that answers "can I publish?" |
-| Three-layer scoring | Self-consistency + release hygiene + software-engineering quality | A PASS/FAIL release gate plus two reproducible 0–100 scores |
-| Sensitive-data scan | API keys, tokens, accounts, local absolute paths, logs, caches | Redact, replace, or remove before release |
-| Third-party / attribution review | Upstream references, copyright/trademark notices, external license terms | Lists items for your decision; never auto-deletes |
-| Bilingual README + repo description | Chinese-default README, English companion, one-line first-screen pitch | Public docs ready for GitHub display and install |
-| Multi-shape support | Single-skill repo / marketplace collection repo; cross-agent portability | Detects the repo shape; flags phrasing other agents would reject |
+| Capability | What It Helps You Do |
+|---|---|
+| Pre-publish review | Check README, required files, Git state, sensitive data, dependencies, and compatibility before release. |
+| Three-layer scoring | Produce reproducible scores for package consistency, release hygiene, and software-engineering quality. |
+| Sensitive-data scan | Catch API keys, tokens, accounts, local paths, logs, and caches before they reach a public repository. |
+| Third-party / attribution review | Surface upstream references, copyright/trademark notices, and external license terms for a deliberate decision. |
+| Bilingual README + repo description | Create or repair the Chinese-default README, English companion, and GitHub first-screen description. |
+| Multi-shape support | Recognize single-skill and marketplace repos, then flag phrasing that can break cross-agent installation. |
 
 ## Three-Layer Quality Check (the core value)
 

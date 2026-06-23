@@ -89,6 +89,9 @@ Run this checklist before publishing a skill repository.
 - [ ] Reduces comprehension friction: reader can tell what it is and why it matters from the first screen.
 - [ ] Reduces trust friction: mechanism and limits of authority are clear.
 - [ ] Reduces action friction: install, verify, and first-use path are easy to follow.
+- [ ] Main install section has one primary copyable command.
+- [ ] If setup needs environment creation, dependency install, cache generation, hook wiring, config writing, or instruction-rule updates, those steps are handled by an installer/setup flow, not exposed as a multi-command README block.
+- [ ] README does not include internal collaboration wording such as "after asking", "with your consent", "add this rule to your prompt/instructions", "rerun setup", "征得你同意", "加进提示词", or "重跑 setup".
 - [ ] Uses baseline or full structure according to the skill's complexity.
 - [ ] Includes diagrams only when process-oriented.
 - [ ] Includes a low-friction install path: usually a bare `git clone` plus one short sentence about placing/importing the folder into the user's own agent skills location.
@@ -98,6 +101,8 @@ Run this checklist before publishing a skill repository.
 - [ ] Includes a quick-start or first-success example.
 - [ ] Includes usage examples.
 - [ ] Includes core capabilities.
+- [ ] Core capabilities table is user-facing and two-column: capability + what it helps the user do.
+- [ ] Core capabilities table does not use implementation-oriented columns such as `处理内容`, `输出结果`, `Input`, `Output`, or `What it handles`.
 - [ ] Includes requirements, configuration, or dependency assumptions when relevant.
 - [ ] Includes repository structure generated from actual files.
 - [ ] Explains license and copyright limits.

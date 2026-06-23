@@ -24,6 +24,48 @@ function read(rel) {
   return fs.readFileSync(path.join(root, rel), "utf8");
 }
 
+function markdownSection(content, names) {
+  const headings = [...content.matchAll(/^##\s+(.+?)\s*$/gim)];
+  for (let i = 0; i < headings.length; i += 1) {
+    const title = headings[i][1].trim().replace(/[#*`]/g, "");
+    if (!names.some((name) => new RegExp(`^${name}$`, "i").test(title))) continue;
+    const start = headings[i].index + headings[i][0].length;
+    const end = i + 1 < headings.length ? headings[i + 1].index : content.length;
+    return content.slice(start, end).trim();
+  }
+  return "";
+}
+
+function fencedCodeBlocks(content) {
+  return [...content.matchAll(/```[a-zA-Z0-9_-]*\n([\s\S]*?)```/g)].map((m) => m[1]);
+}
+
+function commandLines(blocks) {
+  return blocks
+    .flatMap((block) => block.split(/\r?\n/))
+    .map((line) => line.trim())
+    .filter((line) => line && !line.startsWith("#"));
+}
+
+function firstMarkdownTable(section) {
+  const lines = section.split(/\r?\n/);
+  for (let i = 0; i < lines.length - 1; i += 1) {
+    if (!/^\s*\|.+\|\s*$/.test(lines[i])) continue;
+    if (!/^\s*\|(?:\s*:?-{3,}:?\s*\|)+\s*$/.test(lines[i + 1])) continue;
+    const table = [];
+    for (let j = i; j < lines.length; j += 1) {
+      if (!/^\s*\|.+\|\s*$/.test(lines[j])) break;
+      table.push(lines[j]);
+    }
+    return table;
+  }
+  return [];
+}
+
+function tableColumnCount(line) {
+  return line.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").length;
+}
+
 function git(args) {
   try {
     return execFileSync("git", args, { cwd: root, encoding: "utf8" }).trim();
@@ -131,6 +173,45 @@ if (hasReadme) {
       add("WARNING", title, "Current README structure was preserved by explicit pass-through; it does not fully match the default release template.");
     } else {
       add("FAIL", title, "Upgrade README.md to the current default structure before publishing, or use --allow-legacy-readme only for an explicit pass-through release.");
+    }
+  }
+}
+
+for (const rel of ["README.md", "README.en.md"]) {
+  if (!exists(rel)) continue;
+  const content = read(rel);
+
+  const internalReadmePhrases = [
+    ["internal consent wording", /(?:征得你同意|征得.*同意|with your consent|after asking)/i],
+    ["prompt/instruction chore exposed", /(?:加进(?:你的)?(?:Agent\s*)?(?:提示词|指令)|add (?:this )?rule to (?:your )?(?:prompt|instructions))/i],
+    ["setup internals exposed as user chore", /(?:重跑\s*(?:setup|\.\/setup)|重新运行\s*setup|rerun\s+\.\/setup|re-run\s+\.\/setup)/i],
+  ];
+  for (const [label, pattern] of internalReadmePhrases) {
+    if (pattern.test(content)) add("FAIL", `README contains ${label}`, `${rel}: rewrite as product-facing install/result copy.`);
+  }
+
+  const install = markdownSection(content, ["安装", "怎么安装", "一键安装", "Install", "One-Command Install", "Installation"]);
+  if (install) {
+    const cmds = commandLines(fencedCodeBlocks(install));
+    if (!isMarketplace && cmds.length > 1) {
+      add("FAIL", "README install has multiple command lines", `${rel}: main install section should expose one primary copyable command.`);
+    }
+    if (!isMarketplace && cmds.some((line) => /^(?:cd\b|\.\/setup\b|bash\s+setup\b|sh\s+setup\b|python(?:3)?\s+-m\s+venv\b|pip(?:3)?\s+install\b|node\s+scripts\/)/i.test(line))) {
+      add("FAIL", "README exposes setup internals in install command", `${rel}: move clone/setup/dependency steps into an installer or setup flow.`);
+    }
+  }
+
+  const core = markdownSection(content, ["核心能力", "功能", "Capabilities", "Core Capabilities"]);
+  if (core) {
+    const table = firstMarkdownTable(core);
+    if (table.length > 0) {
+      const columns = tableColumnCount(table[0]);
+      if (columns !== 2) {
+        add("FAIL", "README core capabilities table is not two-column", `${rel}: use capability + what it helps the user do.`);
+      }
+      if (/(?:处理内容|输出结果|^.*\bInput\b.*$|^.*\bOutput\b.*$|What it handles)/im.test(table[0])) {
+        add("FAIL", "README core capabilities table uses implementation-oriented columns", `${rel}: write user-facing capability + benefit columns.`);
+      }
     }
   }
 }
