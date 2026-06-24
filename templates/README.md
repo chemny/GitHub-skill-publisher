@@ -1,92 +1,96 @@
 # {{Skill Name}}
 
-中文 | [English](./README.en.md)
+English | [中文](./README.zh.md)
 
-{{Skill Name}} 是一个面向 {{适用人群 1}}、{{适用人群 2}}、{{适用人群 3}} 和 Agent 用户的 {{产品定位}}。它会把 {{用户原本分散/低效处理的对象}} 整理成 {{可复用/可追溯/可交付的结果}}，方便后续 {{后续任务 1}}、{{后续任务 2}} 和 {{后续任务 3}} 继续使用。
+{{Skill Name}} is a {{product positioning}} for {{audience 1}}, {{audience 2}}, {{audience 3}}, and agent users. It turns {{scattered or inefficient user inputs/assets}} into {{reusable/traceable/deliverable results}} so later {{follow-up task 1}}, {{follow-up task 2}}, and {{follow-up task 3}} have a clearer starting point.
 
-它支持 {{核心能力 1}}、{{核心能力 2}} 和 {{核心能力 3}}，也可以 {{更完整的工作流能力}}。
+It supports {{core capability 1}}, {{core capability 2}}, and {{core capability 3}}, and it can also {{fuller workflow capability}}.
 
-## 适合谁使用？
+## Program or Page Screenshot
 
-这个 skill 适合：
+![{{Skill Name}} program or page screenshot](./assets/{{screenshot-file}})
 
-- {{适用人群 1}}
-- {{适用人群 2}}
-- {{适用工作流或团队场景}}
+## Who Is This For?
 
-## 它能做什么？
+This skill is designed for:
 
-{{用 1-2 段自然说明这个 skill 会做什么，最后会给用户什么结果。避免宣传腔和空泛形容词。}}
+- {{Audience 1}}
+- {{Audience 2}}
+- {{Target workflow or team scenario}}
 
-## 核心能力
+## What It Does
 
-按对用户最重要的顺序排列。先写决定这个 skill 是否值得安装、是否能完成主要任务的能力，再写辅助能力。
+{{Explain in 1-2 natural paragraphs what this skill does and what result users get. Avoid hype and vague adjectives.}}
 
-| 能力 | 处理内容 | 输出结果 |
+## Capabilities
+
+List capabilities in order of user importance. Put the capabilities that decide whether the skill is worth installing and whether it can complete its main job first; put supporting capabilities later.
+
+| Capability | What it handles | Output |
 |---|---|---|
-| {{能力 1}} | {{处理内容 1}} | {{输出结果 1}} |
-| {{能力 2}} | {{处理内容 2}} | {{输出结果 2}} |
-| {{能力 3}} | {{处理内容 3}} | {{输出结果 3}} |
+| {{Capability 1}} | {{Handled input/context 1}} | {{Output 1}} |
+| {{Capability 2}} | {{Handled input/context 2}} | {{Output 2}} |
+| {{Capability 3}} | {{Handled input/context 3}} | {{Output 3}} |
 
-## 平台兼容性
+## Platform Compatibility
 
-{{用一句话说明兼容哪些平台。不要给未实测平台写“完全兼容”。}}
+{{One-sentence platform compatibility note. Do not claim full compatibility for platforms that have not been tested.}}
 
-## 安装
+## Install
 
 ```bash
 git clone {{repo-url}}
 ```
 
-把克隆后的目录放到你的 Agent 会扫描的 skills 目录里，或按你的 Agent 的安装方式导入。确保 `SKILL.md` 位于该 skill 目录根部。
+Place the cloned folder in the skills directory used by your agent, or import it using your agent's own skill installation flow. Keep `SKILL.md` at the root of that skill folder.
 
-安装后开一个新的 Agent 会话，让它重新扫描 skills。
+After installing, start a fresh agent session so it can rescan skills.
 
-## 快速开始
+## Quick Start
 
-对 Agent 说：
-
-```text
-{{写一段中文 prompt，用户可以直接复制到 Codex、Claude Code、OpenClaw 或其他兼容 agent 里使用。}}
-```
-
-预期结果：
+Ask your agent:
 
 ```text
-{{首次成功使用后应该看到或得到什么。}}
+{{Write an English prompt the user can paste into Codex, Claude Code, OpenClaw, or another compatible agent.}}
 ```
 
-## 使用示例
+Expected result:
 
 ```text
-{{中文示例 prompt 1}}
+{{What the user should see or receive after the first successful use.}}
+```
+
+## Usage Examples
+
+```text
+{{English example prompt 1}}
 ```
 
 ```text
-{{中文示例 prompt 2}}
+{{English example prompt 2}}
 ```
 
-## 工作原理
+## How It Works
 
-{{简单说明这个 skill 如何使用仓库里的文件、脚本、模板或参考资料完成任务。简单 skill 写短一点。}}
+{{Briefly explain how this skill uses repository files, scripts, templates, or references to complete the task. Keep it short for simple skills.}}
 
-## 仓库结构
+## Repository Structure
 
 ```text
 {{repo-name}}/
 ├── SKILL.md
 ├── README.md
-├── README.en.md
-└── {{核心文件}}
+├── README.zh.md
+└── {{Core file}}
 ```
 
-## 运行要求
+## Requirements
 
-- {{要求 1}}
-- {{要求 2}}
-- {{要求 3}}
-- 可选：{{可选依赖或集成}}
+- {{Requirement 1}}
+- {{Requirement 2}}
+- {{Requirement 3}}
+- Optional: {{Optional dependency or integration}}
 
-## 协议
+## License
 
-MIT。见 [LICENSE](./LICENSE)。
+MIT. See [LICENSE](./LICENSE).

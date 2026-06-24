@@ -44,7 +44,7 @@ function expectFile(relativePath) {
 for (const relativePath of [
   "SKILL.md",
   "README.md",
-  "README.en.md",
+  "README.zh.md",
   "LICENSE",
   ".gitignore",
   "references/pre-publish-flow.md",
@@ -54,7 +54,7 @@ for (const relativePath of [
   "references/update-workflow.md",
   "references/github-workflow.md",
   "templates/README.md",
-  "templates/README.en.md",
+  "templates/README.zh.md",
   "templates/README.hero.md",
   "templates/README.hero.zh.md",
   "templates/LICENSE-MIT",
@@ -94,9 +94,9 @@ if (exists("SKILL.md")) {
 
 const languageSwitchFiles = [
   "README.md",
-  "README.en.md",
+  "README.zh.md",
   "templates/README.md",
-  "templates/README.en.md",
+  "templates/README.zh.md",
   "templates/README.hero.md",
   "templates/README.hero.zh.md",
 ];
@@ -124,6 +124,8 @@ if (exists("references/publish-checklist.md")) {
   const checklist = read("references/publish-checklist.md");
   const requiredItems = [
     "Final publish confirmation",
+    "程序或页面截图",
+    "Screenshot was shown to the user before publishing",
     "node scripts/smoke-test.mjs",
     "node scripts/publish-check.mjs",
     ".env.example",
@@ -133,6 +135,19 @@ if (exists("references/publish-checklist.md")) {
   const missing = requiredItems.filter((item) => !checklist.includes(item));
   if (missing.length === 0) pass("publish checklist contains release gates");
   else fail("publish checklist contains release gates", `Missing: ${missing.join(", ")}`);
+}
+
+if (exists("references/readme-style.md")) {
+  const style = read("references/readme-style.md");
+  const requiredItems = [
+    "Program or Page Screenshot",
+    "for a web page, open the page in a browser",
+    "for a desktop/app program, launch the real program",
+    "show the screenshot to the user",
+  ];
+  const missing = requiredItems.filter((item) => !style.includes(item));
+  if (missing.length === 0) pass("README style contains screenshot workflow");
+  else fail("README style contains screenshot workflow", `Missing: ${missing.join(", ")}`);
 }
 
 if (exists("templates/LICENSE-MIT")) {

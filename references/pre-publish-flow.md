@@ -7,13 +7,14 @@ Use this flow before publishing a new skill repository or pushing an update to a
 ```mermaid
 flowchart TD
     A["Start: publish or update skill"] --> B["Inspect Repo<br/>Check directory, Git status, remote, branch"]
-    B --> C["Classify Files<br/>Core files, templates, references, scripts, drafts, caches, generated output"]
+    B --> C0["Capture Screenshot<br/>Open real page or program UI<br/>Save screenshot asset"]
+    C0 --> C["Classify Files<br/>Core files, templates, references, scripts, drafts, caches, generated output"]
     C --> D["Cleanup Plan<br/>List suggested deletion, redaction, .gitignore updates, or files to keep"]
     D --> E{"Deletion, redaction,<br/>move, or high-risk cleanup?"}
     E -- "Yes" --> F["Ask user to confirm cleanup"]
     E -- "No" --> G["Gitignore / Env Check"]
     F --> G
-    G["Gitignore / Env Check<br/>Check .gitignore, .env, .env.example, tracked files"] --> H["Generate / Finalize README<br/>Complete README.md and README.en.md"]
+    G["Gitignore / Env Check<br/>Check .gitignore, .env, .env.example, tracked files"] --> H["Generate / Finalize README<br/>Complete README.md and README.zh.md"]
     H --> I0["Smoke Test<br/>Run scripts/smoke-test.mjs when available"]
     I0 --> I["Automated Publish Check<br/>Run scripts/publish-check.mjs when available"]
     I --> J{"Result"}
@@ -30,7 +31,7 @@ flowchart TD
     Q -- "Yes" --> R["Report risk and options"]
     Q -- "No" --> S["Final Pre-publish Summary"]
     R --> S
-    S["Final Pre-publish Summary<br/>Target, files, README, security, completeness, dependencies, compatibility, metadata, risks"] --> T{"Ask user:<br/>Publish to GitHub?"}
+    S["Final Pre-publish Summary<br/>Target, files, README, screenshot preview, security, completeness, dependencies, compatibility, metadata, risks"] --> T{"Ask user:<br/>Publish to GitHub?"}
     T -- "No" --> U["Stop publishing<br/>Keep local results"]
     T -- "Yes" --> V["Commit confirmed files only"]
     V --> W["Publish / Push"]
@@ -47,7 +48,8 @@ High-risk cleanup confirmation:
 
 Final publish authorization:
 
-- After all content, including README files, has been generated and checked, list the final publish summary.
+- After all content, including README files and any screenshot asset, has been generated and checked, list the final publish summary.
+- If a screenshot was captured, show it to the user before final publish authorization.
 - Ask the user explicitly whether to publish to GitHub when the current request did not already include explicit publish authorization.
 - If the user already said "修改并发布", "更新并同步到 GitHub", or equivalent edit-plus-publish wording, run checks and publish after success without a second confirmation.
 - Only `commit`, `push`, `sync`, `gh repo create`, or `gh repo edit` when explicit publish authorization exists.
@@ -60,6 +62,7 @@ Include:
 - Target repository, remote URL, branch, and visibility.
 - Files that will be committed or published.
 - README status, including whether README files are complete and aligned.
+- Screenshot status: path, source surface, whether it is a real page/program capture, and whether the user approved it.
 - Security result: secrets, API keys, tokens, accounts, local paths, private files, logs, and caches.
 - Third-party/copyright review: third-party names, platform names, copyright notices, trademark notices, upstream references, and license-limit notes that require a user decision.
 - Completeness result: `SKILL.md`, README files, `LICENSE`, references, templates, scripts, and assets.

@@ -6,7 +6,7 @@ Use this for first-time publishing.
 
 1. Confirm repository name.
 2. Confirm public or private visibility.
-3. Draft the GitHub repository description in Chinese by default.
+3. Draft the GitHub repository description in English by default.
 4. Confirm repository root is the skill root.
 5. Create a cleanup plan for drafts, caches, logs, generated output, local-only files, and environment files.
 6. Check `.gitignore`, `.env`, `.env.example`, and tracked files.
@@ -56,7 +56,7 @@ gh repo create <repo-name> --public --source=. --remote=origin --push
 Set or update the repository description:
 
 ```bash
-gh repo edit <owner>/<repo> --description "<一句中文仓库描述>"
+gh repo edit <owner>/<repo> --description "<one-sentence English repository description>"
 ```
 
 For an existing empty repository:

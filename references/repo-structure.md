@@ -7,7 +7,7 @@ The preferred publishing model is one skill per repository.
 ```text
 skill-name/
 ├── README.md
-├── README.en.md
+├── README.zh.md
 ├── LICENSE
 └── SKILL.md
 ```
@@ -38,7 +38,7 @@ Use a collection repository only if the user explicitly asks for one.
 ```text
 SKILL.md
 README.md
-README.en.md
+README.zh.md
 LICENSE
 ```
 

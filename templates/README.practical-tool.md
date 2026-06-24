@@ -1,195 +1,195 @@
-# {{Skill Name}}：{{一句话说明它是什么工具}}
+# {{Skill Name}}: {{one-line tool description}}
 
-中文 | [English](./README.en.md)
+English | [中文](./README.zh.md)
 
-> {{可选声明：来源、改编、翻译、灵感、上游项目或参考资料。没有明确来源时删除本节。}}
+> {{Optional statement: source, adaptation, translation, inspiration, upstream project, or reference material. Remove this block when there is no clear source to disclose.}}
 >
-> - {{来源或参考 1}}
-> - {{来源或参考 2}}
-> - {{许可或内容边界说明}}
+> - {{Source or reference 1}}
+> - {{Source or reference 2}}
+> - {{License or content boundary note}}
 
-## 项目简介
+## Overview
 
-{{用 2-3 句话说明这个 skill 是什么、适合谁使用、最终帮助用户得到什么结果。}}
+{{Explain in 2-3 sentences what this skill is, who it is for, and what useful result users get.}}
 
-本项目适用于：
+This project is useful for:
 
-- {{适用场景 1}}
-- {{适用场景 2}}
-- {{适用场景 3}}
+- {{Use case 1}}
+- {{Use case 2}}
+- {{Use case 3}}
 
-## 安装
+## Installation
 
 ```bash
 git clone {{repo-url}}
 ```
 
-把克隆后的目录放到你的 Agent 会扫描的 skills 目录里，或按你的 Agent 的安装方式导入。确保 `SKILL.md` 位于该 skill 目录根部。
+Place the cloned folder in the skills directory used by your agent, or import it using your agent's own skill installation flow. Keep `SKILL.md` at the root of that skill folder.
 
-### 验证是否生效
+### Verify Installation
 
-重新打开 agent 会话后，输入：
+After restarting the agent session, enter:
 
 ```text
 {{verification-prompt}}
 ```
 
-如果安装成功，Agent 会识别并使用这个 skill。
+If installation succeeded, the agent will recognize and use this skill.
 
-## 使用
+## Usage
 
-### 基础用法
+### Basic Usage
 
-#### 1. 直接调用 skill
+#### 1. Call the skill directly
 
 ```text
 {{direct-skill-prompt}}
 ```
 
-#### 2. 在对话中使用
+#### 2. Use it in conversation
 
 ```text
 {{natural-language-prompt}}
 ```
 
-#### 3. 处理文件内容
+#### 3. Process file content
 
 ```text
 {{file-based-prompt}}
 ```
 
-### 使用场景示例
+### Usage Scenarios
 
-#### 场景 1：{{场景名称}}
+#### Scenario 1: {{scenario name}}
 
-输入：
+Input:
 
 ```text
 {{example-input-1}}
 ```
 
-输出示例：
+Example output:
 
 > {{example-output-1}}
 
-#### 场景 2：{{场景名称}}
+#### Scenario 2: {{scenario name}}
 
-输入：
+Input:
 
 ```text
 {{example-input-2}}
 ```
 
-输出示例：
+Example output:
 
 > {{example-output-2}}
 
-#### 场景 3：{{场景名称}}
+#### Scenario 3: {{scenario name}}
 
-输入：
+Input:
 
 ```text
 {{example-input-3}}
 ```
 
-输出示例：
+Example output:
 
 > {{example-output-3}}
 
-## {{工具检测或处理的核心模式}}
+## {{Core Patterns This Tool Detects Or Handles}}
 
-{{说明这个工具能识别、处理或修复哪些问题。适合规则型、检查型、改写型、审核型 skill。}}
+{{Explain what this tool can identify, process, rewrite, review, or fix. This section is useful for rule-based, checklist-based, rewriting, and review skills.}}
 
-### {{类别 1}}
+### {{Category 1}}
 
-1. {{规则或模式 1}}
-2. {{规则或模式 2}}
-3. {{规则或模式 3}}
+1. {{Rule or pattern 1}}
+2. {{Rule or pattern 2}}
+3. {{Rule or pattern 3}}
 
-### {{类别 2}}
+### {{Category 2}}
 
-4. {{规则或模式 4}}
-5. {{规则或模式 5}}
-6. {{规则或模式 6}}
+4. {{Rule or pattern 4}}
+5. {{Rule or pattern 5}}
+6. {{Rule or pattern 6}}
 
-### {{类别 3}}
+### {{Category 3}}
 
-7. {{规则或模式 7}}
-8. {{规则或模式 8}}
-9. {{规则或模式 9}}
+7. {{Rule or pattern 7}}
+8. {{Rule or pattern 8}}
+9. {{Rule or pattern 9}}
 
-## 文件说明
+## File Guide
 
-- `SKILL.md`：{{说明 skill 定义或核心规则}}
-- `README.md`：{{说明中文文档}}
-- `README.en.md`：{{说明英文文档，可选}}
-- `references/`：{{说明参考规则，可选}}
-- `scripts/`：{{说明辅助脚本，可选}}
+- `SKILL.md`: {{Explain the skill definition or core rules}}
+- `README.md`: {{Explain the English documentation}}
+- `README.zh.md`: {{Explain the Chinese documentation, optional}}
+- `references/`: {{Explain reference rules, optional}}
+- `scripts/`: {{Explain helper scripts, optional}}
 
-## 手动使用方法
+## Manual Workflow
 
-### 基本流程
+### Basic Process
 
-1. {{步骤 1：识别或分析}}
-2. {{步骤 2：处理或改写}}
-3. {{步骤 3：保留核心含义或关键约束}}
-4. {{步骤 4：调整风格或输出}}
-5. {{步骤 5：检查质量}}
+1. {{Step 1: identify or analyze}}
+2. {{Step 2: process or rewrite}}
+3. {{Step 3: preserve core meaning or constraints}}
+4. {{Step 4: adjust style or output}}
+5. {{Step 5: check quality}}
 
-### 关键原则
+### Key Principles
 
-#### {{原则标题}}
+#### {{Principle title}}
 
-{{用一段话说明为什么这些原则重要。}}
+{{Explain in one paragraph why these principles matter.}}
 
-- {{原则 1}}
-- {{原则 2}}
-- {{原则 3}}
-- {{原则 4}}
-- {{原则 5}}
+- {{Principle 1}}
+- {{Principle 2}}
+- {{Principle 3}}
+- {{Principle 4}}
+- {{Principle 5}}
 
-### 示例对比
+### Before / After Example
 
-处理前：
+Before:
 
 > {{before-example}}
 
-处理后：
+After:
 
 > {{after-example}}
 
-变化：
+What changed:
 
-- {{变化点 1}}
-- {{变化点 2}}
-- {{变化点 3}}
-- {{变化点 4}}
+- {{Change 1}}
+- {{Change 2}}
+- {{Change 3}}
+- {{Change 4}}
 
-## {{可选：警示列表、检查清单或常见问题}}
+## {{Optional: Warning List, Checklist, Or FAQ}}
 
-{{适合放高频问题、风险词、坏味道、检查项或注意事项。}}
+{{Use this section for frequent issues, risk terms, bad smells, check items, or operational notes.}}
 
-- {{条目 1}}
-- {{条目 2}}
-- {{条目 3}}
-- {{条目 4}}
+- {{Item 1}}
+- {{Item 2}}
+- {{Item 3}}
+- {{Item 4}}
 
-## 贡献
+## Contributing
 
-如果你发现问题或想改进这个 skill，欢迎提交 Issue 或 Pull Request。
+If you find an issue or want to improve this skill, feel free to open an issue or pull request.
 
-## 参考资源
+## References
 
-- {{参考资源 1}}
-- {{参考资源 2}}
-- {{参考资源 3}}
+- {{Reference 1}}
+- {{Reference 2}}
+- {{Reference 3}}
 
-## 许可
+## License
 
-本项目使用 {{license}} License。
+This project is licensed under the {{license}} License.
 
-第三方名称、平台名称、上游项目和参考资料仍受其原始许可和条款约束。
+Third-party names, platform names, upstream projects, and reference materials remain subject to their original licenses and terms.
 
 ---
 
-提示：{{一句补充说明，强调这个工具的正确使用边界或价值观。}}
+Note: {{One final usage note that clarifies the tool's proper boundary or value.}}

@@ -43,7 +43,10 @@ function git(a) {
   }
 }
 function listFiles() {
-  const visible = git(["ls-files", "--cached", "--others", "--exclude-standard"]).split("\n").filter(Boolean);
+  const visible = git(["ls-files", "--cached", "--others", "--exclude-standard"])
+    .split("\n")
+    .filter(Boolean)
+    .filter((rel) => exists(rel));
   if (visible.length) return [...new Set(visible)];
   const out = [];
   (function walk(dir) {
@@ -204,7 +207,7 @@ const hasAntiExamples = exists("SKILL.md")
 // Runtime-neutrality red-flag — phrasing that locks the skill to one runtime
 // makes other agents reject it. Platform LISTS and install paths are fine;
 // only single-runtime EXCLUSIVITY is flagged.
-const runtimeLockText = [skill, readSafe("README.md"), readSafe("README.en.md")].join("\n");
+const runtimeLockText = [skill, readSafe("README.md"), readSafe("README.zh.md")].join("\n");
 const runtimeNeutral = !/在\s*Claude Code\s*(?:里|中)|Claude Code skill\b|仅(?:适用于?|支持)\s*(?:Claude Code|Cursor|Codex)|(?:Cursor|Codex|Claude Code)\s+only\b|only works (?:in|with)\s+(?:Claude Code|Cursor|Codex)|只能在\s*(?:Claude Code|Cursor|Codex)/i.test(runtimeLockText);
 
 // ---- rubric --------------------------------------------------------------
@@ -223,7 +226,7 @@ const spec = [
     ["permissive open license", "det", permissiveLicense, 5],
     ["standard/open formats only", "det", onlyOpenFormats, 3],
     ["documented extension points", "proxy", extensionDocs, 4],
-    ["bilingual docs", "det", exists("README.md") && exists("README.en.md"), 2],
+    ["bilingual docs", "det", exists("README.md") && exists("README.zh.md"), 2],
     ["external deps standard & declared", "proxy", depsDeclared && !hardDepPhrase, 2],
     ["runtime-neutral phrasing (cross-agent portable)", "proxy", runtimeNeutral, 0],
   ]],

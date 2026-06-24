@@ -1,132 +1,132 @@
 # GitHub-skill-publisher
 
-中文 · [English](README.en.md)
+English · [中文](README.zh.md)
 
-把一个本地 agent skill **安全、规范地发布成 GitHub 仓库**，并在发布前给它做一次**可量化的工程质量体检**。它先看真实文件、跑三层检查、列出发布清单，等你确认后才提交和推送——绝不擅自发布。
+Publish a local agent skill to GitHub **safely and consistently**, and give it a **quantified engineering-quality check** before release. It inspects the real files, runs three layers of checks, lays out a release checklist, and only commits and pushes after you confirm — it never publishes on its own.
 
-## 适合谁使用？
+## Who Is This For?
 
-- 写好了 agent skill、想发布到 GitHub 的作者。
-- 同时维护多个 skill 仓库、想让 README / 协议 / 结构 / 检查保持统一的人。
-- 发布前想先查一遍密钥、本地路径、私有依赖，并想知道"这个 skill 到底做得够不够好"的人。
+- Authors who have written an agent skill and want to publish it to GitHub.
+- Maintainers of several skill repositories who want README / license / structure / checks to stay consistent.
+- Anyone who wants to scan for secrets, local paths, and private dependencies before release — and to know whether the skill is actually well built.
 
-## 它解决什么问题？
+## What Problem It Solves
 
-手动发布 skill 容易踩三个坑：**发布质量不稳定**（README 太薄、结构乱、协议忘了、仓库描述空着）、**安全泄露**（示例里混进 API key、本地路径、私有文件、别人家的版权内容）、**没有客观标尺**（发出去之前没人能说清它好不好）。这个 skill 把这三件事变成固定流程 + 自动检查 + 量化评分。
+Publishing a skill by hand hits three traps: **inconsistent quality** (thin README, drifting structure, forgotten license, empty repo description), **security leaks** (API keys, local paths, private files, or someone else's copyrighted content in examples), and **no objective gauge** (nobody can say whether it's good before it ships). This skill turns those into a repeatable flow plus automated checks and quantified scores.
 
-## 核心能力
+## Core Capabilities
 
-| 能力 | 它能帮你做什么 |
+| Capability | What It Helps You Do |
 |---|---|
-| 发布前总检 | 检查 README、必需文件、Git 状态、敏感信息、依赖和兼容性，给出能不能发布的清单。 |
-| 三层质量评分 | 用包自洽、发布卫生和软件工程质量三套指标，给出可复现的发布分数。 |
-| 敏感信息检查 | 发现 API key、token、账号、本地路径、日志和缓存，避免把私有信息发到公开仓库。 |
-| 第三方/署名复核 | 标出上游引用、版权/商标声明和外部协议条款，让发布前的保留、改写或署名有依据。 |
-| 双语 README + 仓库描述 | 生成或修正中文默认 README、英文 companion 和 GitHub 首屏描述。 |
-| 多形态兼容 | 识别单 skill 仓库和 marketplace 集合仓库，并检查会影响跨 Agent 安装的措辞。 |
+| Pre-publish review | Check README, required files, Git state, sensitive data, dependencies, and compatibility before release. |
+| Three-layer scoring | Produce reproducible scores for package consistency, release hygiene, and software-engineering quality. |
+| Sensitive-data scan | Catch API keys, tokens, accounts, local paths, logs, and caches before they reach a public repository. |
+| Third-party / attribution review | Surface upstream references, copyright/trademark notices, and external license terms for a deliberate decision. |
+| Bilingual README + repo description | Create or repair the English-default README, Chinese companion, and GitHub first-screen description. |
+| Multi-shape support | Recognize single-skill and marketplace repos, then flag phrasing that can break cross-agent installation. |
 
-## 三层质量体检（核心卖点）
+## Three-Layer Quality Check (the core value)
 
-发布前跑三套检查，每套回答一个不同的问题，全部**只报告、绝不推送**：
+Three checks run before release, each answering a different question — all **report-only, never push**:
 
-| 工具 | 回答的问题 | 产出 |
+| Tool | Question it answers | Output |
 |---|---|---|
-| `smoke-test.mjs` | 这个包自己自洽吗？ | 必需文件 / 引用 / 模板的逐项自检（PASS/FAIL） |
-| `publish-check.mjs` | **能不能发？** | 释放门 `PASS/WARNING/FAIL` + 工程卫生分（元数据/文档/结构/安全/工具，5 类 0–100） |
-| `se-quality.mjs` | **作为软件，做得好吗？** | 软件工程质量分（完整性/开放性/复用性/内聚/耦合/健壮性，0–100） |
+| `smoke-test.mjs` | Is the package self-consistent? | Per-item self-check of required files / references / templates (PASS/FAIL) |
+| `publish-check.mjs` | **Can I publish?** | Release gate `PASS/WARNING/FAIL` + engineering-hygiene score (metadata / docs / structure / security / tooling, 5 groups, 0–100) |
+| `se-quality.mjs` | **As software, is it well built?** | Software-engineering quality score (completeness / openness / reusability / cohesion / coupling / robustness, 0–100) |
 
-评分坚持**诚实设计**：硬指标（`det`）才计分，启发式信号（`proxy`）只做提示不进分，不适用项标 `N/A` 排除，并明说**不测功能正确性**——避免给你虚假的安全感。
+The scoring stays **honest**: only deterministic checks (`det`) count toward the number; heuristic signals (`proxy`) are advisory and never scored; inapplicable items are marked `N/A` and excluded; and it states plainly that it **does not test functional correctness** — so the score never gives false confidence.
 
-## 平台兼容性
+## Platform Compatibility
 
-适用于 Codex、Claude Code、OpenClaw 等 50+ 兼容 skills 的 runtime。同时识别**单 skill 仓库**和 **marketplace 集合仓库**（`.claude-plugin/marketplace.json`）两种结构，并检查"只能在某个 runtime 用"这类会让别的 agent 拒装的措辞。
+Works with Codex, Claude Code, OpenClaw, and 50+ skills-compatible runtimes. It recognizes both **single-skill repos** and **marketplace collection repos** (`.claude-plugin/marketplace.json`), and flags "only works in runtime X" phrasing that would make other agents refuse to install the skill.
 
-## 安装
+## Install
 
 ```bash
 git clone https://github.com/chemny/GitHub-skill-publisher.git
 ```
 
-把目录放进你的 Agent 会扫描的 skills 目录，确保 `SKILL.md` 在该 skill 根部，然后重开一个会话让 Agent 重新扫描。
+Put the directory in the skills folder your Agent scans, keep `SKILL.md` at the skill root, then start a new session so the Agent re-scans.
 
-## 快速开始
+## Quick Start
 
-对 Agent 说：
-
-```text
-使用 GitHub-skill-publisher 检查当前这个 skill 是否适合发布到 GitHub。
-```
-
-你会拿到一份发布前结果：释放门结论、两个质量分、README/结构/必需文件状态、敏感信息、依赖、兼容性、Git 状态和下一步建议。
-
-## 使用示例
-
-整理成可公开发布的仓库：
+Tell your Agent:
 
 ```text
-使用 GitHub-skill-publisher 帮我把当前 skill 整理成可以公开发布的 GitHub 仓库。
+Use GitHub-skill-publisher to check whether the current skill is ready to publish to GitHub.
 ```
 
-只看质量分、不发布：
+You get a pre-publish result: the release-gate verdict, both quality scores, README/structure/required-file status, sensitive data, dependencies, compatibility, Git state, and next steps.
+
+## Usage Examples
+
+Prepare a publishable repo:
 
 ```text
-使用 GitHub-skill-publisher 跑一遍 publish-check 和 se-quality，给我看分数和扣分项，先不要发布。
+Use GitHub-skill-publisher to turn the current skill into a publishable GitHub repository.
 ```
 
-发布前查风险：
+Just see the scores, do not publish:
 
 ```text
-使用 GitHub-skill-publisher 检查这个 skill 有没有 API key、账号、本地路径、私有文件或对其他 skill 的强依赖。
+Use GitHub-skill-publisher to run publish-check and se-quality and show me the scores and deductions — do not publish yet.
 ```
 
-修改并发布：
+Check risks before release:
 
 ```text
-使用 GitHub-skill-publisher 修改并发布这个 skill 到 GitHub。
+Use GitHub-skill-publisher to check this skill for API keys, accounts, local paths, private files, or hard dependencies on other skills.
 ```
 
-## 工作原理
+Edit and publish:
 
-它依赖三类文件：
+```text
+Use GitHub-skill-publisher to edit and publish this skill to GitHub.
+```
 
-- `templates/` —— README 和 LICENSE 模板。
-- `references/` —— 发布流程、README 写法、兼容性与安全检查清单。
-- `scripts/` —— 本地检查脚本，**只报告问题，不改任何东西**：
+## How It Works
+
+It relies on three kinds of files:
+
+- `templates/` — README and LICENSE templates.
+- `references/` — publish flow, README style, compatibility and security checklists.
+- `scripts/` — local check scripts that **only report problems, never change anything**:
 
 ```bash
-node scripts/smoke-test.mjs      # 包自洽自检
-node scripts/publish-check.mjs   # 释放门 + 工程卫生分
-node scripts/se-quality.mjs      # 软件工程质量分
+node scripts/smoke-test.mjs      # package self-consistency
+node scripts/publish-check.mjs   # release gate + engineering-hygiene score
+node scripts/se-quality.mjs      # software-engineering quality score
 ```
 
-这些脚本不会 commit、push、建仓、删文件或改 GitHub。任何发布动作都必须等你明确授权，且推送前会再单独确认一次。
+These scripts never commit, push, create repos, delete files, or touch GitHub. Any publish action requires your explicit authorization, with one more confirmation before pushing.
 
-## 仓库结构
+## Repository Structure
 
 ```text
 GitHub-skill-publisher/
 ├── SKILL.md
-├── README.md / README.en.md
+├── README.md / README.zh.md
 ├── LICENSE
 ├── .gitignore
 ├── evals/
-├── references/        # 发布流程、README 风格、安全/兼容/完整性清单
+├── references/        # publish flow, README style, security/compat/completeness checklists
 ├── scripts/
 │   ├── smoke-test.mjs
 │   ├── publish-check.mjs
 │   └── se-quality.mjs
-└── templates/         # README / LICENSE / .gitignore 模板
+└── templates/         # README / LICENSE / .gitignore templates
 ```
 
-## 运行要求
+## Requirements
 
-- 一个能读取本地 `SKILL.md` 的 Agent 环境（Codex、Claude Code、OpenClaw 等）。
-- `git` —— 检查仓库状态、提交历史和远端。
-- Node.js —— 运行 `scripts/` 下的检查脚本。
-- GitHub CLI `gh` —— 仅在建仓、更新 metadata 或推送时使用。
+- An Agent environment that can read a local `SKILL.md` (Codex, Claude Code, OpenClaw, etc.).
+- `git` — to inspect repo state, commit history, and remotes.
+- Node.js — to run the check scripts under `scripts/`.
+- GitHub CLI `gh` — only for creating repos, updating metadata, or pushing.
 
-## 协议
+## License
 
-本仓库使用 MIT License。
+This repository uses the MIT License.
 
-第三方名称、平台名称和上游参考资料仍受其原始条款约束。
+Third-party names, platform names, and upstream references remain subject to their original terms.

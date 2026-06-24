@@ -8,13 +8,13 @@ Do not use hype. Do actively explain what the skill improves and how the reader 
 
 Also generate a GitHub repository description. GitHub shows this one-line description on profile cards, search results, and repository lists, so it must explain the skill's value before a reader opens the README.
 
-Use Chinese as the default GitHub repository description language, because `README.md` is Chinese by default and GitHub profile cards should match the repository homepage. Use English only when the user explicitly requests an English or international-facing repository.
+Use English as the default GitHub repository description language, because `README.md` is English by default and GitHub profile cards should match the repository homepage. Use Chinese only when the user explicitly requests a Chinese or China-facing repository.
 
 Create both:
 
 ```text
-README.md      Chinese, default GitHub repository homepage
-README.en.md   English
+README.md      English, default GitHub repository homepage
+README.zh.md   Chinese
 ```
 
 Each README must link to the other near the top with an explicit language switch.
@@ -22,11 +22,11 @@ Each README must link to the other near the top with an explicit language switch
 Default language switch:
 
 ```markdown
-中文 | [English](./README.en.md)
+English | [中文](./README.zh.md)
 ```
 
 ```markdown
-[中文](./README.md) | English
+[English](./README.md) | 中文
 ```
 
 Use only the language names in the switch labels: `中文` and `English`. Do not write `中文 README`, `English README`, or any label that includes the word `README`; it is visually redundant on GitHub.
@@ -35,8 +35,8 @@ Use only the language names in the switch labels: `中文` and `English`. Do not
 
 This is a required pre-publish check.
 
-- `README.md` must be Chinese-first because GitHub displays it by default.
-- `README.en.md` must be English-only except for the intentional language label/link.
+- `README.md` must be English-first because GitHub displays it by default.
+- `README.zh.md` must be Chinese-only except for the intentional language label/link.
 - Do not use a mixed bilingual body in either README by default.
 - Do not solve missing Chinese documentation by putting Chinese paragraphs into the English README.
 - If the user explicitly requests a single bilingual README, confirm that choice before publishing.
@@ -55,13 +55,14 @@ Before publishing or republishing a skill:
 - Do not blindly overwrite an older README, because it may contain useful project-specific details.
 - If the user did not explicitly ask to preserve the current README as-is, upgrade missing key modules before publishing.
 - If the user explicitly asks for a pass-through release, keep the existing README structure, report it as a warning when incomplete, and do not claim it follows the current template.
-- Do not publish only because `README.md` is Chinese and `README.en.md` exists. Language layout is necessary but not sufficient.
+- Do not publish only because `README.md` is English and `README.zh.md` exists. Language layout is necessary but not sufficient.
 
 Required structure modules:
 
 - audience and value opening: who should use the skill and why it matters,
 - install path: how to install or import the skill,
 - first-use path: quick start, verification prompt, or first successful command,
+- program or page screenshot: a real screenshot captured by the agent when the skill has a visual surface,
 - core capabilities: what the skill can actually do,
 - requirements or configuration: dependencies, credentials, environment, or setup assumptions,
 - platform compatibility: Codex, Claude Code, OpenClaw, or a concise compatibility sentence,
@@ -73,28 +74,28 @@ Product-page quality gates:
 - Core capabilities must be easy for a normal user to scan. Prefer a two-column table: `Capability` + `What it helps you do` (Chinese: `能力` + `它能帮你做什么`). Do not use three-column implementation tables such as `能力 / 处理内容 / 输出结果`, `Capability / Input / Output`, or `Capability / What it handles / Output` as the main capability table.
 - README copy must describe the public product, not the authoring conversation. Remove internal collaboration wording such as "after asking", "with your consent", "add this rule to your prompt/instructions", "rerun setup", "征得你同意", "加进提示词", or "重跑 setup". Product docs can say what the installer does and what result the user gets, but should not narrate our back-and-forth or expose implementation chores as user work.
 
-Root-cause rule from the `ai-image-generator` case: a README that has Chinese `README.md`, English `README.en.md`, and Chinese GitHub metadata can still be incomplete if it was only normalized for language layout. Future publisher-managed releases must either upgrade it to the current README structure or explicitly report the preserved structure as pass-through.
+Root-cause rule from the `ai-image-generator` case: a README can still be incomplete if it was only normalized for language layout. Future publisher-managed releases must either upgrade it to the current README structure or explicitly report the preserved structure as pass-through.
 
 ## Release surface normalization policy
 
 Old projects may still use the legacy layout:
 
 ```text
-README.md      English
-README.zh.md   Chinese
+README.md      Chinese
+README.en.md   English
 ```
 
 GitHub-skill-publisher uses publisher-managed release by default. A publisher-managed release must normalize the public release surface before publishing:
 
 ```text
-README.md      Chinese, GitHub default
-README.en.md   English
-GitHub description: Chinese by default
+README.md      English, GitHub default
+README.zh.md   Chinese
+GitHub description: English by default
 ```
 
 Default behavior:
 
-- Legacy `README.md` English + `README.zh.md` Chinese is a release-surface mismatch.
+- Legacy `README.md` Chinese + `README.en.md` English is a release-surface mismatch.
 - Migrate the release surface before publishing.
 - `publish-check.mjs` fails this mismatch by default.
 
@@ -103,7 +104,7 @@ Pass-through exception:
 - If the user explicitly says to preserve the old README, not migrate README, or publish the current files as-is, keep the old layout.
 - In pass-through releases, report the old layout as a warning and run `node scripts/publish-check.mjs --allow-legacy-readme`.
 
-When GitHub repository description is updated, use Chinese by default even if a pass-through release temporarily retains old README files.
+When GitHub repository description is updated, use English by default even if a pass-through release temporarily retains old README files.
 
 ## README style variants
 
@@ -123,17 +124,18 @@ The default Standard section order is:
 1. Title
 2. Language switch
 3. Audience-and-value opening
-4. Who Is This For?
-5. What It Does
-6. Core Capabilities
-7. Platform Compatibility
-8. One-command Install / Install
-9. Quick Start
-10. Usage Examples
-11. How It Works
-12. Repository Structure
-13. Requirements
-14. License
+4. Program or Page Screenshot
+5. Who Is This For?
+6. What It Does
+7. Core Capabilities
+8. Platform Compatibility
+9. One-command Install / Install
+10. Quick Start
+11. Usage Examples
+12. How It Works
+13. Repository Structure
+14. Requirements
+15. License
 ```
 
 Standard writing rules:
@@ -150,7 +152,13 @@ Standard writing rules:
 - Do not make first-time users run `git clone`, `cd`, `./setup.sh`, `pip install`, `python -m venv`, or `node scripts/...` as a multi-command install block. Those steps belong inside the installer or setup script.
 - Provide a copy-ready prompt for direct use.
 - Put deeper CLI details in usage examples or reference docs, not in the main README unless the command is part of first successful use.
-- Include a preview image section only when real screenshots, cover images, first-frame previews, UI images, or other persuasive visuals are available.
+- Include a program or page screenshot section whenever the skill has a visual surface. Use a real screenshot captured by the agent:
+  - for a web page, open the page in a browser and capture the page;
+  - for a desktop/app program, launch the real program and capture the UI;
+  - insert the screenshot near the top of both `README.md` and `README.zh.md`;
+  - store the image in the repository, usually under `assets/`;
+  - before publishing, show the screenshot to the user and wait for confirmation.
+- Do not use a mock screenshot when a real page or program can be opened. If real user data should not be exposed, use safe sample data while keeping the real UI, and state that clearly in the final pre-publish summary.
 - Move technical details, long configuration matrices, and repository internals behind the main value path or into references/docs.
 
 Use the hero badge structure when the user wants a more promotional first screen or when the skill has strong product positioning. This style uses a centered opening block, shields.io badges, a bold value statement, quick navigation links, and language links.
@@ -158,10 +166,10 @@ Use the hero badge structure when the user wants a more promotional first screen
 Available templates:
 
 ```text
-templates/README.md           Standard Chinese README, GitHub default
-templates/README.en.md        Standard English README
-templates/README.practical-tool.md     Practical utility Chinese README for rule/checklist/example-heavy skills
-templates/README.practical-tool.en.md  Practical utility English README for rule/checklist/example-heavy skills
+templates/README.md           Standard English README, GitHub default
+templates/README.zh.md        Standard Chinese README
+templates/README.practical-tool.md     Practical utility English README for rule/checklist/example-heavy skills
+templates/README.practical-tool.zh.md  Practical utility Chinese README for rule/checklist/example-heavy skills
 templates/README.hero.md      Hero/badge English README
 templates/README.hero.zh.md   Hero/badge Chinese README
 ```
@@ -212,6 +220,7 @@ Every public skill README should quickly answer:
 - how to install it,
 - how to verify it works,
 - how to use it,
+- what it looks like when it has a page or program UI,
 - whether it supports Codex, Claude Code, and OpenClaw,
 - what the repository contains,
 - what license and copyright limits apply.
@@ -227,8 +236,8 @@ Create a concise GitHub repository description for every published skill.
 Rules:
 
 - Keep it to one sentence.
-- Use Chinese by default.
-- Prefer 35-80 Chinese characters, or 80-140 English characters when the user explicitly requests English.
+- Use English by default.
+- Prefer 80-140 English characters, or 35-80 Chinese characters when the user explicitly requests Chinese.
 - Explain what the skill does and why it matters.
 - Avoid generic text such as "Agent skill", "README", or only the repository name.
 - Do not use unsupported compatibility or security claims.
@@ -237,11 +246,11 @@ Rules:
 Useful patterns:
 
 ```text
-把本地 agent skill 发布成结构清晰、可安装、适合公开推广的 GitHub 单 skill 仓库。
+Publish local agent skills as clean, installable, promotion-ready single-skill GitHub repositories.
 ```
 
 ```text
-把本地 skill 整理成带 README、协议、安全检查和兼容性检查的 GitHub 仓库。
+Package a local skill with README, license, safety checks, and compatibility review for GitHub release.
 ```
 
 ## Conversion principle

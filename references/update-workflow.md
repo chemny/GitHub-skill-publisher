@@ -21,7 +21,7 @@ Inspect -> Edit -> Smoke test -> Pre-publish check -> Final summary -> Commit or
    - If the user did not explicitly ask to preserve the current README as-is, upgrade missing README modules before publishing.
 4. Run `node scripts/smoke-test.mjs` when available.
 5. Run `node scripts/publish-check.mjs` when available.
-   - By default this requires normalized release surface: Chinese `README.md`, English `README.en.md`, and no legacy `README.zh.md`.
+   - By default this requires normalized release surface: English `README.md`, Chinese `README.zh.md`, and no legacy `README.en.md`.
    - By default this also checks required README structure modules for publisher-managed releases.
    - Use `--allow-legacy-readme` only when the user explicitly asks to preserve old README files or publish current files as-is.
 6. Show the final pre-publish summary after all content, including README files, has been generated and checked.

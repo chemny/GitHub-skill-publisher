@@ -24,11 +24,15 @@ function read(rel) {
   return fs.readFileSync(path.join(root, rel), "utf8");
 }
 
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 function markdownSection(content, names) {
   const headings = [...content.matchAll(/^##\s+(.+?)\s*$/gim)];
   for (let i = 0; i < headings.length; i += 1) {
     const title = headings[i][1].trim().replace(/[#*`]/g, "");
-    if (!names.some((name) => new RegExp(`^${name}$`, "i").test(title))) continue;
+    if (!names.some((name) => new RegExp(`^${escapeRegExp(name)}$`, "i").test(title))) continue;
     const start = headings[i].index + headings[i][0].length;
     const end = i + 1 < headings.length ? headings[i + 1].index : content.length;
     return content.slice(start, end).trim();
@@ -66,6 +70,14 @@ function tableColumnCount(line) {
   return line.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").length;
 }
 
+function markdownImages(content) {
+  return [...content.matchAll(/!\[[^\]]*]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)].map((m) => m[1]);
+}
+
+function mentionsVisualSurface(content) {
+  return /(?:网页|页面|浏览器|程序|应用|客户端|界面|截图|预览|web\s?page|browser|app|program|desktop|client|ui|dashboard|html|localhost|127\.0\.0\.1)/i.test(content);
+}
+
 function git(args) {
   try {
     return execFileSync("git", args, { cwd: root, encoding: "utf8" }).trim();
@@ -75,7 +87,10 @@ function git(args) {
 }
 
 function listFiles() {
-  const gitVisible = git(["ls-files", "--cached", "--others", "--exclude-standard"]).split("\n").filter(Boolean);
+  const gitVisible = git(["ls-files", "--cached", "--others", "--exclude-standard"])
+    .split("\n")
+    .filter(Boolean)
+    .filter((rel) => exists(rel));
   if (gitVisible.length > 0) return [...new Set(gitVisible)];
 
   const out = [];
@@ -129,33 +144,37 @@ if (isMarketplace) {
 }
 
 const hasReadme = exists("README.md");
-const hasModernEnglishReadme = exists("README.en.md");
-const hasLegacyChineseReadme = exists("README.zh.md");
+const hasChineseReadme = exists("README.zh.md");
+const hasLegacyEnglishReadme = exists("README.en.md");
 
 if (hasReadme) {
   const readme = read("README.md");
-  const readmeTop = readme.split(/\r?\n/).slice(0, 30).join("\n");
-  const readmeLinksLegacyChinese = /README\.zh\.md/.test(readmeTop);
-  const readmeLinksModernEnglish = /README\.en\.md/.test(readmeTop);
-  const looksChinese = /[\u4e00-\u9fff]/.test(readmeTop);
-  const looksLegacy = hasLegacyChineseReadme || readmeLinksLegacyChinese || (!hasModernEnglishReadme && !looksChinese);
+  const readmeTopLines = readme.split(/\r?\n/).slice(0, 30);
+  const readmeTop = readmeTopLines.join("\n");
+  const readmeLinksModernChinese = /README\.zh\.md/.test(readmeTop);
+  const readmeLinksLegacyEnglish = /README\.en\.md/.test(readmeTop);
+  const readmeTopWithoutLanguageSwitch = readmeTopLines
+    .filter((line) => !/(?:README\.zh\.md|README\.en\.md|^\s*(?:English|中文)\s*[|·])/.test(line))
+    .join("\n");
+  const looksChinese = /[\u4e00-\u9fff]/.test(readmeTopWithoutLanguageSwitch);
+  const looksLegacy = hasLegacyEnglishReadme || readmeLinksLegacyEnglish || (!hasChineseReadme && looksChinese);
   const modernProblems = [];
 
-  if (!looksChinese) modernProblems.push(["README.md must be Chinese by default", "Migrate Chinese documentation into README.md."]);
-  if (!hasModernEnglishReadme) modernProblems.push(["Missing README.en.md", "Move English documentation to README.en.md."]);
-  if (hasLegacyChineseReadme) modernProblems.push(["Legacy README.zh.md remains", "Use README.md for Chinese and README.en.md for English."]);
-  if (!readmeLinksModernEnglish) modernProblems.push(["README language switch is not modern", "README.md should link to README.en.md near the top."]);
+  if (looksChinese) modernProblems.push(["README.md must be English by default", "Move English documentation into README.md and Chinese documentation into README.zh.md."]);
+  if (!hasChineseReadme) modernProblems.push(["Missing README.zh.md", "Move Chinese documentation to README.zh.md."]);
+  if (hasLegacyEnglishReadme) modernProblems.push(["Legacy README.en.md remains", "Use README.md for English and README.zh.md for Chinese."]);
+  if (!readmeLinksModernChinese) modernProblems.push(["README language switch is not modern", "README.md should link to README.zh.md near the top."]);
 
   if (modernProblems.length > 0) {
     if (allowLegacyReadme && looksLegacy) {
-      add("WARNING", "Legacy README structure allowed by explicit pass-through", "README.md English + README.zh.md Chinese was kept because --allow-legacy-readme was used.");
+      add("WARNING", "Legacy README structure allowed by explicit pass-through", "README.md Chinese + README.en.md English was kept because --allow-legacy-readme was used.");
     } else {
       for (const [title, detail] of modernProblems) add("FAIL", title, detail);
     }
   }
 
   const structureChecks = [
-    ["README missing audience/value opening", /(?:面向|适合谁|谁适合|适用人群|目标用户|for .{0,40}(?:users|teams|authors))/i],
+    ["README missing audience/value opening", /(?:面向|适合谁|谁适合|适用人群|目标用户|Who Is This For|for .{0,40}(?:users|teams|authors))/i],
     ["README missing install path", /(?:^##\s*(?:怎么安装|安装|Install)(?:\s|$)|git clone)/im],
     ["README missing quick start or first-use path", /(?:^##\s*(?:快速开始|使用方式|怎么使用|Quick Start|Usage)(?:\s|$)|验证|verification prompt|first successful)/im],
     ["README missing core capabilities", /(?:^##\s*(?:核心能力|功能|Capabilities|Core Capabilities)(?:\s|$))/im],
@@ -175,9 +194,16 @@ if (hasReadme) {
       add("FAIL", title, "Upgrade README.md to the current default structure before publishing, or use --allow-legacy-readme only for an explicit pass-through release.");
     }
   }
+
+  const screenshotSection = markdownSection(readme, ["程序或页面截图", "页面预览", "程序截图", "页面截图", "Program or Page Screenshot", "Screenshot", "Preview"]);
+  if (!screenshotSection && mentionsVisualSurface(readme)) {
+    add("WARNING", "README missing program/page screenshot section", "If the skill has a web page, app, or program UI, capture a real screenshot and show it to the user before publishing.");
+  } else if (screenshotSection && markdownImages(screenshotSection).length === 0) {
+    add("WARNING", "README screenshot section has no image", "Add a captured screenshot image link, usually under assets/.");
+  }
 }
 
-for (const rel of ["README.md", "README.en.md"]) {
+for (const rel of ["README.md", "README.zh.md"]) {
   if (!exists(rel)) continue;
   const content = read(rel);
 
@@ -212,6 +238,15 @@ for (const rel of ["README.md", "README.en.md"]) {
       if (/(?:处理内容|输出结果|^.*\bInput\b.*$|^.*\bOutput\b.*$|What it handles)/im.test(table[0])) {
         add("FAIL", "README core capabilities table uses implementation-oriented columns", `${rel}: write user-facing capability + benefit columns.`);
       }
+    }
+  }
+
+  const screenshotSection = markdownSection(content, ["程序或页面截图", "页面预览", "程序截图", "页面截图", "Program or Page Screenshot", "Screenshot", "Preview"]);
+  if (screenshotSection) {
+    for (const imagePath of markdownImages(screenshotSection)) {
+      if (/^(?:https?:)?\/\//i.test(imagePath)) continue;
+      const normalized = imagePath.replace(/^\.\//, "").split("#")[0].split("?")[0];
+      if (normalized && !exists(normalized)) add("FAIL", "README screenshot image is missing", `${rel}: ${imagePath}`);
     }
   }
 }
@@ -482,10 +517,10 @@ const hasResult = (substr) => results.some((r) => r.title.includes(substr));
 const readmeMissingCount = results.filter((r) => r.title.startsWith("README missing")).length;
 const structureFrac = Math.max(0, 10 - readmeMissingCount) / 10;
 const readmeModernOk =
-  !hasResult("must be Chinese") &&
-  !hasResult("Missing README.en.md") &&
+  !hasResult("must be English") &&
+  !hasResult("Missing README.zh.md") &&
   !hasResult("language switch is not modern") &&
-  !hasResult("Legacy README.zh.md");
+  !hasResult("Legacy README.en.md");
 
 const scorecardSpec = [
   ["Metadata & discoverability", [
@@ -497,8 +532,8 @@ const scorecardSpec = [
   ]],
   ["Documentation", [
     ["README.md present", exists("README.md"), 4],
-    ["README.md Chinese-default + en switch", readmeModernOk, 4],
-    ["README.en.md present", exists("README.en.md"), 4],
+    ["README.md English-default + zh switch", readmeModernOk, 4],
+    ["README.zh.md present", exists("README.zh.md"), 4],
     ["README structure modules", structureFrac, 4],
     ["LICENSE present", exists("LICENSE"), 4],
   ]],
