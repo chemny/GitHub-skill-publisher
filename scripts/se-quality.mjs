@@ -143,7 +143,7 @@ const orphanCount = [...refFiles, ...templateFiles, ...files.filter((r) => /^ass
 const brokenRefCount = [...new Set(skill.match(/\b(?:references|templates|scripts|assets)\/[A-Za-z0-9._/-]+/g) || [])].filter(
   (rel) => !exists(rel.replace(/[.,;:]$/, ""))
 ).length;
-const readmeHasInstall = /(?:^##\s*(?:安装|怎么安装|Install)|git clone)/im.test(readSafe("README.md"));
+const readmeHasInstall = /(?:^##\s*(?:安装|怎么安装|Install|Installation))/im.test(readSafe("README.md"));
 const readmeHasUsage = /(?:^##\s*(?:使用|快速开始|怎么使用|Quick Start|Usage))/im.test(readSafe("README.md"));
 const extensionDocs = templateFiles.length > 0 && /(starting point|template|起点|模板|扩展|customi[sz]e)/i.test(allText);
 const depsDeclared = /(?:\bgit\b)/.test(allText) && /\bnode(?:\.js)?\b/i.test(allText);

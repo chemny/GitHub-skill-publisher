@@ -24,6 +24,7 @@
 | 第三方/署名复核 | 标出上游引用、版权/商标声明和外部协议条款，让发布前的保留、改写或署名有依据。 |
 | 双语 README + 仓库描述 | 生成或修正英文默认 README、中文 companion 和 GitHub 首屏描述。 |
 | 多形态兼容 | 识别单 skill 仓库和 marketplace 集合仓库，并检查会影响跨 Agent 安装的措辞。 |
+| 当前 Skill 元数据校验 | 从 `metadata.version` 读取语义化版本，并在发布前拦截旧的顶层版本字段。 |
 
 ## 三层质量体检（核心卖点）
 
@@ -43,11 +44,14 @@
 
 ## 安装
 
-```bash
-git clone https://github.com/chemny/GitHub-skill-publisher.git
+把下面这句话发送给你的 Agent：
+
+```text
+帮我安装这个 Skill：
+https://github.com/chemny/GitHub-skill-publisher
 ```
 
-把目录放进你的 Agent 会扫描的 skills 目录，确保 `SKILL.md` 在该 skill 根部，然后重开一个会话让 Agent 重新扫描。
+Agent 会根据当前客户端完成安装、依赖检查和加载验证。
 
 ## 快速开始
 

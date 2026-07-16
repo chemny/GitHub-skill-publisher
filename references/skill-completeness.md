@@ -12,7 +12,8 @@ If a required dependency is missing, private, or platform-specific, tell the use
 
 - [ ] `SKILL.md` exists at the repository root.
 - [ ] `SKILL.md` has valid YAML frontmatter.
-- [ ] Frontmatter includes `name`, `description`, and `version` when available.
+- [ ] Frontmatter includes `name` and `description`.
+- [ ] Version, when present, is read from `metadata.version`; legacy top-level `version` must be migrated before a publisher-managed release.
 - [ ] `README.md` exists for public repositories.
 - [ ] `README.zh.md` exists when bilingual publishing is required.
 - [ ] `LICENSE` exists.

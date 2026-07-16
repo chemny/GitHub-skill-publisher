@@ -1,7 +1,8 @@
 ---
 name: GitHub-skill-publisher
 description: Use this skill when the user wants to publish, update, package, document, or synchronize an agent skill to GitHub. It captures a single-skill-per-repository workflow, bilingual README writing style, GitHub repository creation, commit/push updates, publish readiness checks, Codex/Claude Code/OpenClaw compatibility checks, portability checks, and security review for public skill repositories.
-version: 0.1.0
+metadata:
+  version: "0.1.0"
 ---
 
 # GitHub-skill-publisher
@@ -91,9 +92,14 @@ Inspect -> Normalize -> Capture screenshot -> Write README -> Pre-publish cleanu
 4. Write or update `README.md`, `README.zh.md`, `LICENSE`, and `.gitignore` when useful.
    - Treat the README template as a release quality gate, not only as writing guidance.
    - For publisher-managed releases, evaluate any existing README against the current default README structure before publishing.
+   - For every update release, review the current diff before publishing and decide whether the change affects README content.
+   - If changes touch user-visible capability, usage, install flow, dependencies, compatibility, outputs, repository structure, templates, scripts, security/copyright boundaries, or GitHub metadata, update both `README.md` and `README.zh.md` before publishing.
+   - If the changes are small and do not affect README content, do not force a README edit; document the no-impact reason in the final pre-publish summary and run the publish check with `--readme-no-impact`.
    - Do not blindly overwrite old READMEs, but if the user did not explicitly ask to preserve the current README as-is, upgrade missing key modules before publishing.
    - Required README modules include audience fit, program or page screenshot when the skill has a visual surface, what it does, core capabilities, platform compatibility, install, quick start, usage examples, how it works, repository/file structure, requirements or configuration, and license.
-   - Productize README copy before release: use a two-column user-facing core-capabilities table, keep the main install section to one primary command, and remove internal collaboration/setup phrasing from public docs.
+   - Productize README copy before release: use a two-column user-facing core-capabilities table and make the main install section a copy-ready natural-language request that asks the current Agent to install the public repository URL.
+   - For agent-facing skill repositories, remove default `git clone`, directory-copy, manual-install, platform-path, dependency, and restart instructions from the main README. The installing Agent owns environment detection, installation, dependency checks, and load verification.
+   - When an existing README still uses a clone-and-copy installation flow, rewrite that section during normalization before running the final publish check. Do not merely report the old structure and leave it for the user to fix.
 5. Generate or update GitHub repository metadata, especially the repository description.
    - Use an English repository description by default unless the user explicitly requests Chinese or a China-facing repository.
    - The description should match the first-screen value proposition in `README.md`.
@@ -108,6 +114,7 @@ Inspect -> Normalize -> Capture screenshot -> Write README -> Pre-publish cleanu
    - Prefer `node scripts/publish-check.mjs` from the skill repository when available.
    - By default, `node scripts/publish-check.mjs` requires the normalized release surface: English `README.md`, Chinese `README.zh.md`, and no legacy `README.en.md`.
    - The publish check must validate README structure, not only README language layout. A README that is English by default but misses required product/documentation modules is not release-ready.
+   - The publish check must also validate README freshness against the current diff. If relevant non-README files changed but README files did not, treat that as a release blocker unless the diff was reviewed and explicitly marked no-impact with `--readme-no-impact`.
    - Use `node scripts/publish-check.mjs --allow-legacy-readme` only when the user explicitly requests a pass-through release that preserves old README files.
    - The script must report `PASS`, `WARNING`, or `FAIL`; it must not commit, push, create repositories, or publish.
    - Treat `FAIL` as a hard stop until fixed.
@@ -176,7 +183,7 @@ Use these as starting points, not rigid boilerplate:
 - `templates/LICENSE-MIT`
 - `templates/gitignore`
 
-Use `templates/README.md` and `templates/README.zh.md` as the default Standard high-conversion README templates. `README.md` is English by default for GitHub's repository homepage, and `README.zh.md` is the Chinese switch page. They prioritize user value, product pain, product highlights, workflow, optional preview, one-line installation, direct-use prompt, default configuration, final result, compatibility, and license.
+Use `templates/README.md` and `templates/README.zh.md` as the default Standard high-conversion README templates. `README.md` is English by default for GitHub's repository homepage, and `README.zh.md` is the Chinese switch page. They prioritize user value, product pain, product highlights, workflow, optional preview, Agent-directed installation, direct-use prompt, default configuration, final result, compatibility, and license.
 
 Use `templates/README.practical-tool.md` and `templates/README.practical-tool.zh.md` when a skill is a practical utility with rich usage examples, rule categories, manual workflows, before/after examples, warning lists, references, and source attribution.
 

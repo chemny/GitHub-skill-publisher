@@ -38,13 +38,14 @@
 
 ## 安装
 
-```bash
-git clone {{repo-url}}
+把下面这句话发送给你的 Agent：
+
+```text
+帮我安装这个 Skill：
+{{repo-url}}
 ```
 
-把克隆后的目录放到你的 Agent 会扫描的 skills 目录里，或按你的 Agent 的安装方式导入。确保 `SKILL.md` 位于该 skill 目录根部。
-
-安装后开一个新的 Agent 会话，让它重新扫描 skills。
+Agent 会根据当前客户端完成安装、依赖检查和加载验证。
 
 ## 快速开始
 

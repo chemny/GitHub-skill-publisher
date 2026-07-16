@@ -19,16 +19,22 @@ Inspect -> Edit -> Smoke test -> Pre-publish check -> Final summary -> Commit or
    - If a hard dependency exists, document it, make it optional, bundle it, or pause and report it to the user before publishing.
    - If README files are present, evaluate them against the current default README structure, not only the language layout.
    - If the user did not explicitly ask to preserve the current README as-is, upgrade missing README modules before publishing.
-4. Run `node scripts/smoke-test.mjs` when available.
-5. Run `node scripts/publish-check.mjs` when available.
+4. Run README change-impact review.
+   - Compare the current diff against `README.md` and `README.zh.md`.
+   - If the release changes user-visible capabilities, usage examples, install flow, dependencies, compatibility, outputs, repository/file structure, templates, scripts, safety/copyright boundaries, or GitHub metadata, update the relevant README sections before publishing.
+   - If the release only contains small internal edits that do not affect public documentation, README does not need to change. Record the no-impact reason in the final pre-publish summary.
+5. Run `node scripts/smoke-test.mjs` when available.
+6. Run `node scripts/publish-check.mjs` when available.
    - By default this requires normalized release surface: English `README.md`, Chinese `README.zh.md`, and no legacy `README.en.md`.
    - By default this also checks required README structure modules for publisher-managed releases.
+   - By default this fails when README-impacting files changed but README files did not.
+   - Use `--readme-no-impact` only after reviewing the diff and confirming the changes do not affect README content.
    - Use `--allow-legacy-readme` only when the user explicitly asks to preserve old README files or publish current files as-is.
-6. Show the final pre-publish summary after all content, including README files, has been generated and checked.
-7. If the user's current request already included explicit edit-plus-publish authorization, commit and push after successful checks. Otherwise ask whether to publish to GitHub.
-8. Commit with a clear message only after explicit publish authorization exists.
-9. Push to the tracked remote.
-10. Verify GitHub state.
+7. Show the final pre-publish summary after all content, including README files, has been generated and checked.
+8. If the user's current request already included explicit edit-plus-publish authorization, commit and push after successful checks. Otherwise ask whether to publish to GitHub.
+9. Commit with a clear message only after explicit publish authorization exists.
+10. Push to the tracked remote.
+11. Verify GitHub state.
 
 ## Common update types
 

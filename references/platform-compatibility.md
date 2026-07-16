@@ -31,7 +31,7 @@ If compatibility is partial or broken, tell the user before publishing and pause
 - [ ] `name`, `description`, and trigger contexts are clear.
 - [ ] Instructions do not depend on one platform's private memory files.
 - [ ] Instructions do not depend on one platform's hidden runtime behavior.
-- [ ] Installation docs explain generic placement in an agent skills directory.
+- [ ] Installation docs use an Agent-directed installation request and do not make the user choose a platform directory.
 - [ ] Platform-specific paths are examples only, not requirements.
 - [ ] Any scripts use portable relative paths.
 - [ ] Any scripts document runtime requirements such as Node.js, Python, `gh`, or shell tools.

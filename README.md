@@ -24,6 +24,7 @@ Publishing a skill by hand hits three traps: **inconsistent quality** (thin READ
 | Third-party / attribution review | Surface upstream references, copyright/trademark notices, and external license terms for a deliberate decision. |
 | Bilingual README + repo description | Create or repair the English-default README, Chinese companion, and GitHub first-screen description. |
 | Multi-shape support | Recognize single-skill and marketplace repos, then flag phrasing that can break cross-agent installation. |
+| Current Skill metadata validation | Read semantic versions from `metadata.version` and block legacy top-level version fields before release. |
 
 ## Three-Layer Quality Check (the core value)
 
@@ -43,11 +44,14 @@ Works with Codex, Claude Code, OpenClaw, and 50+ skills-compatible runtimes. It 
 
 ## Install
 
-```bash
-git clone https://github.com/chemny/GitHub-skill-publisher.git
+Send this to your Agent:
+
+```text
+Install this Skill for me:
+https://github.com/chemny/GitHub-skill-publisher
 ```
 
-Put the directory in the skills folder your Agent scans, keep `SKILL.md` at the skill root, then start a new session so the Agent re-scans.
+The Agent will choose the installation method for the current client, check dependencies, and verify that the Skill loads.
 
 ## Quick Start
 

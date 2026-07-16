@@ -38,6 +38,7 @@ Run this checklist before publishing a skill repository.
 - [ ] Frontmatter includes `name`.
 - [ ] Frontmatter includes a strong `description`.
 - [ ] Description contains trigger phrases and task contexts.
+- [ ] Version, when present, uses `metadata.version`; top-level `version` has been migrated.
 - [ ] No private `local_updated_at` or machine-specific metadata is required for release.
 
 ## Completeness and dependencies
@@ -81,6 +82,10 @@ Run this checklist before publishing a skill repository.
 
 - [ ] Existing README was evaluated against the current default README structure before publishing.
 - [ ] README template compliance was treated as a release quality gate, not only as writing guidance.
+- [ ] Current diff was reviewed for README impact before publishing.
+- [ ] User-visible changes to capability, usage, install flow, dependencies, compatibility, outputs, repository/file structure, templates, scripts, safety/copyright boundaries, or GitHub metadata were reflected in `README.md` and `README.zh.md`.
+- [ ] If README was not updated, the change was confirmed as small/no-impact and the no-impact reason was included in the final pre-publish summary.
+- [ ] `node scripts/publish-check.mjs --readme-no-impact` was used only after the diff was reviewed and README was confirmed unnecessary.
 - [ ] Missing key modules were added unless the user explicitly requested a pass-through release.
 - [ ] Explains why the skill exists.
 - [ ] Explains who should use or install it.
@@ -94,14 +99,13 @@ Run this checklist before publishing a skill repository.
 - [ ] Reduces comprehension friction: reader can tell what it is and why it matters from the first screen.
 - [ ] Reduces trust friction: mechanism and limits of authority are clear.
 - [ ] Reduces action friction: install, verify, and first-use path are easy to follow.
-- [ ] Main install section has one primary copyable command.
-- [ ] If setup needs environment creation, dependency install, cache generation, hook wiring, config writing, or instruction-rule updates, those steps are handled by an installer/setup flow, not exposed as a multi-command README block.
+- [ ] Main install section has one copy-ready natural-language request asking the current Agent to install the public repository URL.
+- [ ] Existing clone-and-copy installation prose was rewritten during README normalization before the final publish check.
+- [ ] The default README install flow does not expose `git clone`, directory copying, platform paths, manual installation, dependency commands, or restart instructions.
 - [ ] README does not include internal collaboration wording such as "after asking", "with your consent", "add this rule to your prompt/instructions", "rerun setup", "征得你同意", "加进提示词", or "重跑 setup".
 - [ ] Uses baseline or full structure according to the skill's complexity.
 - [ ] Includes diagrams only when process-oriented.
-- [ ] Includes a low-friction install path: usually a bare `git clone` plus one short sentence about placing/importing the folder into the user's own agent skills location.
-- [ ] Explains `SKILL.md` must be at the skill root.
-- [ ] Explains that a fresh agent session may be needed after installation.
+- [ ] Installation details are delegated to the current Agent, which selects the client-appropriate method and verifies the result.
 - [ ] Includes a verification prompt.
 - [ ] Includes a quick-start or first-success example.
 - [ ] Includes usage examples.
@@ -150,6 +154,7 @@ Run this checklist before publishing a skill repository.
 - [ ] All content, including README files, has been generated and checked.
 - [ ] Final pre-publish summary was shown to the user.
 - [ ] Summary included target repository, remote URL, branch, visibility, file list, README status, security result, third-party/copyright review result, completeness result, dependency result, compatibility result, GitHub metadata, warnings, and remaining risks.
+- [ ] Summary included the README change-impact result: updated / no-impact with reason / blocked until README is updated.
 - [ ] Summary included the screenshot path and whether the user approved the screenshot before publish.
 - [ ] Explicit publish authorization exists before any commit, push, repository creation, sync, or GitHub metadata update.
 - [ ] If the current request used edit-only wording, the user was asked before publishing.

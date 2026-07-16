@@ -148,8 +148,8 @@ Standard writing rules:
 - Prefer user-facing results over internal file names.
 - Sort core capabilities by real user importance, from highest to lowest. Do not list them by implementation order unless that order matches user value.
 - In Chinese READMEs, quick-start prompts and usage examples must be written in Chinese. In English READMEs, quick-start prompts and usage examples must be written in English.
-- Installation must be one primary copyable command. A bare `git clone <repo-url>` is acceptable for simple skills. If installation requires extra setup such as a Python venv, package installation, cache generation, hook registration, config writing, or agent-instruction updates, provide an installer/bootstrap script and make the README's primary install block call that installer in one command.
-- Do not make first-time users run `git clone`, `cd`, `./setup.sh`, `pip install`, `python -m venv`, or `node scripts/...` as a multi-command install block. Those steps belong inside the installer or setup script.
+- Installation must be one copy-ready natural-language request addressed to the current Agent and include the public repository URL.
+- Do not expose `git clone`, directory copying, platform-specific skill paths, manual installation, dependency commands, or restart instructions in the default README install flow. The installing Agent owns those decisions and reports the verified result.
 - Provide a copy-ready prompt for direct use.
 - Put deeper CLI details in usage examples or reference docs, not in the main README unless the command is part of first successful use.
 - Include a program or page screenshot section whenever the skill has a visual surface. Use a real screenshot captured by the agent:
@@ -378,21 +378,18 @@ Signal -> Triage -> Route -> Store -> Validate -> Promote -> Prune
 
 Read `references/install-section.md` before writing the installation section.
 
-The Standard README should use one-line installation as the release default. Avoid making first-time users run `git clone`, `cd`, and another command as separate steps when one copyable command can do the job.
+The Standard README should ask the current Agent to install the public repository URL. This is the complete default installation flow:
 
-Do not hardcode the publisher author's local skills directory as the default install target. For public skills, prefer a bare `git clone <repo-url>` command plus one short sentence telling users to place or import the cloned folder wherever their own agent scans skills. Use paths such as `~/.agents/skills/...` only as clearly labeled examples.
+```text
+Install this Skill for me:
+https://github.com/owner/repo
+```
 
-If setup is more complex than cloning/importing a skill folder, the README should expose a single installer command and describe the result in product terms. The installer should handle dependencies, environment creation, config/cache generation, hook wiring, validation, and final feedback where applicable.
+The Chinese README should use the equivalent Chinese request. The README may add one short result sentence: the Agent will choose the installation method for the current client, check dependencies, and verify that the Skill loads.
 
-The install section should still make these facts clear:
+Do not add a default manual-install section. Do not list skill directories, `git clone`, copy/move steps, dependency commands, or restart instructions. If installation fails, the current Agent should diagnose the real environment interactively instead of making every reader scan hypothetical fallback steps.
 
-- `SKILL.md` at the skill folder root,
-- the cloned folder belongs in the user's agent skills directory or install flow,
-- why a fresh agent session may be needed,
-- a short verification prompt,
-- how to update later.
-
-If details would slow the README down, keep the Standard section short and move deeper installation variants into references/docs.
+Only add a manual installation section when the user explicitly requests it or the repository is intentionally designed for a non-Agent audience.
 
 ## Design philosophy section
 

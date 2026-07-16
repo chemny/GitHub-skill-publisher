@@ -20,21 +20,14 @@ This project is useful for:
 
 ## Installation
 
-```bash
-git clone {{repo-url}}
-```
-
-Place the cloned folder in the skills directory used by your agent, or import it using your agent's own skill installation flow. Keep `SKILL.md` at the root of that skill folder.
-
-### Verify Installation
-
-After restarting the agent session, enter:
+Send this to your Agent:
 
 ```text
-{{verification-prompt}}
+Install this Skill for me:
+{{repo-url}}
 ```
 
-If installation succeeded, the agent will recognize and use this skill.
+The Agent will choose the installation method for the current client, check dependencies, and verify that the Skill loads.
 
 ## Usage
 

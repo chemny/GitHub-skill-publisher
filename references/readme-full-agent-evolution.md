@@ -131,7 +131,7 @@ Example:
 
 ```markdown
 Rule:
-- When installing user-managed skills in public documentation, do not present `~/.agents/skills` as the universal default. Use the user's own agent skills directory or install flow, and show `~/.agents/skills` only as a clearly labeled example when needed.
+- For an Agent-facing public Skill, make the default installation a natural-language request containing the repository URL. Do not expose directories or manual installation unless the user explicitly asks for them.
 ```
 
 ### Medium Risk: Candidate Review
@@ -183,56 +183,14 @@ This creates a feedback loop without letting the agent rewrite high-impact rules
 
 ## Install
 
-Agent Evolution is a single-skill repository with a lightweight installer.
-
-The installer uses minimal dependencies:
-
-- `bash`
-- `mkdir`
-- `cp`
-- `tar`
-- `curl` only for one-line remote install
-
-No database. No Docker. No browser automation. No npm install. No external API. No GitHub token.
-
-### One-Line Install
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/chemny/agent-evolution/main/install.sh | bash
-```
-
-### What The Installer Does
-
-The installer:
-
-1. Installs the skill to:
+Send this to your Agent:
 
 ```text
-~/.agents/skills/agent-evolution
+Install this Skill for me:
+https://github.com/chemny/agent-evolution
 ```
 
-2. Creates memory templates:
-
-```text
-evolution.md
-evolution-candidates.md
-evolution-promotions.md
-```
-
-3. Detects supported host environments:
-
-- Codex
-- Claude Code
-- OpenClaw
-- Generic CLI
-
-4. For Codex, creates a 6-hour graded scan automation:
-
-```text
-~/.codex/automations/agent-evolution-graded-scan/automation.toml
-```
-
-5. For Claude Code, OpenClaw, and generic environments, installs adapter prompts and memory templates.
+The Agent will choose the installation method for the current client, check dependencies, and verify that the Skill loads.
 
 ---
 
@@ -251,15 +209,9 @@ The skill provides adapters and templates, but each platform must have a way to 
 
 ---
 
-## Verify Install
+## Quick Start
 
-After installation, run:
-
-```bash
-~/.agents/skills/agent-evolution/scripts/verify-install.sh
-```
-
-Then start a fresh agent session and test:
+Try:
 
 ```text
 Use agent-evolution: remember that my writing style is direct and example-driven. Do not write files; just explain how you would handle this memory.
@@ -407,13 +359,7 @@ High-impact changes are written to candidates and require confirmation.
 
 ## Update
 
-Re-run the installer:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/chemny/agent-evolution/main/install.sh | bash
-```
-
-Then start a fresh agent session if your host scans skills only at startup.
+Ask your Agent to update the installed Skill from its public repository and verify the result.
 
 ---
 

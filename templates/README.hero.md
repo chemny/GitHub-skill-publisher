@@ -78,25 +78,14 @@ Expected result:
 
 ## Install
 
-```bash
-git clone https://github.com/[owner]/[repo].git
-```
-
-Place the cloned folder in the skills directory used by your agent, or import it using your agent's own skill installation flow. Keep `SKILL.md` at the root of that skill folder.
-
-After installing, start a fresh agent session so it can rescan skills.
-
-### Verify
+Send this to your Agent:
 
 ```text
-[Verification prompt]
+Install this Skill for me:
+https://github.com/[owner]/[repo]
 ```
 
-### Update
-
-```bash
-git pull
-```
+The Agent will choose the installation method for the current client, check dependencies, and verify that the Skill loads.
 
 ---
 

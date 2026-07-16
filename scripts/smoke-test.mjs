@@ -72,11 +72,15 @@ if (exists("SKILL.md")) {
     fail("SKILL.md frontmatter", "Missing YAML frontmatter.");
   } else {
     let ok = true;
-    for (const key of ["name", "description", "version"]) {
+    for (const key of ["name", "description"]) {
       if (!new RegExp(`^${key}:\\s*\\S`, "m").test(frontmatter[1])) {
         ok = false;
         fail("SKILL.md frontmatter", `Missing ${key}.`);
       }
+    }
+    if (/^version:\s*\S/m.test(frontmatter[1])) {
+      ok = false;
+      fail("SKILL.md frontmatter", "Move top-level version to metadata.version.");
     }
     if (ok) pass("SKILL.md frontmatter");
   }

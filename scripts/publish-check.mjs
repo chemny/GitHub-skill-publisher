@@ -7,6 +7,7 @@ import { execFileSync } from "node:child_process";
 const args = process.argv.slice(2);
 const jsonOnly = args.includes("--json");
 const allowLegacyReadme = args.includes("--allow-legacy-readme") || args.includes("--pass-through-readme");
+const allowReadmeUnchanged = args.includes("--readme-no-impact") || args.includes("--allow-readme-unchanged");
 const reportPathArg = args.find((arg) => arg.startsWith("--report="))?.split("=")[1] ?? "publish-check-report.json";
 const root = process.cwd();
 const reportPath = path.resolve(root, reportPathArg);
@@ -74,6 +75,37 @@ function markdownImages(content) {
   return [...content.matchAll(/!\[[^\]]*]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)].map((m) => m[1]);
 }
 
+function cleanYamlScalar(value) {
+  return String(value ?? "").trim().replace(/^['"]|['"]$/g, "");
+}
+
+function yamlTopLevelValue(block, key) {
+  return cleanYamlScalar(block.match(new RegExp(`^${escapeRegExp(key)}:\\s*(.+)$`, "m"))?.[1] ?? "");
+}
+
+function yamlMetadataVersion(block) {
+  const inlineMetadata = block.match(/^metadata:\s*\{([^}]*)\}\s*$/m)?.[1] ?? "";
+  if (inlineMetadata) {
+    const inlineVersion = inlineMetadata.match(/(?:^|,)\s*version\s*:\s*([^,]+)\s*(?:,|$)/)?.[1] ?? "";
+    if (inlineVersion) return cleanYamlScalar(inlineVersion);
+  }
+
+  const lines = block.split(/\r?\n/);
+  const start = lines.findIndex((line) => /^metadata:\s*$/.test(line));
+  if (start === -1) return "";
+  for (let i = start + 1; i < lines.length; i += 1) {
+    const line = lines[i];
+    if (/^\S/.test(line)) break;
+    const version = line.match(/^\s+version:\s*(.+)\s*$/)?.[1] ?? "";
+    if (version) return cleanYamlScalar(version);
+  }
+  return "";
+}
+
+function skillVersionFromFrontmatter(block) {
+  return yamlMetadataVersion(block) || yamlTopLevelValue(block, "version");
+}
+
 function mentionsVisualSurface(content) {
   return /(?:网页|页面|浏览器|程序|应用|客户端|界面|截图|预览|web\s?page|browser|app|program|desktop|client|ui|dashboard|html|localhost|127\.0\.0\.1)/i.test(content);
 }
@@ -109,6 +141,33 @@ function listFiles() {
 
 const trackedFiles = git(["ls-files"]).split("\n").filter(Boolean);
 const files = listFiles();
+const changedFiles = [
+  ...git(["diff", "--name-only", "HEAD", "--"]).split("\n").filter(Boolean),
+  ...git(["ls-files", "--others", "--exclude-standard"]).split("\n").filter(Boolean),
+]
+  .filter((rel) => exists(rel) || trackedFiles.includes(rel))
+  .filter((rel) => !/(?:^|\/)(?:publish-check-report|smoke-test-report|se-quality-report)\.json$/i.test(rel));
+const changedFileSet = new Set(changedFiles);
+const readmeChanged = changedFileSet.has("README.md") || changedFileSet.has("README.zh.md") || changedFileSet.has("README.en.md");
+const readmeImpactRules = [
+  [/^SKILL\.md$/, "skill behavior, triggers, or public value may have changed"],
+  [/^scripts\//, "scripts, commands, checks, or runtime requirements may have changed"],
+  [/^templates\//, "generated README/output structure may have changed"],
+  [/^references\/(?:install-section|platform-compatibility|readme-style|repo-structure|skill-completeness|security-checklist|publish-checklist|update-workflow|github-workflow)\.md$/, "public workflow, install, compatibility, or release rules may have changed"],
+  [/^(?:package|pnpm-lock|package-lock|yarn\.lock|requirements|pyproject|uv\.lock|Cargo|go\.mod|deno)\b/, "dependencies or runtime requirements may have changed"],
+  [/^(?:adapters|assets|evals)\//, "platform support, examples, visuals, or verification assets may have changed"],
+  [/^\.env\.example$/, "configuration requirements may have changed"],
+  [/^LICENSE$/, "license or copyright terms may have changed"],
+];
+const readmeImpactFiles = changedFiles.filter((rel) => readmeImpactRules.some(([pattern]) => pattern.test(rel)));
+if (readmeImpactFiles.length > 0 && !readmeChanged) {
+  const detail = `Changed files that may affect README content: ${readmeImpactFiles.slice(0, 12).join(", ")}${readmeImpactFiles.length > 12 ? ", ..." : ""}. Update README.md and README.zh.md, or rerun with --readme-no-impact only after reviewing the diff and documenting why README does not need to change.`;
+  if (allowReadmeUnchanged) {
+    add("WARNING", "README unchanged after explicit no-impact review", detail);
+  } else {
+    add("FAIL", "README sync review required", detail);
+  }
+}
 
 // A repository can be a single-skill repo (root SKILL.md) or a marketplace /
 // collection repo (.claude-plugin/marketplace.json declaring one or more
@@ -175,7 +234,7 @@ if (hasReadme) {
 
   const structureChecks = [
     ["README missing audience/value opening", /(?:面向|适合谁|谁适合|适用人群|目标用户|Who Is This For|for .{0,40}(?:users|teams|authors))/i],
-    ["README missing install path", /(?:^##\s*(?:怎么安装|安装|Install)(?:\s|$)|git clone)/im],
+    ["README missing Agent-directed install section", /(?:^##\s*(?:怎么安装|安装|Install|Installation)(?:\s|$))/im],
     ["README missing quick start or first-use path", /(?:^##\s*(?:快速开始|使用方式|怎么使用|Quick Start|Usage)(?:\s|$)|验证|verification prompt|first successful)/im],
     ["README missing core capabilities", /(?:^##\s*(?:核心能力|功能|Capabilities|Core Capabilities)(?:\s|$))/im],
     ["README missing usage examples", /(?:^##\s*(?:使用示例|Usage Examples)(?:\s|$))/im],
@@ -218,12 +277,17 @@ for (const rel of ["README.md", "README.zh.md"]) {
 
   const install = markdownSection(content, ["安装", "怎么安装", "一键安装", "Install", "One-Command Install", "Installation"]);
   if (install) {
-    const cmds = commandLines(fencedCodeBlocks(install));
-    if (!isMarketplace && cmds.length > 1) {
-      add("FAIL", "README install has multiple command lines", `${rel}: main install section should expose one primary copyable command.`);
-    }
-    if (!isMarketplace && cmds.some((line) => /^(?:cd\b|\.\/setup\b|bash\s+setup\b|sh\s+setup\b|python(?:3)?\s+-m\s+venv\b|pip(?:3)?\s+install\b|node\s+scripts\/)/i.test(line))) {
-      add("FAIL", "README exposes setup internals in install command", `${rel}: move clone/setup/dependency steps into an installer or setup flow.`);
+    if (!isMarketplace) {
+      const hasRepoUrl = /https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+/i.test(install);
+      const hasInstallIntent = /(?:install\s+this\s+skill\s+for\s+me|帮我安装(?:这个|一下)?\s*Skill|请帮我安装(?:这个|一下)?\s*Skill)/i.test(install);
+      const exposesManualFlow = /(?:\bgit\s+clone\b|\b(?:cp|mv)\s+-|copy|复制|移动).{0,50}(?:folder|directory|目录|文件夹)|(?:\.agents|\.codex|\.claude|\.openclaw)\/skills|手动安装|manual\s+install|重新开启|重新打开|重启|restart|rescan|pip(?:3)?\s+install|npm\s+install/i.test(install);
+      if (!hasRepoUrl || !hasInstallIntent || exposesManualFlow) {
+        add(
+          "FAIL",
+          "README install requires rewrite",
+          `${rel}: rewrite the main install section as one copy-ready request asking the current Agent to install the public GitHub repository URL; remove clone, directory, manual-install, dependency, and restart instructions.`
+        );
+      }
     }
   }
 
@@ -266,10 +330,17 @@ if (exists("SKILL.md")) {
   if (!frontmatter) {
     add("FAIL", "Invalid SKILL.md", "Missing YAML frontmatter.");
   } else {
-    for (const key of ["name", "description", "version"]) {
+    for (const key of ["name", "description"]) {
       if (!new RegExp(`^${key}:\\s*\\S`, "m").test(frontmatter[1])) {
         add("FAIL", "Incomplete SKILL.md frontmatter", `Missing ${key}.`);
       }
+    }
+    if (yamlTopLevelValue(frontmatter[1], "version")) {
+      add(
+        "FAIL",
+        "Legacy top-level version field",
+        "Move version to metadata.version; the current Skill schema does not allow a top-level version key."
+      );
     }
   }
 
@@ -420,9 +491,9 @@ if (isMarketplace && marketplace) {
   const skill = read("SKILL.md");
   const fm = skill.match(/^---\n([\s\S]*?)\n---/);
   const block = fm ? fm[1] : "";
-  fmName = (block.match(/^name:\s*(.+)$/m)?.[1] ?? "").trim();
+  fmName = yamlTopLevelValue(block, "name");
   fmDescription = (block.match(/^description:\s*(.+(?:\n\s+.+)*)$/m)?.[1] ?? "").replace(/\s+/g, " ").trim();
-  fmVersion = (block.match(/^version:\s*(.+)$/m)?.[1] ?? "").trim();
+  fmVersion = skillVersionFromFrontmatter(block);
   skillBodyLines = (fm ? skill.slice(fm[0].length) : skill).split(/\r?\n/).filter((l) => l.trim()).length;
 }
 
@@ -440,7 +511,7 @@ if (fmDescription && !descTriggerOk) {
 }
 
 // 2. version is valid semver.
-const semverOk = /^\d+\.\d+\.\d+(?:[-+.][0-9A-Za-z.-]+)?$/.test(fmVersion);
+const semverOk = !fmVersion || /^\d+\.\d+\.\d+(?:[-+.][0-9A-Za-z.-]+)?$/.test(fmVersion);
 if (fmVersion && !semverOk) {
   add("WARNING", "version is not semver", `Found "${fmVersion}"; use MAJOR.MINOR.PATCH.`);
 }
