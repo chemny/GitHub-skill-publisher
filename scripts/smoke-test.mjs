@@ -68,7 +68,7 @@ for (const relativePath of [
 
 if (exists("SKILL.md")) {
   const skill = read("SKILL.md");
-  const frontmatter = skill.match(/^---\n([\s\S]*?)\n---/);
+  const frontmatter = skill.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (!frontmatter) {
     fail("SKILL.md frontmatter", "Missing YAML frontmatter.");
   } else {

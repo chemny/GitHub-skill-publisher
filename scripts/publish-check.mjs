@@ -326,7 +326,7 @@ if (!exists(".gitignore")) {
 
 if (exists("SKILL.md")) {
   const skill = read("SKILL.md");
-  const frontmatter = skill.match(/^---\n([\s\S]*?)\n---/);
+  const frontmatter = skill.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (!frontmatter) {
     add("FAIL", "Invalid SKILL.md", "Missing YAML frontmatter.");
   } else {
