@@ -3,12 +3,13 @@
 import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 
 const args = process.argv.slice(2);
 const jsonOnly = args.includes("--json");
 const reportPathArg = args.find((arg) => arg.startsWith("--report="))?.split("=")[1] ?? "smoke-test-report.json";
 
-const skillRoot = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
+const skillRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const reportPath = path.resolve(skillRoot, reportPathArg);
 const results = [];
 
@@ -162,7 +163,7 @@ if (exists("templates/LICENSE-MIT")) {
 
 if (exists("scripts/publish-check.mjs")) {
   try {
-    execFileSync("node", ["scripts/publish-check.mjs"], {
+    execFileSync("node", ["scripts/publish-check.mjs", "--readme-no-impact"], {
       cwd: skillRoot,
       encoding: "utf8",
       stdio: "pipe",
