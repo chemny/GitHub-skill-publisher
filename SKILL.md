@@ -125,8 +125,9 @@ Inspect -> Normalize -> Capture screenshot -> Write README -> Pre-publish cleanu
    - If third-party or copyright-related content is found, do not remove it automatically. List the findings and ask the user whether to keep, rewrite, add attribution, or remove them before publishing.
    - Check whether the skill is complete and whether it has hard dependencies on other skills or private local resources.
    - If a dependency is required, document it clearly or bundle/adapter-isolate it before publishing.
-10. Test platform compatibility where possible.
-   - Target platforms are Codex, Claude Code, and OpenClaw.
+10. Test runtime and operating-system compatibility where possible.
+   - Target agent runtimes are Codex, Claude Code, and OpenClaw.
+   - Target operating systems are macOS, Linux, and Windows when the skill includes scripts, installers, path handling, shell commands, browser automation, filesystem operations, or external CLIs.
    - If a platform cannot be tested in the current environment, mark it `Not tested` and explain why.
    - If any platform is incompatible or only partially compatible, tell the user before publishing and pause for confirmation.
 11. Present a final pre-publish summary after all content, including README files, has been generated and checked.

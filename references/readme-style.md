@@ -421,7 +421,7 @@ Include a repository structure section for public skill repositories. Generate t
 
 ## Platform compatibility section
 
-For public release, evaluate compatibility with Codex, Claude Code, and OpenClaw before publishing.
+For public release, evaluate compatibility with Codex, Claude Code, and OpenClaw before publishing. Also evaluate operating-system compatibility with macOS, Linux, and Windows when the skill includes scripts, installers, path handling, shell commands, browser automation, filesystem operations, or external CLIs.
 
 In the README, keep platform compatibility user-facing and concise. Use one sentence that names the compatible platforms.
 
@@ -448,6 +448,7 @@ Before publishing, treat third-party names, platform names, copyright notices, t
 - There is a short first-success path.
 - Examples are copy-pasteable.
 - Platform compatibility with Codex, Claude Code, and OpenClaw is tested where possible and stated accurately.
+- OS compatibility with macOS, Linux, and Windows is tested or reviewed when the skill has runtime scripts, installers, shell commands, path assumptions, filesystem behavior, or external CLIs.
 - Repository structure matches actual files.
 - Installation assumes a public GitHub repo.
 - MIT is used when the user has not requested another license.

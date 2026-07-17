@@ -42,6 +42,8 @@ The scoring stays **honest**: only deterministic checks (`det`) count toward the
 
 Works with Codex, Claude Code, OpenClaw, and 50+ skills-compatible runtimes. It recognizes both **single-skill repos** and **marketplace collection repos** (`.claude-plugin/marketplace.json`), and flags "only works in runtime X" phrasing that would make other agents refuse to install the skill.
 
+The check scripts are tested on macOS, Linux, and Windows through GitHub Actions. Windows requires Node.js, Git, and GitHub CLI (`gh`) to be available in `PATH` for the corresponding check or publish step.
+
 ## Install
 
 Send this to your Agent:
@@ -128,6 +130,7 @@ GitHub-skill-publisher/
 - `git` — to inspect repo state, commit history, and remotes.
 - Node.js — to run the check scripts under `scripts/`.
 - GitHub CLI `gh` — only for creating repos, updating metadata, or pushing.
+- On Windows, make sure `git`, `node`, and `gh` are available in `PATH` before running the scripts or publishing.
 
 ## License
 

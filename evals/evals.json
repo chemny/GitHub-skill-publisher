@@ -16,13 +16,13 @@
     {
       "id": 3,
       "prompt": "检查这个 skill 能不能公开发布到 GitHub。",
-      "expected_output": "Runs publish, Codex/Claude Code/OpenClaw compatibility, portability, and security checklist reasoning before recommending publication.",
+      "expected_output": "Runs publish, Codex/Claude Code/OpenClaw runtime compatibility, macOS/Linux/Windows OS compatibility, portability, and security checklist reasoning before recommending publication.",
       "files": []
     },
     {
       "id": 4,
       "prompt": "帮我给这个 skill 的 README 补充安装说明。",
-      "expected_output": "Adds a concise install section with a bare git clone command, generic placement in the user's agent skills directory or install flow, SKILL.md-at-root note, fresh-session note, verification prompt, and update instructions when useful. It must not hardcode the publisher author's local skills path as the default install target.",
+      "expected_output": "Adds a concise Agent-directed install section with one copy-ready natural-language request containing the public repository URL. It must not expose git clone, local skill directories, manual copy steps, dependency commands, or restart instructions as the default install flow.",
       "files": []
     }
   ]

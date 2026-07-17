@@ -42,6 +42,8 @@
 
 适用于 Codex、Claude Code、OpenClaw 等 50+ 兼容 skills 的 runtime。同时识别**单 skill 仓库**和 **marketplace 集合仓库**（`.claude-plugin/marketplace.json`）两种结构，并检查"只能在某个 runtime 用"这类会让别的 agent 拒装的措辞。
 
+检查脚本通过 GitHub Actions 在 macOS、Linux 和 Windows 上测试。Windows 需要将 Node.js、Git 和 GitHub CLI（`gh`）加入 `PATH`，才能运行对应检查或发布步骤。
+
 ## 安装
 
 把下面这句话发送给你的 Agent：
@@ -128,6 +130,7 @@ GitHub-skill-publisher/
 - `git` —— 检查仓库状态、提交历史和远端。
 - Node.js —— 运行 `scripts/` 下的检查脚本。
 - GitHub CLI `gh` —— 仅在建仓、更新 metadata 或推送时使用。
+- Windows 上运行脚本或发布前，需要确认 `git`、`node` 和 `gh` 已加入 `PATH`。
 
 ## 协议
 

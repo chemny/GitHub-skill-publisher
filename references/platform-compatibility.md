@@ -2,7 +2,7 @@
 
 Run this test before publishing a public skill repository.
 
-The default target platforms are:
+The default target agent runtimes are:
 
 ```text
 Codex
@@ -10,15 +10,24 @@ Claude Code
 OpenClaw
 ```
 
+The default target operating systems are:
+
+```text
+macOS
+Linux
+Windows
+```
+
 ## Goal
 
-Confirm whether the skill can be installed, discovered, and used across all target platforms without hidden local assumptions.
+Confirm whether the skill can be installed, discovered, and used across target agent runtimes and operating systems without hidden local assumptions.
 
 If compatibility is partial or broken, tell the user before publishing and pause for confirmation. Do not silently publish a repository that claims compatibility when a platform is incompatible or untested.
 
 ## Required behavior before publishing
 
 - Test each target platform when the local environment or available tooling makes that possible.
+- Test or statically review Windows compatibility whenever scripts, installers, path handling, shell commands, browser automation, filesystem operations, or external CLIs are involved.
 - If a platform cannot be tested, mark it `Not tested` and explain the reason.
 - If a platform is partially compatible, mark it `Partial` and explain exactly what works and what does not.
 - If a platform is incompatible, mark it `Unsupported` and tell the user before any commit, push, or GitHub publication.
@@ -40,6 +49,10 @@ If compatibility is partial or broken, tell the user before publishing and pause
 - [ ] The skill can be installed without private user memory, local-only folders, or unpublished companion skills.
 - [ ] Platform-specific capabilities are isolated in adapters or clearly marked sections.
 - [ ] README includes a verification prompt that can be tried after a fresh session.
+- [ ] Windows is explicitly considered when the skill uses scripts, installers, paths, shell commands, browser automation, filesystem operations, or external CLIs.
+- [ ] Windows checks do not rely on POSIX-only tools such as `bash`, `sh`, `sed`, `grep`, `xargs`, `cp`, `mv`, `rm`, `chmod`, or Unix-only path assumptions unless an adapter or fallback is documented.
+- [ ] Node.js scripts use `path.join`, `path.resolve`, `path.relative`, and `path.sep` instead of hardcoded `/` path assumptions for filesystem operations.
+- [ ] External CLIs required on Windows, such as `git`, `node`, `python`, or `gh`, are documented and expected to be available in `PATH`.
 
 ## README compatibility sentence
 
@@ -60,6 +73,10 @@ Platform compatibility:
 - Codex: Supported / Partial / Unsupported / Not tested — [reason]
 - Claude Code: Supported / Partial / Unsupported / Not tested — [reason]
 - OpenClaw: Supported / Partial / Unsupported / Not tested — [reason]
+OS compatibility:
+- macOS: Supported / Partial / Unsupported / Not tested — [reason]
+- Linux: Supported / Partial / Unsupported / Not tested — [reason]
+- Windows: Supported / Partial / Unsupported / Not tested — [reason]
 ```
 
 If any status is `Partial`, `Unsupported`, or `Not tested`, ask the user whether to continue, revise docs, or fix compatibility first.

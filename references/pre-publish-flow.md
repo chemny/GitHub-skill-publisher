@@ -67,6 +67,7 @@ Include:
 - Third-party/copyright review: third-party names, platform names, copyright notices, trademark notices, upstream references, and license-limit notes that require a user decision.
 - Completeness result: `SKILL.md`, README files, `LICENSE`, references, templates, scripts, and assets.
 - Dependency result: other skills, private directories, unpublished scripts, and platform-specific assumptions.
-- Compatibility result for Codex, Claude Code, and OpenClaw.
+- Runtime compatibility result for Codex, Claude Code, and OpenClaw.
+- OS compatibility result for macOS, Linux, and Windows, including any Windows-specific requirements or limitations.
 - GitHub metadata: repository description and license.
 - Warnings, failures, and remaining risks.
