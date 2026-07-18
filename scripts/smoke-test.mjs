@@ -136,6 +136,8 @@ if (exists("references/publish-checklist.md")) {
     ".env.example",
     "Explicit publish authorization exists",
     "edit-plus-publish wording",
+    "Identity and attribution metadata review",
+    "Git commit authors, emails, and signature metadata",
   ];
   const missing = requiredItems.filter((item) => !checklist.includes(item));
   if (missing.length === 0) pass("publish checklist contains release gates");

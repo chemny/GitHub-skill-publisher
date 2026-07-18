@@ -122,7 +122,11 @@ Inspect -> Normalize -> Capture screenshot -> Write README -> Pre-publish cleanu
    - Check for API keys, user accounts, private tokens, local paths, private files, and machine-specific assumptions.
    - Redact or replace sensitive/local-only content before publishing.
    - Check for third-party names, brand names, platform names, copyright notices, trademark notices, upstream-source statements, and external license-limit notes.
+   - Allow neutral references to design style, design language, and company names such as Apple, Anthropic, and Meta when they are used only as design or compatibility context and do not imply ownership, endorsement, copied assets, or relicensing.
+   - Treat README and LICENSE findings involving other third parties as high-priority review items when they include attribution, copyright, trademark, source, license, generated-by, or ownership language.
+   - Check for public identity and attribution signals, including author names, maintainer names, private emails, personal usernames, social handles, generator watermarks, tool watermarks, and visible Git commit author/signature metadata.
    - If third-party or copyright-related content is found, do not remove it automatically. List the findings and ask the user whether to keep, rewrite, add attribution, or remove them before publishing.
+   - If identity or attribution metadata is found, do not remove it automatically. List the findings and ask the user whether to keep, anonymize, replace with organization identity, or remove it before publishing.
    - Check whether the skill is complete and whether it has hard dependencies on other skills or private local resources.
    - If a dependency is required, document it clearly or bundle/adapter-isolate it before publishing.
 10. Test runtime and operating-system compatibility where possible.

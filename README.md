@@ -38,6 +38,8 @@ Three checks run before release, each answering a different question — all **r
 
 The scoring stays **honest**: only deterministic checks (`det`) count toward the number; heuristic signals (`proxy`) are advisory and never scored; inapplicable items are marked `N/A` and excluded; and it states plainly that it **does not test functional correctness** — so the score never gives false confidence.
 
+Before publishing, `publish-check.mjs` also reviews License and copyright signals, author or maintainer names, private emails, personal usernames, third-party attribution, generator/tool watermarks, and Git commit author/signature metadata. Neutral design-language or company references such as Apple, Anthropic, and Meta are allowed when they do not imply ownership, endorsement, copied assets, or relicensing; README and LICENSE findings involving other third parties are highlighted for user decision. The script never rewrites identity, attribution, or Git history automatically.
+
 ## Platform Compatibility
 
 Works with Codex, Claude Code, OpenClaw, and 50+ skills-compatible runtimes. It recognizes both **single-skill repos** and **marketplace collection repos** (`.claude-plugin/marketplace.json`), and flags "only works in runtime X" phrasing that would make other agents refuse to install the skill.

@@ -38,6 +38,8 @@
 
 评分坚持**诚实设计**：硬指标（`det`）才计分，启发式信号（`proxy`）只做提示不进分，不适用项标 `N/A` 排除，并明说**不测功能正确性**——避免给你虚假的安全感。
 
+发布前，`publish-check.mjs` 还会 review License 和版权信号、作者或维护者姓名、私人邮箱、个人用户名、第三方署名、生成器/工具水印，以及 Git 提交作者和签名 metadata。Apple、Anthropic、Meta 这类设计语言或公司名的中性引用可以保留，只要不暗示所有权、背书、复制资产或重新授权；README 和 LICENSE 中涉及其他第三方的内容会被重点提醒给用户决策。脚本不会自动改身份、署名或 Git 历史。
+
 ## 平台兼容性
 
 适用于 Codex、Claude Code、OpenClaw 等 50+ 兼容 skills 的 runtime。同时识别**单 skill 仓库**和 **marketplace 集合仓库**（`.claude-plugin/marketplace.json`）两种结构，并检查"只能在某个 runtime 用"这类会让别的 agent 拒装的措辞。

@@ -16,7 +16,7 @@
     {
       "id": 3,
       "prompt": "检查这个 skill 能不能公开发布到 GitHub。",
-      "expected_output": "Runs publish, Codex/Claude Code/OpenClaw runtime compatibility, required macOS/Windows OS compatibility, optional Linux compatibility when relevant, portability, and security checklist reasoning before recommending publication. It stops before publishing if macOS or Windows was not checked, is partial, or is unsupported.",
+      "expected_output": "Runs publish, Codex/Claude Code/OpenClaw runtime compatibility, required macOS/Windows OS compatibility, optional Linux compatibility when relevant, portability, security checklist reasoning, third-party/copyright review, and identity/attribution metadata review before recommending publication. It allows neutral design-language or company references such as Apple, Anthropic, and Meta when they do not imply ownership, endorsement, copied assets, or relicensing. It stops before publishing if macOS or Windows was not checked, is partial, or is unsupported, and reports README/LICENSE third-party findings, author names, private emails, usernames, generator watermarks, and Git commit author/signature metadata for user decision.",
       "files": []
     },
     {

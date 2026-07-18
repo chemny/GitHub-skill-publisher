@@ -65,6 +65,7 @@ Include:
 - Screenshot status: path, source surface, whether it is a real page/program capture, and whether the user approved it.
 - Security result: secrets, API keys, tokens, accounts, local paths, private files, logs, and caches.
 - Third-party/copyright review: third-party names, platform names, copyright notices, trademark notices, upstream references, and license-limit notes that require a user decision.
+- Identity/attribution metadata review: author names, maintainer names, private emails, personal usernames, social handles, generator/tool watermarks, and Git commit author/signature metadata that require a user decision.
 - Completeness result: `SKILL.md`, README files, `LICENSE`, references, templates, scripts, and assets.
 - Dependency result: other skills, private directories, unpublished scripts, and platform-specific assumptions.
 - Runtime compatibility result for Codex, Claude Code, and OpenClaw.
