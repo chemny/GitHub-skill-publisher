@@ -127,9 +127,10 @@ Inspect -> Normalize -> Capture screenshot -> Write README -> Pre-publish cleanu
    - If a dependency is required, document it clearly or bundle/adapter-isolate it before publishing.
 10. Test runtime and operating-system compatibility where possible.
    - Target agent runtimes are Codex, Claude Code, and OpenClaw.
-   - Target operating systems are macOS, Linux, and Windows when the skill includes scripts, installers, path handling, shell commands, browser automation, filesystem operations, or external CLIs.
-   - If a platform cannot be tested in the current environment, mark it `Not tested` and explain why.
-   - If any platform is incompatible or only partially compatible, tell the user before publishing and pause for confirmation.
+   - Required target operating systems are macOS and Windows when the skill includes scripts, installers, path handling, shell commands, browser automation, filesystem operations, or external CLIs.
+   - Linux compatibility is optional. Test or review it when it is easy or relevant, but do not treat missing Linux validation as a release blocker by default.
+   - If macOS or Windows cannot be tested or reviewed before publishing, stop before GitHub publication and tell the user what has not been checked.
+   - If macOS or Windows is incompatible or only partially compatible, tell the user before publishing and pause for confirmation.
 11. Present a final pre-publish summary after all content, including README files, has been generated and checked.
    - Include target repository, remote URL, branch, visibility, files to publish, README status, screenshot path, screenshot approval status, security result, third-party/copyright review result, completeness result, dependency result, compatibility result, GitHub metadata, warnings, and remaining risks.
    - Show the captured screenshot to the user before publishing.

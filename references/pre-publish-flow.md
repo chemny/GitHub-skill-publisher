@@ -68,6 +68,6 @@ Include:
 - Completeness result: `SKILL.md`, README files, `LICENSE`, references, templates, scripts, and assets.
 - Dependency result: other skills, private directories, unpublished scripts, and platform-specific assumptions.
 - Runtime compatibility result for Codex, Claude Code, and OpenClaw.
-- OS compatibility result for macOS, Linux, and Windows, including any Windows-specific requirements or limitations.
+- OS compatibility result for required targets macOS and Windows, including any Windows-specific requirements or limitations. Linux is optional unless the user, repository, or documented runtime explicitly requires it.
 - GitHub metadata: repository description and license.
 - Warnings, failures, and remaining risks.

@@ -130,7 +130,9 @@ Run this checklist before publishing a skill repository.
 ## Portability
 
 - [ ] Compatibility with Codex, Claude Code, and OpenClaw has been tested where possible.
-- [ ] OS compatibility with macOS, Linux, and Windows has been tested where possible or explicitly reviewed when direct testing is unavailable.
+- [ ] OS compatibility with macOS and Windows has been tested where possible or explicitly reviewed when direct testing is unavailable.
+- [ ] Missing macOS or Windows validation is reported to the user before publishing and treated as a pause point.
+- [ ] Linux compatibility is treated as optional unless the user, repository, or documented runtime explicitly requires Linux.
 - [ ] Windows compatibility was considered when scripts, installers, path handling, shell commands, browser automation, filesystem operations, or external CLIs are involved.
 - [ ] Windows requirements such as Node.js, Git, Python, or GitHub CLI being available in `PATH` are documented when relevant.
 - [ ] POSIX-only commands such as `bash`, `sh`, `sed`, `grep`, `xargs`, `cp`, `mv`, `rm`, or `chmod` are avoided in default flows or isolated behind documented adapters.

@@ -44,6 +44,8 @@
 
 检查脚本通过 GitHub Actions 在 macOS、Linux 和 Windows 上测试。Windows 需要将 Node.js、Git 和 GitHub CLI（`gh`）加入 `PATH`，才能运行对应检查或发布步骤。
 
+通过这套流程发布其他 skills 时，如果涉及脚本、安装器、路径处理、shell 命令、浏览器自动化、文件系统操作或外部 CLI，发布前必须测试或 review macOS 和 Windows 兼容性。Linux 兼容性默认可选，除非项目本身明确要求。
+
 ## 安装
 
 把下面这句话发送给你的 Agent：

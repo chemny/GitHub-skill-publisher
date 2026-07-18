@@ -10,27 +10,29 @@ Claude Code
 OpenClaw
 ```
 
-The default target operating systems are:
+The required target operating systems are:
 
 ```text
 macOS
-Linux
 Windows
 ```
 
+Linux compatibility is optional. Test or review it when it is easy or relevant, but do not treat missing Linux validation as a release blocker by default.
+
 ## Goal
 
-Confirm whether the skill can be installed, discovered, and used across target agent runtimes and operating systems without hidden local assumptions.
+Confirm whether the skill can be installed, discovered, and used across target agent runtimes and required operating systems without hidden local assumptions.
 
-If compatibility is partial or broken, tell the user before publishing and pause for confirmation. Do not silently publish a repository that claims compatibility when a platform is incompatible or untested.
+If macOS or Windows compatibility is partial, broken, or not checked, tell the user before publishing and pause for confirmation. Do not silently publish a repository that claims compatibility when a required operating system is incompatible or untested.
 
 ## Required behavior before publishing
 
 - Test each target platform when the local environment or available tooling makes that possible.
-- Test or statically review Windows compatibility whenever scripts, installers, path handling, shell commands, browser automation, filesystem operations, or external CLIs are involved.
+- Test or statically review macOS and Windows compatibility whenever scripts, installers, path handling, shell commands, browser automation, filesystem operations, or external CLIs are involved.
+- Treat Linux compatibility as optional unless the user, repository, or documented runtime explicitly requires Linux.
 - If a platform cannot be tested, mark it `Not tested` and explain the reason.
 - If a platform is partially compatible, mark it `Partial` and explain exactly what works and what does not.
-- If a platform is incompatible, mark it `Unsupported` and tell the user before any commit, push, or GitHub publication.
+- If macOS or Windows is incompatible, partial, or not checked, tell the user before any commit, push, or GitHub publication.
 - Do not replace real testing with assumptions. Static review is useful, but it must be labeled as review rather than tested support.
 
 ## Compatibility checks
@@ -49,6 +51,7 @@ If compatibility is partial or broken, tell the user before publishing and pause
 - [ ] The skill can be installed without private user memory, local-only folders, or unpublished companion skills.
 - [ ] Platform-specific capabilities are isolated in adapters or clearly marked sections.
 - [ ] README includes a verification prompt that can be tried after a fresh session.
+- [ ] macOS is explicitly considered when the skill uses scripts, installers, paths, shell commands, browser automation, filesystem operations, or external CLIs.
 - [ ] Windows is explicitly considered when the skill uses scripts, installers, paths, shell commands, browser automation, filesystem operations, or external CLIs.
 - [ ] Windows checks do not rely on POSIX-only tools such as `bash`, `sh`, `sed`, `grep`, `xargs`, `cp`, `mv`, `rm`, `chmod`, or Unix-only path assumptions unless an adapter or fallback is documented.
 - [ ] Node.js scripts use `path.join`, `path.resolve`, `path.relative`, and `path.sep` instead of hardcoded `/` path assumptions for filesystem operations.
@@ -75,11 +78,11 @@ Platform compatibility:
 - OpenClaw: Supported / Partial / Unsupported / Not tested — [reason]
 OS compatibility:
 - macOS: Supported / Partial / Unsupported / Not tested — [reason]
-- Linux: Supported / Partial / Unsupported / Not tested — [reason]
 - Windows: Supported / Partial / Unsupported / Not tested — [reason]
+- Linux: Supported / Partial / Unsupported / Not tested / Optional not checked — [reason]
 ```
 
-If any status is `Partial`, `Unsupported`, or `Not tested`, ask the user whether to continue, revise docs, or fix compatibility first.
+If macOS or Windows is `Partial`, `Unsupported`, or `Not tested`, stop before publishing and ask the user whether to continue, revise docs, or fix compatibility first. Linux can be reported as optional when it was not checked.
 
 ## README wording
 

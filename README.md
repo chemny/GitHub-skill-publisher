@@ -44,6 +44,8 @@ Works with Codex, Claude Code, OpenClaw, and 50+ skills-compatible runtimes. It 
 
 The check scripts are tested on macOS, Linux, and Windows through GitHub Actions. Windows requires Node.js, Git, and GitHub CLI (`gh`) to be available in `PATH` for the corresponding check or publish step.
 
+For skills published through this workflow, macOS and Windows compatibility must be tested or reviewed before release when scripts, installers, path handling, shell commands, browser automation, filesystem operations, or external CLIs are involved. Linux compatibility is optional unless the project explicitly requires it.
+
 ## Install
 
 Send this to your Agent:

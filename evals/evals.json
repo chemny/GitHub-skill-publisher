@@ -16,7 +16,7 @@
     {
       "id": 3,
       "prompt": "检查这个 skill 能不能公开发布到 GitHub。",
-      "expected_output": "Runs publish, Codex/Claude Code/OpenClaw runtime compatibility, macOS/Linux/Windows OS compatibility, portability, and security checklist reasoning before recommending publication.",
+      "expected_output": "Runs publish, Codex/Claude Code/OpenClaw runtime compatibility, required macOS/Windows OS compatibility, optional Linux compatibility when relevant, portability, and security checklist reasoning before recommending publication. It stops before publishing if macOS or Windows was not checked, is partial, or is unsupported.",
       "files": []
     },
     {
