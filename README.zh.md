@@ -2,7 +2,15 @@
 
 [English](README.md) · 中文
 
+署名与出处审核支持复用同一仓库的明确确认。检查时指定 `--visibility=private` 或 `--visibility=public`，读取本地 Git 元数据中的记录；仅新增或变化项重新询问。记录不代表推送授权。详见[确认复用规则](references/review-decisions.md)。运行 `node --test scripts/review-decisions.test.mjs` 验证复用、失效与撤销。
+
 把一个本地 agent skill **安全、规范地发布成 GitHub 仓库**，并在发布前给它做一次**可量化的工程质量体检**。它先看真实文件、跑三层检查、列出发布清单，等你确认后才提交和推送——绝不擅自发布。
+
+README 配图检查要求中英文均有实际界面或成果图；无法配图必须写明具体原因。徽章、隐藏注释和代码示例不算配图，图片文件缺失会阻止发布。详见[配图证据规则](references/readme-visuals.md)，运行 `node --test scripts/readme-visuals.test.mjs` 验证。
+
+## 暂无配图的原因
+
+当前交付是终端文字与结构化 JSON 审核报告，包内尚未包含实际结果的截图。下文展示报告字段和工作流程；为避免把制作的示意图冒充真实运行截图，配图仍列为待补项，不宣称已完成视觉展示。
 
 ## 适合谁使用？
 

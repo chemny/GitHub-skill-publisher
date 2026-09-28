@@ -1,5 +1,7 @@
 # Security Checklist
 
+For identity/attribution confirmation, [review-decisions.md](review-decisions.md) takes precedence over blanket “ask the user” instructions below: reuse unchanged scoped explicit approvals and ask only about new/changed findings. Reuse is not publication authorization; a current publication hold must be respected.
+
 Use this before public release, before pushing updates to an already published repository, and before changing GitHub repository metadata.
 
 If a finding includes sensitive or local-only content, fix it before publishing. Do not simply document the issue in the README.

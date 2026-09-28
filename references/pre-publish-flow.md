@@ -1,5 +1,7 @@
 # Pre-publish Flow
 
+For identity/attribution confirmation, [review-decisions.md](review-decisions.md) takes precedence over blanket “ask the user” instructions below: reuse unchanged scoped explicit approvals and ask only about new/changed findings. Reuse is not publication authorization; a current publication hold must be respected.
+
 Use this flow before publishing a new skill repository or pushing an update to an existing public skill repository.
 
 ## Flow
@@ -49,7 +51,7 @@ High-risk cleanup confirmation:
 Final publish authorization:
 
 - After all content, including README files and any screenshot asset, has been generated and checked, list the final publish summary.
-- If a screenshot was captured, show it to the user before final publish authorization.
+- Show actual UI/output previews before final publish authorization, reusing approval for unchanged images. If images are omitted, report the concrete reason from each README; never silently waive the image requirement because the Skill has no UI. See [readme-visuals.md](readme-visuals.md).
 - Ask the user explicitly whether to publish to GitHub when the current request did not already include explicit publish authorization.
 - If the user already said "修改并发布", "更新并同步到 GitHub", or equivalent edit-plus-publish wording, run checks and publish after success without a second confirmation.
 - Only `commit`, `push`, `sync`, `gh repo create`, or `gh repo edit` when explicit publish authorization exists.

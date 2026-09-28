@@ -39,6 +39,8 @@ Always run the relevant pre-publish checks and provide a publish summary before 
 
 ## Release surface normalization rule
 
+Before asking about identity, attribution, or Git-history metadata, follow `references/review-decisions.md`. Record explicit first-time decisions locally and reuse matching decisions on later checks. Ask only about new or changed findings; successful prior publication is not consent evidence. Decision reuse never authorizes a push. A user hold on publication overrides all previous publish authorization.
+
 Any skill published through GitHub-skill-publisher is a publisher-managed release by default. Before publishing, normalize the public release surface:
 
 ```text
@@ -83,12 +85,14 @@ Inspect -> Normalize -> Capture screenshot -> Write README -> Pre-publish cleanu
 
 1. Inspect the local skill files and current git state.
 2. Normalize to single-skill repository structure.
-3. Capture a real product screenshot before finalizing README when the skill has a visual surface.
+3. Add a real visual preview near the top of both READMEs by default. Follow `references/readme-visuals.md`.
    - If it is a web page, run/open the page and capture a browser screenshot.
    - If it is an app/program, launch the program and capture the real UI.
    - Store the image in the repository, usually under `assets/`, and reference it from both `README.md` and `README.zh.md`.
    - Do not use mock screenshots when a real page/program can be opened. If sample data is safer than private data, keep the real UI but use safe sample data and say so.
    - Before publishing, show the screenshot to the user and wait for their confirmation.
+   - For output-producing skills without a UI, embed approved real outputs (images, document pages, reports or before/after results). Files in assets without README embeds do not count.
+   - If no suitable visual can be included, explain the specific constraint visibly in both READMEs and repeat it in the final publish summary. No UI alone is not a reason. Missing both a preview and a reason is FAIL.
 4. Write or update `README.md`, `README.zh.md`, `LICENSE`, and `.gitignore` when useful.
    - Treat the README template as a release quality gate, not only as writing guidance.
    - For publisher-managed releases, evaluate any existing README against the current default README structure before publishing.
@@ -96,7 +100,7 @@ Inspect -> Normalize -> Capture screenshot -> Write README -> Pre-publish cleanu
    - If changes touch user-visible capability, usage, install flow, dependencies, compatibility, outputs, repository structure, templates, scripts, security/copyright boundaries, or GitHub metadata, update both `README.md` and `README.zh.md` before publishing.
    - If the changes are small and do not affect README content, do not force a README edit; document the no-impact reason in the final pre-publish summary and run the publish check with `--readme-no-impact`.
    - Do not blindly overwrite old READMEs, but if the user did not explicitly ask to preserve the current README as-is, upgrade missing key modules before publishing.
-   - Required README modules include audience fit, program or page screenshot when the skill has a visual surface, what it does, core capabilities, platform compatibility, install, quick start, usage examples, how it works, repository/file structure, requirements or configuration, and license.
+   - Required README modules include audience fit, an actual visual preview or explicit omission reason, what it does, core capabilities, platform compatibility, install, quick start, usage examples, how it works, repository/file structure, requirements or configuration, and license.
    - Productize README copy before release: use a two-column user-facing core-capabilities table and make the main install section a copy-ready natural-language request that asks the current Agent to install the public repository URL.
    - For agent-facing skill repositories, remove default `git clone`, directory-copy, manual-install, platform-path, dependency, and restart instructions from the main README. The installing Agent owns environment detection, installation, dependency checks, and load verification.
    - When an existing README still uses a clone-and-copy installation flow, rewrite that section during normalization before running the final publish check. Do not merely report the old structure and leave it for the user to fix.
@@ -125,8 +129,7 @@ Inspect -> Normalize -> Capture screenshot -> Write README -> Pre-publish cleanu
    - Allow neutral references to design style, design language, and company names such as Apple, Anthropic, and Meta when they are used only as design or compatibility context and do not imply ownership, endorsement, copied assets, or relicensing.
    - Treat README and LICENSE findings involving other third parties as high-priority review items when they include attribution, copyright, trademark, source, license, generated-by, or ownership language.
    - Check for public identity and attribution signals, including author names, maintainer names, private emails, personal usernames, social handles, generator watermarks, tool watermarks, and visible Git commit author/signature metadata.
-   - If third-party or copyright-related content is found, do not remove it automatically. List the findings and ask the user whether to keep, rewrite, add attribution, or remove them before publishing.
-   - If identity or attribution metadata is found, do not remove it automatically. List the findings and ask the user whether to keep, anonymize, replace with organization identity, or remove it before publishing.
+   - For third-party and identity findings, first compare local confirmed decisions. Do not remove content automatically. Ask only about unmatched or changed findings, then record the user's explicit decision as described in `references/review-decisions.md`.
    - Check whether the skill is complete and whether it has hard dependencies on other skills or private local resources.
    - If a dependency is required, document it clearly or bundle/adapter-isolate it before publishing.
 10. Test runtime and operating-system compatibility where possible.
@@ -136,7 +139,7 @@ Inspect -> Normalize -> Capture screenshot -> Write README -> Pre-publish cleanu
    - If macOS or Windows cannot be tested or reviewed before publishing, stop before GitHub publication and tell the user what has not been checked.
    - If macOS or Windows is incompatible or only partially compatible, tell the user before publishing and pause for confirmation.
 11. Present a final pre-publish summary after all content, including README files, has been generated and checked.
-   - Include target repository, remote URL, branch, visibility, files to publish, README status, screenshot path, screenshot approval status, security result, third-party/copyright review result, completeness result, dependency result, compatibility result, GitHub metadata, warnings, and remaining risks.
+   - Include target repository, remote URL, branch, visibility, files to publish, README status, preview paths and approval status (or the concrete omission reason), security result, third-party/copyright review result, completeness result, dependency result, compatibility result, GitHub metadata, warnings, and remaining risks. Report the checker's readmeVisuals for both languages; never silently dismiss a missing-image warning as no UI.
    - Show the captured screenshot to the user before publishing.
    - Ask explicitly whether to publish to GitHub only when the user's current request did not already include explicit edit-plus-publish authorization.
 12. Commit, create repositories, push, sync, or update GitHub metadata only after explicit publish authorization exists.
@@ -189,7 +192,7 @@ Use these as starting points, not rigid boilerplate:
 - `templates/LICENSE-MIT`
 - `templates/gitignore`
 
-Use `templates/README.md` and `templates/README.zh.md` as the default Standard high-conversion README templates. `README.md` is English by default for GitHub's repository homepage, and `README.zh.md` is the Chinese switch page. They prioritize user value, product pain, product highlights, workflow, optional preview, Agent-directed installation, direct-use prompt, default configuration, final result, compatibility, and license.
+Use `templates/README.md` and `templates/README.zh.md` as the default Standard high-conversion README templates. `README.md` is English by default for GitHub's repository homepage, and `README.zh.md` is the Chinese switch page. They prioritize user value, product pain, product highlights, workflow, a required preview or explicit omission reason, Agent-directed installation, direct-use prompt, default configuration, final result, compatibility, and license.
 
 Use `templates/README.practical-tool.md` and `templates/README.practical-tool.zh.md` when a skill is a practical utility with rich usage examples, rule categories, manual workflows, before/after examples, warning lists, references, and source attribution.
 

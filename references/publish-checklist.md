@@ -1,5 +1,7 @@
 # Publish Checklist
 
+For identity/attribution confirmation, [review-decisions.md](review-decisions.md) takes precedence over blanket “ask the user” instructions below: reuse unchanged scoped explicit approvals and ask only about new/changed findings. Reuse is not publication authorization; a current publication hold must be respected.
+
 Run this checklist before publishing a skill repository.
 
 ## Repository
@@ -8,7 +10,7 @@ Run this checklist before publishing a skill repository.
 - [ ] `SKILL.md` is at the root.
 - [ ] `README.md` exists.
 - [ ] `README.zh.md` exists.
-- [ ] If the skill has a web page, app, program, or other visual surface, a real screenshot asset exists in the repository.
+- [ ] Both READMEs embed real UI screenshots or approved output previews; otherwise both state a concrete omission reason as specified in [readme-visuals.md](readme-visuals.md).
 - [ ] `LICENSE` exists.
 - [ ] License is MIT unless the user requested another license.
 - [ ] `.gitignore` exists if generated files may appear.
@@ -103,7 +105,7 @@ Run this checklist before publishing a skill repository.
 - [ ] Names target users and target workflows.
 - [ ] Explains what it can do.
 - [ ] Explains how it works.
-- [ ] Includes a “程序或页面截图” / “Program or Page Screenshot” / “Preview” section when the skill has a visual surface.
+- [ ] Includes a “程序或页面截图” / “Program or Page Screenshot” / “Preview” / “效果预览” section with real images, or a visible concrete reason for omission. No UI alone is not an exemption.
 - [ ] Screenshot was captured by opening the real web page or real program, not by inventing a mock image.
 - [ ] Screenshot is referenced from both `README.md` and `README.zh.md` when both files exist.
 - [ ] Screenshot was shown to the user before publishing.
@@ -172,7 +174,7 @@ Run this checklist before publishing a skill repository.
 - [ ] Final pre-publish summary was shown to the user.
 - [ ] Summary included target repository, remote URL, branch, visibility, file list, README status, security result, third-party/copyright review result, identity/attribution metadata review result, completeness result, dependency result, compatibility result, GitHub metadata, warnings, and remaining risks.
 - [ ] Summary included the README change-impact result: updated / no-impact with reason / blocked until README is updated.
-- [ ] Summary included the screenshot path and whether the user approved the screenshot before publish.
+- [ ] Summary included the preview paths and approval scope, or the exact omission reason for both languages. Missing image plus missing reason blocks release.
 - [ ] Explicit publish authorization exists before any commit, push, repository creation, sync, or GitHub metadata update.
 - [ ] If the current request used edit-only wording, the user was asked before publishing.
 - [ ] If the current request used explicit edit-plus-publish wording, publishing proceeded after successful checks without a second confirmation.

@@ -3,6 +3,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
+import { inspectReadmeVisuals } from "./readme-visuals.mjs";
 
 const args = process.argv.slice(2);
 const jsonOnly = args.includes("--json");
@@ -12,9 +14,39 @@ const reportPathArg = args.find((arg) => arg.startsWith("--report="))?.split("="
 const root = process.cwd();
 const reportPath = path.resolve(root, reportPathArg);
 const results = [];
+const readmeVisuals = {};
 
-function add(level, title, detail) {
+const visibility = args.find((arg) => arg.startsWith("--visibility="))?.slice(13);
+const digest = (value) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
+const commonDir = git(["rev-parse", "--git-common-dir"]);
+const approvalFile = commonDir ? path.resolve(root, commonDir, "publisher-review-decisions.json") : null;
+const reviewScope = digest([fs.realpathSync(root), git(["remote", "get-url", "origin"]), visibility ?? "unknown"]);
+let approvals = [];
+try {
+  if (approvalFile && fs.existsSync(approvalFile)) {
+    const record = JSON.parse(fs.readFileSync(approvalFile, "utf8"));
+    if (record.schemaVersion === 1 && record.scope === reviewScope && Array.isArray(record.decisions)) approvals = record.decisions;
+  }
+} catch {
+  results.push({ level: "WARNING", title: "Invalid review decision record", detail: "Approval reuse disabled; repair the local record before relying on it." });
+}
+
+function add(level, title, detail, evidence) {
+  if (level === "WARNING" && evidence && /review needs user decision/.test(title)) {
+    const reviewId = digest([title, evidence]);
+    const approved = ["private", "public"].includes(visibility) && approvals.some((entry) =>
+      entry.reviewId === reviewId && entry.decision === "keep" && !entry.revoked &&
+      typeof entry.userQuote === "string" && entry.userQuote.trim() &&
+      typeof entry.evidenceRef === "string" && entry.evidenceRef.trim() &&
+      Number.isFinite(Date.parse(entry.confirmedAt)));
+    results.push({ level: approved ? "INFO" : level, title: approved ? `Reused user decision: ${title}` : title, detail, reviewId, decisionReused: approved });
+    return;
+  }
   results.push({ level, title, detail });
+}
+
+function reviewEvidence(rel, content, patterns) {
+  return [rel, content.split(/\r?\n/).filter((line) => patterns.some(([, re]) => re.test(line))).map((line) => line.trim()).sort()];
 }
 
 function exists(rel) {
@@ -71,10 +103,6 @@ function tableColumnCount(line) {
   return line.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").length;
 }
 
-function markdownImages(content) {
-  return [...content.matchAll(/!\[[^\]]*]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)].map((m) => m[1]);
-}
-
 function cleanYamlScalar(value) {
   return String(value ?? "").trim().replace(/^['"]|['"]$/g, "");
 }
@@ -104,10 +132,6 @@ function yamlMetadataVersion(block) {
 
 function skillVersionFromFrontmatter(block) {
   return yamlMetadataVersion(block) || yamlTopLevelValue(block, "version");
-}
-
-function mentionsVisualSurface(content) {
-  return /(?:网页|页面|浏览器|程序|应用|客户端|界面|截图|预览|web\s?page|browser|app|program|desktop|client|ui|dashboard|html|localhost|127\.0\.0\.1)/i.test(content);
 }
 
 function git(args) {
@@ -254,12 +278,6 @@ if (hasReadme) {
     }
   }
 
-  const screenshotSection = markdownSection(readme, ["程序或页面截图", "页面预览", "程序截图", "页面截图", "Program or Page Screenshot", "Screenshot", "Preview"]);
-  if (!screenshotSection && mentionsVisualSurface(readme)) {
-    add("WARNING", "README missing program/page screenshot section", "If the skill has a web page, app, or program UI, capture a real screenshot and show it to the user before publishing.");
-  } else if (screenshotSection && markdownImages(screenshotSection).length === 0) {
-    add("WARNING", "README screenshot section has no image", "Add a captured screenshot image link, usually under assets/.");
-  }
 }
 
 for (const rel of ["README.md", "README.zh.md"]) {
@@ -305,14 +323,12 @@ for (const rel of ["README.md", "README.zh.md"]) {
     }
   }
 
-  const screenshotSection = markdownSection(content, ["程序或页面截图", "页面预览", "程序截图", "页面截图", "Program or Page Screenshot", "Screenshot", "Preview"]);
-  if (screenshotSection) {
-    for (const imagePath of markdownImages(screenshotSection)) {
-      if (/^(?:https?:)?\/\//i.test(imagePath)) continue;
-      const normalized = imagePath.replace(/^\.\//, "").split("#")[0].split("?")[0];
-      if (normalized && !exists(normalized)) add("FAIL", "README screenshot image is missing", `${rel}: ${imagePath}`);
-    }
-  }
+  const visuals = inspectReadmeVisuals(content, root);
+  readmeVisuals[rel] = visuals;
+  if (visuals.invalidImages.length) add("FAIL", "README preview image is invalid or missing", `${rel}: ${visuals.invalidImages.join(", ")}`);
+  if (visuals.status === "missing") add("FAIL", "README missing preview image or omission reason", `${rel}: embed a real output/UI image, or explain the specific constraint in 'Why No Preview Image' / '暂无配图的原因'. No UI alone is not an exemption; badges do not count.`);
+  if (visuals.status === "omitted_with_reason") add("WARNING", "README preview omitted with reason", `${rel}: ${visuals.omissionReason} Repeat this reason in the final publish summary; review whether an existing output could be shown.`);
+  if (visuals.externalImages.length) add("WARNING", "README external preview requires verification", `${rel}: ${visuals.externalImages.join(", ")}. Verify rendering and access before release; this offline check does not fetch URLs.`);
 }
 
 if (!exists(".gitignore")) {
@@ -457,7 +473,7 @@ const thirdPartyReviewPatterns = [
   ["external attribution / reuse statement", /\b(?:adapted from|derived from|forked from|ported from|originally (?:from|by|written by)|copied from)\b|(?:改编自|衍生自|移植自|源自|fork\s*自)/i],
   ["copyright or trademark notice", /(?:©|\(c\)\s*\d{4}|all rights reserved|registered trademark|™|®|版权所有|著作权|保留所有权利)/i],
   ["external license terms", /(?:original (?:license|terms)|under (?:its|their|the original) license|subject to .{0,30}license|原始(?:协议|许可|条款)|第三方.{0,8}(?:协议|许可|条款))/i],
-  ["generated-by or third-party ownership language", /\b(?:generated by|created by|made by|owned by|property of|courtesy of)\b|(?:由.{1,24}(?:生成|创建|制作)|归.{0,8}所有|版权所有者)/i],
+  ["generated-by or third-party ownership language", /\b(?:generated by|created by|made by|owned by|property of|courtesy of)\b|(?:归.{0,8}所有|版权所有者)|(?:^|\n)\s*由(?!生图工具|专业生图|图像生成工具).{1,24}(?:生成|创建|制作)/i],
 ];
 
 for (const rel of files) {
@@ -480,7 +496,8 @@ for (const rel of files) {
     add(
       "WARNING",
       highPriority ? "High-priority README/LICENSE third-party review needs user decision" : "Third-party/copyright review needs user decision",
-      `${rel}: ${[...new Set(matches)].join(", ")}. Neutral design-language/company references such as Apple, Anthropic, or Meta are allowed when they do not imply ownership, endorsement, copied assets, or relicensing. Ask the user whether to keep, rewrite, attribute, or remove before publishing.`
+      `${rel}: ${[...new Set(matches)].join(", ")}. Neutral design-language/company references such as Apple, Anthropic, or Meta are allowed when they do not imply ownership, endorsement, copied assets, or relicensing. Ask only if no matching prior decision exists.`,
+      reviewEvidence(rel, content, thirdPartyReviewPatterns)
     );
   }
 }
@@ -491,7 +508,7 @@ const identityReviewPatterns = [
   ["copyright holder identity", new RegExp(`(?:copyright\\s*(?:\\(c\\)|©)?|版权所有)\\s*\\d{4}(?:-\\d{4})?\\s+(?!\\s*${placeholderIdentity})\\S`, "i")],
   ["email address", /\b[A-Z0-9._%+-]+@(?!users\.noreply\.github\.com\b|noreply\.github\.com\b|example\.(?:com|org|net)\b|email\b)[A-Z0-9.-]+\.[A-Z]{2,}\b/i],
   ["personal username or social handle", /(?:^|\n)\s*(?:github|twitter|x|weibo|bilibili|handle|username|user|用户名|账号|社交账号)\s*[:=]\s*@?[A-Za-z0-9_.-]{3,}/i],
-  ["generator or tool watermark", /\b(?:generated by|generated with|created with|made with|built with|scaffolded by|powered by|ai-generated by|written with)\b|(?:由.{1,24}(?:生成|创建|制作|驱动))/i],
+  ["generator or tool watermark", /\b(?:generated by|generated with|created with|made with|built with|scaffolded by|powered by|ai-generated by|written with)\b|(?:^|\n)\s*(?:生成工具|制作工具|生成者|制作方)\s*[:：]|(?:^|\n)\s*由(?!生图工具|专业生图|图像生成工具).{1,24}(?:生成|创建|制作|驱动)/i],
 ];
 
 for (const rel of files) {
@@ -512,7 +529,8 @@ for (const rel of files) {
     add(
       "WARNING",
       "Identity/attribution metadata review needs user decision",
-      `${rel}: ${[...new Set(matches)].join(", ")}. Ask the user whether to keep, anonymize, replace with organization identity, or remove before publishing.`
+      `${rel}: ${[...new Set(matches)].join(", ")}. Ask only if no matching prior decision exists.`,
+      reviewEvidence(rel, content, identityReviewPatterns)
     );
   }
 }
@@ -541,7 +559,8 @@ if (gitIdentityRows.length > 0) {
     add(
       "WARNING",
       "Git history identity/signature metadata review needs user decision",
-      `${details.join(". ")}. Ask the user whether to keep history as-is, squash/rewrite before first publication, or document that this metadata is intentional.`
+      `${details.join(". ")}. Ask only if no matching prior decision exists.`,
+      [...new Set(gitIdentityRows.map(({ name, email, signature }) => `${name}\t${email}\t${signature}`))].sort()
     );
   }
 }
@@ -734,6 +753,8 @@ const band =
   "D · Not ready";
 
 const report = {
+  readmeVisuals,
+  reviewDecisions: { schemaVersion: 1, scope: reviewScope, visibility: visibility ?? "unknown", storage: approvalFile ? "git-common-dir/publisher-review-decisions.json" : null },
   summary: {
     status,
     failed: fail.length,

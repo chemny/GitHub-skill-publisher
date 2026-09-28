@@ -18,6 +18,12 @@ This project is useful for:
 - {{Use case 2}}
 - {{Use case 3}}
 
+## Preview
+
+![Actual result or UI preview](./assets/{{preview-file}})
+
+{{Describe the real result and its scope. If unavailable, replace this section with Why No Preview Image and the concrete constraint; no UI alone is not sufficient.}}
+
 ## Installation
 
 Send this to your Agent:

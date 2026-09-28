@@ -1,5 +1,7 @@
 # Update Workflow
 
+For identity/attribution confirmation, [review-decisions.md](review-decisions.md) takes precedence over blanket “ask the user” instructions below: reuse unchanged scoped explicit approvals and ask only about new/changed findings. Reuse is not publication authorization; a current publication hold must be respected.
+
 Use this for later updates to an existing skill repository.
 
 ## Process
@@ -20,6 +22,7 @@ Inspect -> Edit -> Smoke test -> Pre-publish check -> Final summary -> Commit or
    - If README files are present, evaluate them against the current default README structure, not only the language layout.
    - If the user did not explicitly ask to preserve the current README as-is, upgrade missing README modules before publishing.
 4. Run README change-impact review.
+   - Always check both READMEs for an actual visual preview or concrete omission reason, including small/no-impact updates. Reuse approved output images when available; see [readme-visuals.md](readme-visuals.md).
    - Compare the current diff against `README.md` and `README.zh.md`.
    - If the release changes user-visible capabilities, usage examples, install flow, dependencies, compatibility, outputs, repository/file structure, templates, scripts, safety/copyright boundaries, or GitHub metadata, update the relevant README sections before publishing.
    - If the release only contains small internal edits that do not affect public documentation, README does not need to change. Record the no-impact reason in the final pre-publish summary.

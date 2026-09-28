@@ -61,6 +61,9 @@ for (const relativePath of [
   "templates/LICENSE-MIT",
   "templates/gitignore",
   "scripts/publish-check.mjs",
+  "scripts/readme-visuals.mjs",
+  "scripts/readme-visuals.test.mjs",
+  "references/readme-visuals.md",
   "scripts/smoke-test.mjs",
 ]) {
   expectFile(relativePath);
@@ -176,6 +179,15 @@ if (exists("scripts/publish-check.mjs")) {
     const output = `${error.stdout?.toString() ?? ""}${error.stderr?.toString() ?? ""}`.slice(-1200);
     fail("publish-check script runs", output);
   }
+}
+
+try {
+  execFileSync(process.execPath, ["--test", "scripts/readme-visuals.test.mjs"], {
+    cwd: skillRoot, stdio: "pipe", timeout: 30000,
+  });
+  pass("README visual regression tests");
+} catch (error) {
+  fail("README visual regression tests", `${error.stdout ?? ""}${error.stderr ?? ""}`.slice(-1600));
 }
 
 const summary = {

@@ -62,7 +62,7 @@ Required structure modules:
 - audience and value opening: who should use the skill and why it matters,
 - install path: how to install or import the skill,
 - first-use path: quick start, verification prompt, or first successful command,
-- program or page screenshot: a real screenshot captured by the agent when the skill has a visual surface,
+- visual preview: a real UI screenshot or approved output image, or a visible concrete omission reason in both languages (see [readme-visuals.md](readme-visuals.md)),
 - core capabilities: what the skill can actually do,
 - requirements or configuration: dependencies, credentials, environment, or setup assumptions,
 - platform compatibility: Codex, Claude Code, OpenClaw, or a concise compatibility sentence,
@@ -152,7 +152,7 @@ Standard writing rules:
 - Do not expose `git clone`, directory copying, platform-specific skill paths, manual installation, dependency commands, or restart instructions in the default README install flow. The installing Agent owns those decisions and reports the verified result.
 - Provide a copy-ready prompt for direct use.
 - Put deeper CLI details in usage examples or reference docs, not in the main README unless the command is part of first successful use.
-- Include a program or page screenshot section whenever the skill has a visual surface. Use a real screenshot captured by the agent:
+- Include visual evidence in both READMEs by default. Output-producing skills without a UI use approved real results; unavailable visuals require a concrete reason under `Why No Preview Image` / `暂无配图的原因`, repeated in the publish summary. For a Program or Page Screenshot, use a real screenshot captured by the agent:
   - for a web page, open the page in a browser and capture the page;
   - for a desktop/app program, launch the real program and capture the UI;
   - insert the screenshot near the top of both `README.md` and `README.zh.md`;

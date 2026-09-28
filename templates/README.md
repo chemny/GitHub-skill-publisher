@@ -6,9 +6,11 @@ English | [中文](./README.zh.md)
 
 It supports {{core capability 1}}, {{core capability 2}}, and {{core capability 3}}, and it can also {{fuller workflow capability}}.
 
-## Program or Page Screenshot
+## Preview
 
-![{{Skill Name}} program or page screenshot](./assets/{{screenshot-file}})
+![{{Skill Name}} actual output or UI preview](./assets/{{preview-file}})
+
+{{Explain the real result shown and its scope. If no image is available, replace this section with Why No Preview Image and a concrete reason; no UI alone is not sufficient.}}
 
 ## Who Is This For?
 

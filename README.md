@@ -2,7 +2,15 @@
 
 English · [中文](README.zh.md)
 
+Identity and attribution reviews now reuse explicit repository-scoped approvals. The checker reads local Git-metadata receipts when run with `--visibility=private` or `--visibility=public`; changed findings require a new decision. Receipts never authorize publishing. See [review decisions](references/review-decisions.md). Run `node --test scripts/review-decisions.test.mjs` to verify reuse, invalidation and revocation.
+
 Publish a local agent skill to GitHub **safely and consistently**, and give it a **quantified engineering-quality check** before release. It inspects the real files, runs three layers of checks, lays out a release checklist, and only commits and pushes after you confirm — it never publishes on its own.
+
+README visual checks now require a real UI/output image or a specific visible omission reason in both languages. Badges, hidden comments and fenced examples do not count; broken local image paths block release. See [visual evidence rules](references/readme-visuals.md). Run `node --test scripts/readme-visuals.test.mjs` to verify the checks.
+
+## Why No Preview Image
+
+The current deliverables are terminal text and structured JSON audit reports; this package does not yet contain a captured result image. The report fields and workflow are documented below. A fabricated screenshot would not demonstrate a real check, so a visual preview remains pending rather than being claimed as complete.
 
 ## Who Is This For?
 
