@@ -2,7 +2,7 @@
 
 For identity/attribution confirmation, [review-decisions.md](review-decisions.md) takes precedence over blanket “ask the user” instructions below: reuse unchanged scoped explicit approvals and ask only about new/changed findings. Reuse is not publication authorization; a current publication hold must be respected.
 
-Run this checklist before publishing a skill repository.
+Run this checklist before publishing a skill repository. [readme-style.md](readme-style.md) is the single authority for README order and information duties; this checklist verifies it without defining another framework.
 
 ## Repository
 
@@ -10,7 +10,7 @@ Run this checklist before publishing a skill repository.
 - [ ] `SKILL.md` is at the root.
 - [ ] `README.md` exists.
 - [ ] `README.zh.md` exists.
-- [ ] Both READMEs embed real UI screenshots or approved output previews; otherwise both state a concrete omission reason as specified in [readme-visuals.md](readme-visuals.md).
+- [ ] Both READMEs embed representative actual screenshots/cases, or an approved generated illustration based on verified workflow and pain points when suitable material is unavailable. If neither form is possible, both state the actual omission reason; see [readme-visuals.md](readme-visuals.md).
 - [ ] `LICENSE` exists.
 - [ ] License is MIT unless the user requested another license.
 - [ ] `.gitignore` exists if generated files may appear.
@@ -93,52 +93,57 @@ Run this checklist before publishing a skill repository.
 
 ## README
 
-- [ ] Existing README was evaluated against the current default README structure before publishing.
-- [ ] README template compliance was treated as a release quality gate, not only as writing guidance.
-- [ ] Current diff was reviewed for README impact before publishing.
-- [ ] User-visible changes to capability, usage, install flow, dependencies, compatibility, outputs, repository/file structure, templates, scripts, safety/copyright boundaries, or GitHub metadata were reflected in `README.md` and `README.zh.md`.
-- [ ] If README was not updated, the change was confirmed as small/no-impact and the no-impact reason was included in the final pre-publish summary.
-- [ ] `node scripts/publish-check.mjs --readme-no-impact` was used only after the diff was reviewed and README was confirmed unnecessary.
-- [ ] Missing key modules were added unless the user explicitly requested a pass-through release.
-- [ ] Explains why the skill exists.
-- [ ] Explains who should use or install it.
-- [ ] Names target users and target workflows.
-- [ ] Explains what it can do.
-- [ ] Explains how it works.
-- [ ] Includes a “程序或页面截图” / “Program or Page Screenshot” / “Preview” / “效果预览” section with real images, or a visible concrete reason for omission. No UI alone is not an exemption.
-- [ ] Screenshot was captured by opening the real web page or real program, not by inventing a mock image.
-- [ ] Screenshot is referenced from both `README.md` and `README.zh.md` when both files exist.
-- [ ] Screenshot was shown to the user before publishing.
-- [ ] Reduces comprehension friction: reader can tell what it is and why it matters from the first screen.
-- [ ] Reduces trust friction: mechanism and limits of authority are clear.
-- [ ] Reduces action friction: install, verify, and first-use path are easy to follow.
-- [ ] Main install section has one copy-ready natural-language request asking the current Agent to install the public repository URL.
-- [ ] Existing clone-and-copy installation prose was rewritten during README normalization before the final publish check.
-- [ ] The default README install flow does not expose `git clone`, directory copying, platform paths, manual installation, dependency commands, or restart instructions.
-- [ ] README does not include internal collaboration wording such as "after asking", "with your consent", "add this rule to your prompt/instructions", "rerun setup", "征得你同意", "加进提示词", or "重跑 setup".
-- [ ] Uses baseline or full structure according to the skill's complexity.
-- [ ] Includes diagrams only when process-oriented.
-- [ ] Installation details are delegated to the current Agent, which selects the client-appropriate method and verifies the result.
-- [ ] Includes a verification prompt.
-- [ ] Includes a quick-start or first-success example.
-- [ ] Includes usage examples.
-- [ ] Includes core capabilities.
-- [ ] Core capabilities table is user-facing and two-column: capability + what it helps the user do.
-- [ ] Core capabilities table does not use implementation-oriented columns such as `处理内容`, `输出结果`, `Input`, `Output`, or `What it handles`.
-- [ ] Includes requirements, configuration, or dependency assumptions when relevant.
-- [ ] Includes repository structure generated from actual files.
-- [ ] Explains license and copyright limits.
-- [ ] Release surface was normalized by default for publisher-managed release.
-- [ ] `README.md` is English by default because GitHub uses it as the repository homepage.
-- [ ] `README.zh.md` is complete Chinese documentation, not a short placeholder.
-- [ ] `README.md` and `README.zh.md` link to each other near the top using a clear language switch.
-- [ ] Legacy `README.en.md` is absent unless the user explicitly requested a pass-through release that preserves old README files.
-- [ ] If pass-through was explicitly requested, legacy `README.md` Chinese + `README.en.md` English was reported as a warning and `--allow-legacy-readme` was used.
-- [ ] If pass-through was explicitly requested for any old README structure, missing current-template modules were reported as warnings.
-- [ ] English and Chinese READMEs are aligned in substance.
-- [ ] No accidental mixed-language README body unless the user explicitly requested a single bilingual README.
-- [ ] No default limitations section unless the user asks for one.
-- [ ] Repository structure, if shown, matches actual files.
+- [ ] Both languages follow the default ten sections and order (or fold a labelled capability illustration into Overview as allowed by the standard) in [readme-style.md](readme-style.md), or an explicitly requested pass-through exception is documented without a compliance claim.
+- [ ] Overview makes the product, target users, problem and useful outcome understandable from the first screen.
+- [ ] Preview / 效果预览 is second for screenshots/cases; a labelled generated capability illustration may be embedded in Overview without that heading, with the other sections unchanged. Legacy 程序或页面截图 / Program or Page Screenshot labels are handled as migration exceptions, not alternative defaults.
+- [ ] Both languages embed representative actual screenshots/cases or an approved generated workflow/pain-point illustration; if neither route is possible, state the actual omission reason.
+- [ ] Screenshot was captured from the real running page/program, an approved real case/output was reused, or the fallback illustration was generated from verified workflow and pain points; label illustrations and never present them as execution evidence.
+- [ ] Screenshot was shown to the user before publishing, or the selected case/generated illustration was shown and approved when new or changed; unchanged applicable approval was reused within its scope.
+- [ ] Images use valid package paths, normally assets/, preserve proportions, show readable key information and avoid misleading crops.
+- [ ] Images are self-explanatory with useful alt text; no caption by default, at most one short line if needed. Source, sample, reproduction and rights facts are kept in the internal review, not paragraphs under the image.
+- [ ] Rights, privacy, approval and actual rendered appearance were reviewed separately from file checks.
+- [ ] Features uses a two-column user-facing capability/benefit table, ordered by importance, without implementation-oriented main columns.
+- [ ] Installation has Requirements / 配置要求 (short explanation and named-item table) and Quick Installation / 快速安装 (actual action and feedback); ordinary users see the Agent and minimum core runtime, not internal dependency files/versions or platform test matrices. Necessary current limitations remain visible.
+- [ ] Agent-facing installation gives one copy-ready request with the public repository URL; stale default clone/copy, directory-selection, dependency-command and restart instructions were rewritten.
+- [ ] Other product types use their actual supported installation method and success feedback; no Agent-only flow is forced onto a CLI/library or application.
+- [ ] The installation request asks the Agent to check and fill core environment gaps before installation, verify discovery/loading or readiness, and prepare optional features on demand; feedback distinguishes actual verification from unresolved conditions.
+- [ ] Quick Start uses a short natural request/action for a representative core task; no compulsory generic post-prompt explanation; the five first-use questions are verified internally, not five mandatory public fields.
+- [ ] Prompts/examples use the README language, are copy-ready, and do not require undisclosed services or missing samples.
+- [ ] Usage Examples gives familiar scenario titles and short ordinary requests, adding only useful conditions/results; no repeated task cards or forced internal IDs/paths.
+- [ ] How It Works gives the complete included sub-Skill/component inventory, responsibilities, entry point and supported collaboration/direct-use routes.
+- [ ] Included components, optional plugins and external dependencies are distinguished; diagrams explain a real process when useful.
+- [ ] Repository Structure matches actual principal files, sorts by functional importance with core content first and README/license last, explains installed versus checkout contents and links detailed documentation.
+- [ ] License states the actual original/third-party rights boundaries; default MIT does not override existing or upstream licenses.
+- [ ] About Me is last and uses an approved identity suited to the publication; when contact is intended, its public route is approved or recorded unresolved. Personal facts are not hard-coded in generic templates and missing facts were not invented.
+- [ ] New or changed identity/attribution findings follow review-decisions.md; unchanged scoped approvals are reused.
+- [ ] No update history, upgrade/migration/fix records, release procedures, developer logs or authoring conversation appear anywhere in the README body.
+- [ ] Current dependency versions, genuine conditions/limitations and product publishing capabilities were retained where relevant; keywords alone were not used to delete legitimate content.
+- [ ] Terms are understandable to the intended audience, repetition is minimized and essential conditions remain next to the action they affect.
+- [ ] The current diff was reviewed for README impact; changed current product facts were reflected in both languages.
+- [ ] A genuine no-impact reason was recorded before using --readme-no-impact; that flag does not waive structure or visual acceptance.
+- [ ] Release surface is English README.md plus complete Chinese README.zh.md, with language-name-only reciprocal links near the top; any explicitly authorized legacy preservation is reported.
+- [ ] Both languages align in facts, conditions, inventory and examples; technical identifiers do not count as accidental bilingual prose.
+- [ ] Automated findings and semantic review are reported separately; older checker/template coverage gaps are manually reviewed and disclosed.
+- [ ] Before/after reader evaluation uses previously agreed dimensions and a 10-point rubric, retained case outputs and the same evidence criteria; no predicted result is reported as an achieved score.
+
+## Static README checks
+
+- [ ] Both languages pass the static framework, section/table, link, placeholder and preview checks in [readme-checks.md](readme-checks.md); audience selection matches the actual product.
+- [ ] Automated status and engineering grade are separate; FAIL means blocked, and a static pass still requires manual semantic/visual/fact review.
+- [ ] The complete document/visual/review-decision regression suite ran; actual-repository smoke failures remain visible.
+
+## README preparation and semantic evidence
+
+- [ ] A local [review record](../templates/readme-review-record.md) follows [readme-review.md](readme-review.md), while [readme-style.md](readme-style.md) remains the sole framework authority.
+- [ ] A product brief records audience, core problem/outcomes, main versus supporting tasks with evidence, representative first use and priority-ordered scenarios.
+- [ ] Three independent manual product-fit gates pass with draft evidence: representative first use, main-scenario coverage/priority, four-section consistency. Failed/unresolved gates prevent semantic acceptance regardless of formatting scores.
+- [ ] Material claims have current source/file-line evidence, method, status and section placement; required dependency manifests were inspected internally.
+- [ ] Consequential gaps were resolved or recorded as release blockers; approved scoped decisions were reused. Missing author/visual facts were not invented or replaced with public filler.
+- [ ] The ten reader questions have draft evidence; full component duties and the real tree were verified.
+- [ ] First-use input availability, action, delivery, usefulness and next step were walked through from text; external conditions and unverified behavior are recorded.
+- [ ] Naturalness, captions, requirements tables, jargon, prompt burden and repeated explanations were reviewed for the intended audience.
+- [ ] Comparisons preserve the frozen rubric, common inputs and before/after evidence for every item; unlike historical scores are not compared.
+- [ ] Automated document checks, manual review, separately authorized product tests and actual reader studies are reported separately, with skipped/not tested states explicit.
 
 ## Portability
 

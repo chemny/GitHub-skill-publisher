@@ -1,65 +1,53 @@
-# Install Section
+# Installation Section
 
-Use this reference when writing installation instructions for a public Skill repository intended for Agent users.
+Follow [readme-style.md](readme-style.md) for the section framework. This reference defines the installation method, not another reading order.
 
-## Default principle
+## Two public subsections
 
-The reader should not need to choose an installation directory, run Git, copy a folder, install dependencies, or decide whether the client needs a restart. The current Agent owns environment detection, installation, dependency checks, load verification, and user-facing feedback.
+Use Requirements / 配置要求, then Quick Installation / 快速安装 within Installation. Requirements starts with one short explanation of what is needed to begin and what can wait, followed by a two-column Item / Requirement (项目 / 要求) table. Name rows by need, such as Agent client, core runtime or an optional capability; do not repeat Basic / 基本 as row labels. Quick Installation explains where to send the request or run the supported action, then gives concise actual verification feedback.
 
-The main installation section is a copy-ready natural-language request containing the public repository URL.
+Use Agent client / Agent 客户端 for the host application, and Agent for the actor receiving the installation request. Keep implementation dependency files and exact package ranges internal when they are not needed for the reader's decision.
 
-## Standard English structure
+## Requirements readers can scan
 
-````markdown
-## Install
+For an ordinary Agent Skill user, use the compact named-item table after the short explanation. Core entries show the supported Agent client and minimum core runtime version. Optional entries show which extra feature needs a tool/service or account. The reader should see what is necessary to start and what can wait.
 
-Send this to your Agent:
+Do not list requirements.txt, every dependency package, package-version range, shell entry point or a platform testing matrix in the main install section. The installing Agent must inspect the current manifest/requirements and prepare the real core dependencies; hiding those implementation details from product prose does not waive the check. Versions or limitations that change the reader's decision remain visible. Developer-facing applications and CLI/library projects may legitimately show technical installation commands and package requirements.
 
-```text
-Install this Skill for me:
-https://github.com/[owner]/[repo]
-```
+## Agent-directed installation
 
-The Agent will choose the installation method for the current client, check dependencies, and verify that the Skill loads.
-````
+The current Agent owns core environment detection, preparation, installation and verification. Use one natural request with the actual public repository URL.
 
-## Standard Chinese structure
-
-````markdown
-## 安装
-
-把下面这句话发送给你的 Agent：
+English:
 
 ```text
-帮我安装这个 Skill：
-https://github.com/[owner]/[repo]
+Install this Skill: {{repo-url}}
+Check the basic environment and prepare anything missing first, then install and verify it works. Set up optional features when I need them.
 ```
 
-Agent 会根据当前客户端完成安装、依赖检查和加载验证。
-````
+Chinese:
 
-## Rewrite rule
+```text
+帮我安装这个 Skill：{{repo-url}}
+先检查基础环境，缺什么帮我补齐，再安装并检查能不能用。其他功能等我需要时再配置。
+```
 
-During publisher-managed normalization, rewrite an existing install section when it exposes any of these as the default user flow:
+Replace the URL with the verified public repository. Read the client's actual requirements before selecting the method. Check the core runtime and permissions first; install or choose a suitable supported runtime if missing or below the minimum. For a Python≥3.9 requirement, Python 3.9 already qualifies; do not upgrade it just because it equals the minimum. Do not remove or replace a working system runtime unnecessarily. Check the core dependency manifest, install the Skill, and verify installation plus discovery/loading or actual readiness using supported client facilities.
 
-- `git clone`
-- copying or moving the repository into a Skill directory
-- `.agents/skills`, `.codex/skills`, `.claude/skills`, or another platform path
-- manual installation or fallback instructions
-- dependency installation commands
-- restart or rescan instructions
-- repository-shape instructions such as asking the user to inspect the `SKILL.md` level
+Prepare only the minimum core environment. Do not preinstall every optional image/video/upload service, request unrelated account access or silently perform destructive/system-wide changes. Report permission or availability blockers and the actual remaining step. Do not guarantee automatic success for every machine.
 
-Rewrite first, then run the final publish check. Do not stop at reporting that the README uses the old structure.
+## Audience adaptations
 
-## Boundaries
+For ordinary Skill users, rewrite default git-clone/copy flows, installation directories, manual dependency commands and restart instructions into the Agent request. Do not add speculative fallbacks. Keep advanced troubleshooting in an existing linked document.
 
-- Do not include a manual-install section by default.
-- Do not list platform directories in the main README.
-- Do not promise that every client can install automatically. The request asks the current Agent to try, verify, and report the real result.
-- Add manual instructions only when the user explicitly requests them or the repository is intentionally aimed at a non-Agent audience.
-- Claude Code plugin marketplaces with an official plugin command may use that official command instead of this generic Skill prompt.
+When explicitly requested, or when the project serves applications, CLI/library users or another non-Agent audience, use the actual supported method and minimal verification. An official plugin installation command may be appropriate for its intended audience. These adaptations preserve Installation's place before Quick Start.
 
-## Verification
+## Completion feedback
 
-Installation verification belongs to the installing Agent. The README quick-start section should demonstrate the Skill's first useful task, not ask the user to debug installation state.
+Give concise actual results: installed, loaded/discovered or ready, and any remaining requirement. A file copy alone proves neither loading nor readiness. If loading only happens after a new session, say so truthfully rather than claiming it was verified.
+
+Quick Start demonstrates a useful task. The five first-use review questions belong in [readme-review.md](readme-review.md), not mandatory public labels.
+
+## Checker audience
+
+Use the default Agent audience for ordinary Skill readers. Developer-facing applications, CLI/library projects or other command-based installations use `--readme-audience=developer` when running the publish checker. This adaptation preserves the framework and all link/visual/safety/manual-review gates; see [readme-checks.md](readme-checks.md).

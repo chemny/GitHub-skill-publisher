@@ -80,29 +80,31 @@ Use this skill when the user asks to:
 ## Standard workflow
 
 ```text
-Inspect -> Normalize -> Capture screenshot -> Write README -> Pre-publish cleanup -> Smoke test -> Publish check -> Show screenshot/summary -> User confirmation -> Commit -> Publish or Push -> Verify
+Inspect -> Understand product and main tasks -> Prepare facts / resolve gaps -> Normalize -> Choose real preview -> Write README -> Semantic / first-use text review -> Pre-publish cleanup -> Smoke test -> Publish check -> Show screenshot/summary -> Verify authorization / obtain missing approvals -> Commit -> Publish or Push -> Verify
 ```
 
-1. Inspect the local skill files and current git state.
+1. Inspect the local skill files and current git state. Before drafting, follow `references/readme-review.md` to establish an internal product brief and main/supporting task map, then establish current file/line evidence, resolve consequential gaps and reuse approved facts. Create a local record from `templates/readme-review-record.md`; never copy it into public README prose. Freeze any stage-specific comparison rubric and preserve before outputs before modification.
 2. Normalize to single-skill repository structure.
-3. Add a real visual preview near the top of both READMEs by default. Follow `references/readme-visuals.md`.
+3. Add a visual in both READMEs: use Preview / 效果预览 for actual screenshots/cases; a generated capability/workflow illustration may instead sit in Overview without a separate heading, labelled in alt text as illustration / 示意图. Prefer representative actual screenshots or cases. If no suitable material is available, generate an illustration from the verified Skill workflow and pain points; 16:9 is acceptable. This generated illustration can be the primary Preview without an additional real screenshot, but must be identified as an illustration, not execution evidence. Follow `references/readme-visuals.md`; prefer a self-explanatory image with useful alt text and no caption, or at most one short scope/result line. Source, reproduction conditions and rights belong in the internal review.
    - If it is a web page, run/open the page and capture a browser screenshot.
    - If it is an app/program, launch the program and capture the real UI.
    - Store the image in the repository, usually under `assets/`, and reference it from both `README.md` and `README.zh.md`.
-   - Do not use mock screenshots when a real page/program can be opened. If sample data is safer than private data, keep the real UI but use safe sample data and say so.
-   - Before publishing, show the screenshot to the user and wait for their confirmation.
-   - For output-producing skills without a UI, embed approved real outputs (images, document pages, reports or before/after results). Files in assets without README embeds do not count.
-   - If no suitable visual can be included, explain the specific constraint visibly in both READMEs and repeat it in the final publish summary. No UI alone is not a reason. Missing both a preview and a reason is FAIL.
+   - Do not fabricate screenshots or test results. Use the actual screenshot/case route when suitable material exists, or the labelled workflow/pain-point illustration route when it does not. If sample data is safer than private data, keep the real UI but use safe sample data; record provenance internally and add a brief public label only if needed to avoid misleading readers.
+   - Before publishing, show the selected screenshot, case output or generated illustration to the user and wait for their confirmation.
+   - For output-producing skills without a UI, prefer approved real outputs; otherwise use the grounded generated-illustration route. Record the selected form and rationale internally. Files in assets without README embeds do not count.
+   - If neither visual form can be provided, explain the specific constraint visibly in both READMEs and repeat it in the final publish summary. No UI alone is not a reason. Missing both a preview and a reason is FAIL.
 4. Write or update `README.md`, `README.zh.md`, `LICENSE`, and `.gitignore` when useful.
-   - Treat the README template as a release quality gate, not only as writing guidance.
+   - Use `references/readme-style.md` as the single authority for the ten-section framework and content duties. Templates must follow it; do not treat a stale template as a competing standard.
    - For publisher-managed releases, evaluate any existing README against the current default README structure before publishing.
    - For every update release, review the current diff before publishing and decide whether the change affects README content.
    - If changes touch user-visible capability, usage, install flow, dependencies, compatibility, outputs, repository structure, templates, scripts, security/copyright boundaries, or GitHub metadata, update both `README.md` and `README.zh.md` before publishing.
    - If the changes are small and do not affect README content, do not force a README edit; document the no-impact reason in the final pre-publish summary and run the publish check with `--readme-no-impact`.
    - Do not blindly overwrite old READMEs, but if the user did not explicitly ask to preserve the current README as-is, upgrade missing key modules before publishing.
-   - Required README modules include audience fit, an actual visual preview or explicit omission reason, what it does, core capabilities, platform compatibility, install, quick start, usage examples, how it works, repository/file structure, requirements or configuration, and license.
+   - Follow the default ten-section order and English/Chinese names in `references/readme-style.md`, including its option to fold a labelled generated illustration into Overview without a Preview heading. Put audience fit in Overview, conditions and compatibility in Installation, complete component/sub-Skill responsibilities in How It Works, and actual files plus documentation links in Repository Structure. Keep License and approved About Me information at the end.
+   - README copy describes the current product. Exclude update history, migration/fix records, repository maintenance and internal development logs throughout the body; keep them in changelogs, release notes or developer documents. Current requirements, limitations and the product’s own publishing capabilities remain valid content.
+   - Use short conversational Quick Start and scenario requests for ordinary users, tied to the product brief: representative first use and main scenarios before supporting tasks. Do not require a post-prompt explanation paragraph. Verify inputs, action, result location, success judgment and next step in the internal review, not five compulsory public labels. Never invent author details, components or examples to fill a section. Before acceptance, complete the ten-section semantic and first-use text walkthrough in `references/readme-review.md`, separately from automated gates. The three manual product-fit gates (representative first use, scenario coverage/priority, four-section consistency) must pass before semantic acceptance; high formatting scores cannot offset failure.
    - Productize README copy before release: use a two-column user-facing core-capabilities table and make the main install section a copy-ready natural-language request that asks the current Agent to install the public repository URL.
-   - For agent-facing skill repositories, remove default `git clone`, directory-copy, manual-install, platform-path, dependency, and restart instructions from the main README. The installing Agent owns environment detection, installation, dependency checks, and load verification.
+   - For agent-facing skill repositories, remove default `git clone`, directory-copy, manual-install, platform-path, dependency-command, and restart instructions from the main README. Use Requirements / 配置要求 (brief explanation plus named-item table) and Quick Installation / 快速安装 (request/action plus feedback). State the Agent client, minimum core runtime and optional tools/accounts. Keep implementation dependency lists and OS test matrices in internal review or deeper docs. The installing Agent checks and fills core environment gaps before installation, then verifies installation and discovery/loading or readiness; optional features are prepared on demand. Do not promise automatic success. For applications, CLI/library projects and explicitly non-Agent audiences, use their actual supported method; see `references/install-section.md`.
    - When an existing README still uses a clone-and-copy installation flow, rewrite that section during normalization before running the final publish check. Do not merely report the old structure and leave it for the user to fix.
 5. Generate or update GitHub repository metadata, especially the repository description.
    - Use an English repository description by default unless the user explicitly requests Chinese or a China-facing repository.
@@ -117,7 +119,7 @@ Inspect -> Normalize -> Capture screenshot -> Write README -> Pre-publish cleanu
 8. Run automated publish checks when possible.
    - Prefer `node scripts/publish-check.mjs` from the skill repository when available.
    - By default, `node scripts/publish-check.mjs` requires the normalized release surface: English `README.md`, Chinese `README.zh.md`, and no legacy `README.en.md`.
-   - The publish check must validate README structure, not only README language layout. A README that is English by default but misses required product/documentation modules is not release-ready.
+   - The publish check must validate README structure, not only README language layout. A README that is English by default but misses required product/documentation modules is not release-ready. The checker validates the ten-section framework in both languages; follow `references/readme-checks.md` for coverage and `--readme-audience=developer` when actual developer installation differs. Report supported-syntax limits; a PASS does not certify reader understanding, product semantics or bilingual factual parity.
    - The publish check must also validate README freshness against the current diff. If relevant non-README files changed but README files did not, treat that as a release blocker unless the diff was reviewed and explicitly marked no-impact with `--readme-no-impact`.
    - Use `node scripts/publish-check.mjs --allow-legacy-readme` only when the user explicitly requests a pass-through release that preserves old README files.
    - The script must report `PASS`, `WARNING`, or `FAIL`; it must not commit, push, create repositories, or publish.
@@ -153,6 +155,11 @@ Read only what is needed:
 - `references/repo-structure.md` for repository layout rules.
 - `references/pre-publish-flow.md` for the full publish flow and confirmation gates.
 - `references/readme-style.md` for the bilingual README style.
+- `references/readme-review.md` for evidence preparation, missing facts, semantic acceptance and fair comparisons.
+- `references/readme-checks.md` for static checker coverage, audience selection, report states and regression limits.
+- `examples/readme-visual/publisher-capability.md` for an approved illustration case, reusable layout practices and the boundary between general guidance and this product's specific choices.
+- `templates/readme-review-record.md` for a local internal review record, never public README text.
+- `references/readme-full-agent-evolution.md` only as a historical content example; it does not define the current framework.
 - `references/install-section.md` for skill installation instructions that README files should include.
 - `references/skill-completeness.md` before public release.
 - `references/platform-compatibility.md` before public release.
@@ -173,7 +180,7 @@ node scripts/se-quality.mjs
 
 The smoke test script is a local quality gate. It verifies that this skill's own files, references, templates, and publish-check script are coherent.
 
-The publish check script is a reporting gate only. It must never publish, push, commit, delete files, or mutate GitHub state. It reports a release gate (PASS/WARNING/FAIL) plus an engineering-hygiene score covering metadata, documentation, structure, security, and tooling.
+The publish check script is a reporting gate only. It must never publish, push, commit, delete files, or mutate GitHub state. It reports a release gate (PASS/WARNING/FAIL) plus an engineering-hygiene score covering metadata, documentation, structure, security, and tooling. That score is not a README reader-quality score. Agree dimensions and a 10-point rubric before a writing comparison, retain the before/after case outputs, and apply the same rubric with evidence; never score a proposed result as already achieved.
 
 The se-quality script reports a separate software-engineering quality score (completeness, openness/extensibility, reusability, cohesion, coupling, robustness), plus advisory document-craftsmanship signals (no thin/placeholder sections, instructional phrasing, concrete specifics, low hedging language, encoded failure modes, anti-example lists, and runtime-neutral cross-agent phrasing) that judge how the docs read rather than merely whether sections exist. Like publish-check, it only reports and never mutates state. Each sub-metric is tagged deterministic or proxy so the score stays honest.
 
@@ -192,9 +199,9 @@ Use these as starting points, not rigid boilerplate:
 - `templates/LICENSE-MIT`
 - `templates/gitignore`
 
-Use `templates/README.md` and `templates/README.zh.md` as the default Standard high-conversion README templates. `README.md` is English by default for GitHub's repository homepage, and `README.zh.md` is the Chinese switch page. They prioritize user value, product pain, product highlights, workflow, a required preview or explicit omission reason, Agent-directed installation, direct-use prompt, default configuration, final result, compatibility, and license.
+Use `templates/README.md` and `templates/README.zh.md` as the default Standard starting points. `README.md` is English by default for GitHub's repository homepage, and `README.zh.md` is the Chinese switch page. All six variants must follow `references/readme-style.md`, including the same ten-section order, two-column features, complete first-use path, actual components and approved author information. If a template differs, follow the authoritative standard and record the template mismatch for repair.
 
-Use `templates/README.practical-tool.md` and `templates/README.practical-tool.zh.md` when a skill is a practical utility with rich usage examples, rule categories, manual workflows, before/after examples, warning lists, references, and source attribution.
+Use `templates/README.practical-tool.md` and `templates/README.practical-tool.zh.md` for practical utilities needing richer scenarios, rule categories or before/after examples. Fit them inside the same framework; link long manuals and maintenance documents from Repository Structure. Hero changes the opening presentation, not section order or compatibility evidence.
 
 The README templates intentionally omit a limitations section by default.
 Use MIT for `LICENSE` unless the user requests another license.

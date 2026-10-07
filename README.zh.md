@@ -1,151 +1,134 @@
-# GitHub-skill-publisher
+# GitHub Skill Publisher
 
-[English](README.md) · 中文
+[English](./README.md) | 中文
 
-署名与出处审核支持复用同一仓库的明确确认。检查时指定 `--visibility=private` 或 `--visibility=public`，读取本地 Git 元数据中的记录；仅新增或变化项重新询问。记录不代表推送授权。详见[确认复用规则](references/review-decisions.md)。运行 `node --test scripts/review-decisions.test.mjs` 验证复用、失效与撤销。
+## 项目简介
 
-把一个本地 agent skill **安全、规范地发布成 GitHub 仓库**，并在发布前给它做一次**可量化的工程质量体检**。它先看真实文件、跑三层检查、列出发布清单，等你确认后才提交和推送——绝不擅自发布。
+GitHub Skill Publisher 帮你把本地 Skill 整理成可分享的 GitHub 仓库：写好中英文 README，完成发布前审查，处理发现的问题，再按你的授权发布并核实结果。
 
-README 配图检查要求中英文均有实际界面或成果图；无法配图必须写明具体原因。徽章、隐藏注释和代码示例不算配图，图片文件缺失会阻止发布。详见[配图证据规则](references/readme-visuals.md)，运行 `node --test scripts/readme-visuals.test.mjs` 验证。
+![能力示意图：整理 Skill、发布前审查与 GitHub 发布；包含依赖、兼容性、安全及授权检查](./assets/publisher-hero-v4.png)
 
-## 暂无配图的原因
+适合已有 Skill、准备分享给别人，希望理清文件、使用说明和发布问题的作者。默认一个 Skill 对应一个仓库，仓库根目录就是 Skill 的入口。
 
-当前交付是终端文字与结构化 JSON 审核报告，包内尚未包含实际结果的截图。下文展示报告字段和工作流程；为避免把制作的示意图冒充真实运行截图，配图仍列为待补项，不宣称已完成视觉展示。
-
-## 适合谁使用？
-
-- 写好了 agent skill、想发布到 GitHub 的作者。
-- 同时维护多个 skill 仓库、想让 README / 协议 / 结构 / 检查保持统一的人。
-- 发布前想先查一遍密钥、本地路径、私有依赖，并想知道"这个 skill 到底做得够不够好"的人。
-
-## 它解决什么问题？
-
-手动发布 skill 容易踩三个坑：**发布质量不稳定**（README 太薄、结构乱、协议忘了、仓库描述空着）、**安全泄露**（示例里混进 API key、本地路径、私有文件、别人家的版权内容）、**没有客观标尺**（发出去之前没人能说清它好不好）。这个 skill 把这三件事变成固定流程 + 自动检查 + 量化评分。
-
-## 核心能力
+## 核心功能
 
 | 能力 | 它能帮你做什么 |
 |---|---|
-| 发布前总检 | 检查 README、必需文件、Git 状态、敏感信息、依赖和兼容性，给出能不能发布的清单。 |
-| 三层质量评分 | 用包自洽、发布卫生和软件工程质量三套指标，给出可复现的发布分数。 |
-| 敏感信息检查 | 发现 API key、token、账号、本地路径、日志和缓存，避免把私有信息发到公开仓库。 |
-| 第三方/署名复核 | 标出上游引用、版权/商标声明和外部协议条款，让发布前的保留、改写或署名有依据。 |
-| 双语 README + 仓库描述 | 生成或修正英文默认 README、中文 companion 和 GitHub 首屏描述。 |
-| 多形态兼容 | 识别单 skill 仓库和 marketplace 集合仓库，并检查会影响跨 Agent 安装的措辞。 |
-| 当前 Skill 元数据校验 | 从 `metadata.version` 读取语义化版本，并在发布前拦截旧的顶层版本字段。 |
-
-## 三层质量体检（核心卖点）
-
-发布前跑三套检查，每套回答一个不同的问题，全部**只报告、绝不推送**：
-
-| 工具 | 回答的问题 | 产出 |
-|---|---|---|
-| `smoke-test.mjs` | 这个包自己自洽吗？ | 必需文件 / 引用 / 模板的逐项自检（PASS/FAIL） |
-| `publish-check.mjs` | **能不能发？** | 释放门 `PASS/WARNING/FAIL` + 工程卫生分（元数据/文档/结构/安全/工具，5 类 0–100） |
-| `se-quality.mjs` | **作为软件，做得好吗？** | 软件工程质量分（完整性/开放性/复用性/内聚/耦合/健壮性，0–100） |
-
-评分坚持**诚实设计**：硬指标（`det`）才计分，启发式信号（`proxy`）只做提示不进分，不适用项标 `N/A` 排除，并明说**不测功能正确性**——避免给你虚假的安全感。
-
-发布前，`publish-check.mjs` 还会 review License 和版权信号、作者或维护者姓名、私人邮箱、个人用户名、第三方署名、生成器/工具水印，以及 Git 提交作者和签名 metadata。Apple、Anthropic、Meta 这类设计语言或公司名的中性引用可以保留，只要不暗示所有权、背书、复制资产或重新授权；README 和 LICENSE 中涉及其他第三方的内容会被重点提醒给用户决策。脚本不会自动改身份、署名或 Git 历史。
-
-## 平台兼容性
-
-适用于 Codex、Claude Code、OpenClaw 等 50+ 兼容 skills 的 runtime。同时识别**单 skill 仓库**和 **marketplace 集合仓库**（`.claude-plugin/marketplace.json`）两种结构，并检查"只能在某个 runtime 用"这类会让别的 agent 拒装的措辞。
-
-检查脚本通过 GitHub Actions 在 macOS、Linux 和 Windows 上测试。Windows 需要将 Node.js、Git 和 GitHub CLI（`gh`）加入 `PATH`，才能运行对应检查或发布步骤。
-
-通过这套流程发布其他 skills 时，如果涉及脚本、安装器、路径处理、shell 命令、浏览器自动化、文件系统操作或外部 CLI，发布前必须测试或 review macOS 和 Windows 兼容性。Linux 兼容性默认可选，除非项目本身明确要求。
+| 整理 Skill 仓库 | 理清入口、配套文件和依赖，区分需要分享的内容与本地草稿、缓存。 |
+| 编写中英文 README | 先了解 Skill 的主要用途，再说明功能、安装、使用和目录，让用户知道如何开始。 |
+| 检查发布准备情况 | 找出缺失文件、坏链接、配图问题、敏感信息和需要确认的署名或授权，给出具体位置。 |
+| 发布到 GitHub | 在你明确要求发布后，准备仓库信息、提交并推送，再核实远程结果。需要 GitHub 账号权限。 |
+| 修改已有 Skill | 按你的需求修改本地文件，同步受影响的介绍；是否发布由你的指令决定。 |
+| 查看工程质量 | 分析结构、复用性和健壮性，帮助安排后续改进；工程分不代表功能已实测或文案易懂。 |
 
 ## 安装
 
-把下面这句话发送给你的 Agent：
+### 配置要求
 
-```text
-帮我安装这个 Skill：
-https://github.com/chemny/GitHub-skill-publisher
-```
+你需要一个能读取 Skills、运行本地命令的 Agent 客户端。先准备基础工具；只有需要操作 GitHub 时，才需要登录账号。
 
-Agent 会根据当前客户端完成安装、依赖检查和加载验证。
+| 项目 | 要求 |
+|---|---|
+| Agent 客户端 | 例如 Codex、Claude Code 或 OpenClaw；实际安装和加载方式由客户端决定。 |
+| Node.js | 检查脚本使用 Node.js；项目的检查配置采用 22 版。 |
+| Git | 用于查看文件变更、仓库状态和提交记录。 |
+| GitHub CLI（按需） | 操作 GitHub 仓库时使用 `gh`，并登录有相应权限的账号。 |
+
+本地检查已在 macOS 上运行。Windows、Linux 和不同 Agent 客户端的实际安装与使用仍需验证；如果你的环境无法完成某一步，Agent 应明确指出原因。详细条件见[兼容性说明](./references/platform-compatibility.md)。
+
+### 快速安装
+
+把下面这句话发给你正在使用的 Agent：
+
+> 帮我安装这个 Skill：https://github.com/chemny/GitHub-skill-publisher 。先检查 Node.js 和 Git，缺少的话帮我补齐基础环境，再安装并确认客户端能找到、加载它。GitHub 登录等到需要发布时再配置。
+
+完成后，让 Agent 告诉你装在哪里、是否能加载，还有哪些条件尚未满足。
 
 ## 快速开始
 
-对 Agent 说：
+安装后，打开你想分享的 Skill 文件夹，先看看它是否准备好了：
 
-```text
-使用 GitHub-skill-publisher 检查当前这个 skill 是否适合发布到 GitHub。
-```
-
-你会拿到一份发布前结果：释放门结论、两个质量分、README/结构/必需文件状态、敏感信息、依赖、兼容性、Git 状态和下一步建议。
+> 帮我检查这个 Skill，看看发布到 GitHub 前还需要改什么。
 
 ## 使用示例
 
-整理成可公开发布的仓库：
+### 整理一个准备分享的 Skill
 
-```text
-使用 GitHub-skill-publisher 帮我把当前 skill 整理成可以公开发布的 GitHub 仓库。
-```
+> 这个 Skill 我已经在本地用起来了，帮我整理成一个适合放到 GitHub 上的仓库。
 
-只看质量分、不发布：
+### 把 README 写得容易看懂
 
-```text
-使用 GitHub-skill-publisher 跑一遍 publish-check 和 se-quality，给我看分数和扣分项，先不要发布。
-```
+> 帮我重写这个 Skill 的中英文 README，让第一次看到的人知道它能做什么、怎么安装和使用。
 
-发布前查风险：
+### 将准备好的 Skill 发布出去
 
-```text
-使用 GitHub-skill-publisher 检查这个 skill 有没有 API key、账号、本地路径、私有文件或对其他 skill 的强依赖。
-```
+> 把这个 Skill 发布到我的 GitHub，仓库名称就用 Skill 的名字，设为公开。
 
-修改并发布：
+### 修改后一起发布
 
-```text
-使用 GitHub-skill-publisher 修改并发布这个 skill 到 GitHub。
-```
+> 把 README 的安装说明改清楚，检查通过后同步到 GitHub。
+
+只说“修改”时，Agent 处理本地文件；明确说“修改并发布”时，它在检查通过后继续发布。遇到敏感信息、检查失败、兼容性未核实或仓库目标不明确等问题，会先停下来说明。
+
+### 检查不适合公开的内容
+
+> 帮我看看，这个仓库有没有密钥、私人路径或需要确认授权的内容。
+
+### 找出值得优先改进的地方
+
+> 从工程质量上看看这个 Skill，哪些地方最值得先改？
 
 ## 工作原理
 
-它依赖三类文件：
+Agent 先读取你的 Skill，了解主要用途和现有文件，再整理仓库、编写介绍、运行检查。确认发布条件满足且有明确授权后，才操作 GitHub。
 
-- `templates/` —— README 和 LICENSE 模板。
-- `references/` —— 发布流程、README 写法、兼容性与安全检查清单。
-- `scripts/` —— 本地检查脚本，**只报告问题，不改任何东西**：
+这是一个独立 Skill，没有附带其他子 Skills。它的主要组成如下：
 
-```bash
-node scripts/smoke-test.mjs      # 包自洽自检
-node scripts/publish-check.mjs   # 释放门 + 工程卫生分
-node scripts/se-quality.mjs      # 软件工程质量分
-```
+| 组成 | 作用 |
+|---|---|
+| `SKILL.md` | Agent 的工作入口，定义处理顺序、授权方式和发布边界。 |
+| `references/` | 写作、安装、截图、兼容性、安全与发布检查的具体规范。 |
+| `templates/` | Standard、Hero、Practical Tool 三套 README，各有中英文版本；分别适合常规介绍、突出开篇展示和需要更多场景说明的实用工具。也包含许可、忽略文件和内部审阅记录模板。 |
+| `scripts/` | 提供发布准备检查、工程质量分析，以及 Publisher 自身的文件和模板检查。 |
+| `evals/` | 保存检查场景和回归案例，供维护时验证规则。 |
+| `examples/` | 已确认的 README 配图参考案例，区分可复用做法与本产品的具体选择。 |
 
-这些脚本不会 commit、push、建仓、删文件或改 GitHub。任何发布动作都必须等你明确授权，且推送前会再单独确认一次。
+不同检查各有用途：
 
-## 仓库结构
+- **发布准备检查**：针对当前项目，检查文档、文件、安全与 Git 状态，生成 `publish-check-report.json`。结果分为通过、需审阅和阻断；报告里的工程卫生分不等于发布许可。
+- **工程质量分析**：生成 `se-quality-report.json`，把可直接核验的项目与估算建议区分开；用来补充发布检查，不能替代它。
+- **Publisher 自身检查**：验证本 Skill 的配套文件、模板和检查工具，生成 `smoke-test-report.json`；它不能证明其他 Skill 的功能正常，其他项目仍需自己的测试。
+
+检查工具会写入本地报告；提交、推送和创建 GitHub 仓库由 Agent 按授权执行。自动检查之后，README 的用途、示例、双语事实和配图范围仍需人工审阅。
+
+## 目录结构
 
 ```text
 GitHub-skill-publisher/
-├── SKILL.md
-├── README.md / README.zh.md
-├── LICENSE
-├── .gitignore
-├── evals/
-├── references/        # 发布流程、README 风格、安全/兼容/完整性清单
-├── scripts/
-│   ├── smoke-test.mjs
-│   ├── publish-check.mjs
-│   └── se-quality.mjs
-└── templates/         # README / LICENSE / .gitignore 模板
+├── SKILL.md                 # Agent 工作入口
+├── references/              # 写作与发布规范
+├── templates/               # 三套双语 README 及配套模板
+├── scripts/                 # 检查工具与测试
+├── evals/                   # 检查案例
+├── assets/                  # README 能力示意图
+├── examples/                # 已确认的配图参考案例
+├── .github/workflows/       # 自动检查配置
+├── .gitignore               # 本地文件忽略规则
+├── README.md                # 英文介绍
+├── README.zh.md             # 中文介绍
+└── LICENSE                  # 许可
 ```
 
-## 运行要求
+安装时需要保留 `SKILL.md` 及它引用的规范、模板和工具，不能只复制入口文件。检查产生的报告不属于必需的安装内容：发布检查和工程分析报告写到被检查的项目，Publisher 自身检查报告写到本 Skill 目录。
 
-- 一个能读取本地 `SKILL.md` 的 Agent 环境（Codex、Claude Code、OpenClaw 等）。
-- `git` —— 检查仓库状态、提交历史和远端。
-- Node.js —— 运行 `scripts/` 下的检查脚本。
-- GitHub CLI `gh` —— 仅在建仓、更新 metadata 或推送时使用。
-- Windows 上运行脚本或发布前，需要确认 `git`、`node` 和 `gh` 已加入 `PATH`。
+更多细节：[README 写作规范](./references/readme-style.md)、[文案审阅方法](./references/readme-review.md)、[检查器覆盖范围](./references/readme-checks.md)、[配图参考案例](./examples/readme-visual/publisher-capability.md)、[GitHub 操作流程](./references/github-workflow.md)。
 
-## 协议
+## 许可
 
-本仓库使用 MIT License。
+本项目采用 [MIT License](./LICENSE)。引用的第三方材料、商标及上游内容仍遵守各自的授权条件。
 
-第三方名称、平台名称和上游参考资料仍受其原始条款约束。
+## 关于我
+
+作者：美名 Neo，AI 实战派独立开发者。
+
+有 AI 学习与应用方面的需求，欢迎与我联系！

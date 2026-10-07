@@ -1,25 +1,24 @@
 # README Style
 
-Use a product-quality README, not a bare technical note.
+## Purpose and authority
 
-A public skill README is both documentation and a conversion page. Its job is to help readers understand the product value, trust the mechanism, and complete their first successful use with minimal friction.
+A README is a product introduction and the entry point to first successful use. It should help a reader understand what the project is, what problem it solves, whether it fits their needs, what to prepare, and how to install and use it. Write for the project's actual audience, including readers unfamiliar with Agent Skills.
 
-Do not use hype. Do actively explain what the skill improves and how the reader can try it quickly.
+This file is the single authority for the default README framework, section order and information responsibilities. Installation, visuals, compatibility and repository references elaborate their own topics; they do not define alternative reading orders. Templates are starting points and must follow this standard. If a template or historical example conflicts with it, follow this file and record the mismatch for repair.
 
-Also generate a GitHub repository description. GitHub shows this one-line description on profile cards, search results, and repository lists, so it must explain the skill's value before a reader opens the README.
+Use concrete, practical language. Do not use hype, invented benefits or implementation vocabulary that the intended reader cannot understand.
 
-Use English as the default GitHub repository description language, because `README.md` is English by default and GitHub profile cards should match the repository homepage. Use Chinese only when the user explicitly requests a Chinese or China-facing repository.
+## Language and release surface
 
-Create both:
+For publisher-managed releases, create:
 
 ```text
 README.md      English, default GitHub repository homepage
 README.zh.md   Chinese
+GitHub description: English by default
 ```
 
-Each README must link to the other near the top with an explicit language switch.
-
-Default language switch:
+Put a project title and a clear language switch before the sections:
 
 ```markdown
 English | [中文](./README.zh.md)
@@ -29,428 +28,184 @@ English | [中文](./README.zh.md)
 [English](./README.md) | 中文
 ```
 
-Use only the language names in the switch labels: `中文` and `English`. Do not write `中文 README`, `English README`, or any label that includes the word `README`; it is visually redundant on GitHub.
+Use language names only, without a redundant README label. Keep each body in its own language, including prompts and examples. Technical identifiers, commands, proper names and the language switch may retain their original spelling. Both versions must cover the same facts, conditions, components and examples; translation may use natural phrasing rather than identical sentence lengths.
 
-## README language quality gate
+Legacy Chinese README.md plus English README.en.md must be normalized before a publisher-managed release. Preserve an old language layout or structure only when the user explicitly requests pass-through. Report what is preserved and what does not meet the current standard; use `--allow-legacy-readme` when appropriate. This exception does not waive secrets, broken assets or the visual-evidence gate. An explicitly requested single bilingual README also requires reporting the departure from the default surface.
 
-This is a required pre-publish check.
+Do not overwrite useful project-specific facts when migrating an existing README. Review the current files and diff first.
 
-- `README.md` must be English-first because GitHub displays it by default.
-- `README.zh.md` must be Chinese-only except for the intentional language label/link.
-- Do not use a mixed bilingual body in either README by default.
-- Do not solve missing Chinese documentation by putting Chinese paragraphs into the English README.
-- If the user explicitly requests a single bilingual README, confirm that choice before publishing.
-- If both README files exist, verify their first screen links to each other before publishing.
-- If either language file is missing or obviously thin compared with the other, stop and fix it before publishing.
+## Default framework
 
-## README structure quality gate
+Use these ten top-level sections, in this order, after the title and language switch. Use the English titles in README.md and the Chinese titles in README.zh.md. Do not introduce separate top-level audience, requirements, compatibility or documentation sections; place those facts where the table assigns them.
 
-This is a required pre-publish check for publisher-managed releases.
+| Order | English | Chinese | Information responsibility |
+|---|---|---|---|
+| 1 | Overview | 项目简介 | What it is, intended users, the problem and useful outcome |
+| 2 | Preview | 效果预览 | Actual screenshot/case first; otherwise a grounded workflow/pain-point illustration; at most one short caption |
+| 3 | Features | 核心功能 | Main user tasks and benefits, ordered by user importance |
+| 4 | Installation | 安装 | Prerequisites, relevant support boundaries, installation and verified feedback |
+| 5 | Quick Start | 快速开始 | One small task representing core value, with a natural prompt/action |
+| 6 | Usage Examples | 使用示例 | Other supported scenarios using ordinary requests and necessary conditions |
+| 7 | How It Works | 工作原理 | Complete component inventory, responsibilities and collaboration or execution flow |
+| 8 | Repository Structure | 目录结构 | Actual principal files and directories, installed content and further documentation |
+| 9 | License | 许可 | Applicable license and third-party rights boundaries |
+| 10 | About Me | 关于我 | Approved identity suited to the sharing purpose, with a public contact route when intended |
 
-The default README template is not only a reference example. It is the release structure standard. A repository can pass the language gate and still fail release readiness if the README does not explain the product well enough.
+For a generated capability/workflow illustration, the visual may be embedded in Overview without a separate Preview / 效果预览 heading. Do not call an explanatory illustration an effect preview. This folds the visual duty into Overview; the other nine sections keep their order and responsibilities. Use illustrative alt text (illustration / 示意图), keep the image before Features, and retain rights, approval and rendering checks. Actual screenshots/cases and omission explanations continue to use Preview.
 
-Before publishing or republishing a skill:
+Keep the skeleton consistent across single Skills, collections, applications and CLI/library projects. Adjust depth and the first-use method to the audience. Use subsections for necessary detail, not a second competing framework. For a small project, explain a section briefly and honestly; do not invent components, scenarios or claims to fill it. License and About Me remain at the end.
 
-- Evaluate existing README files against the current default structure.
-- Do not blindly overwrite an older README, because it may contain useful project-specific details.
-- If the user did not explicitly ask to preserve the current README as-is, upgrade missing key modules before publishing.
-- If the user explicitly asks for a pass-through release, keep the existing README structure, report it as a warning when incomplete, and do not claim it follows the current template.
-- Do not publish only because `README.md` is English and `README.zh.md` exists. Language layout is necessary but not sufficient.
+## Product understanding before drafting
 
-Required structure modules:
+Before choosing headings, sample prompts or screenshots, establish the actual product's audience, core problem, principal outcomes and main user tasks from current Skill entry points, capabilities, implementation where needed, and the owner's explicit priorities. Reuse confirmed scope; do not infer priority from directory order, code size or the screenshot currently available.
 
-- audience and value opening: who should use the skill and why it matters,
-- install path: how to install or import the skill,
-- first-use path: quick start, verification prompt, or first successful command,
-- visual preview: a real UI screenshot or approved output image, or a visible concrete omission reason in both languages (see [readme-visuals.md](readme-visuals.md)),
-- core capabilities: what the skill can actually do,
-- requirements or configuration: dependencies, credentials, environment, or setup assumptions,
-- platform compatibility: Codex, Claude Code, OpenClaw, or a concise compatibility sentence,
-- repository/file structure: enough for users to understand what is included,
-- license: MIT by default unless the user requests another license.
+Record this product brief internally using [readme-review.md](readme-review.md) and [the review record](../templates/readme-review-record.md):
 
-Product-page quality gates:
+1. Who needs it, in which situation, and what problem do they want solved?
+2. What principal useful results should they receive?
+3. Which capabilities directly deliver those results, and which support, process or finish them? Record evidence and material conditions.
+4. Which small first-use task represents that core value?
+5. Which common scenarios cover the principal capabilities, in user-importance order?
 
-- Core capabilities must be easy for a normal user to scan. Prefer a two-column table: `Capability` + `What it helps you do` (Chinese: `能力` + `它能帮你做什么`). Do not use three-column implementation tables such as `能力 / 处理内容 / 输出结果`, `Capability / Input / Output`, or `Capability / What it handles / Output` as the main capability table.
-- README copy must describe the public product, not the authoring conversation. Remove internal collaboration wording such as "after asking", "with your consent", "add this rule to your prompt/instructions", "rerun setup", "征得你同意", "加进提示词", or "重跑 setup". Product docs can say what the installer does and what result the user gets, but should not narrate our back-and-forth or expose implementation chores as user work.
+Map Overview, Features, Quick Start and Usage Examples to that brief before writing. The first task should be small and representative; avoid substituting an easy-to-demonstrate utility for the product's main purpose. List supporting capabilities after principal tasks. A screenshot of a secondary capability must not define the product's positioning.
 
-Root-cause rule from the `ai-image-generator` case: a README can still be incomplete if it was only normalized for language layout. Future publisher-managed releases must either upgrade it to the current README structure or explicitly report the preserved structure as pass-through.
+Use this product's actual priority, not a universal ranking copied from a case. Layout is a core task for a layout product; video tools may be core requirements for a video product. Do not force content-writing examples or Python requirements onto unrelated Skills, apps or CLI/library projects.
 
-## Release surface normalization policy
+Terminology: use Agent client / Agent 客户端 for Codex, Claude Code, OpenClaw or another verified host application; use Agent for the actor receiving requests. Do not substitute generic AI assistant / AI 助手 for the client name in this framework. Keep prompts conversational without changing the technical role.
 
-Old projects may still use the legacy layout:
+## Section requirements
 
-```text
-README.md      Chinese
-README.en.md   English
-```
+### Overview
 
-GitHub-skill-publisher uses publisher-managed release by default. A publisher-managed release must normalize the public release surface before publishing:
+Explain in plain language:
 
-```text
-README.md      English, GitHub default
-README.zh.md   Chinese
-GitHub description: English by default
-```
+- what kind of product this is; explain Agent Skill briefly when unfamiliar readers need it,
+- which people and workflows it serves,
+- what difficult or repeated work it helps with,
+- what useful result the reader receives.
 
-Default behavior:
+Put audience fit in this section instead of duplicating it in a separate heading. Prefer a concrete outcome over broad statements such as “for everyone” or “an end-to-end intelligent platform.” Do not start with version history, internal architecture or file lists.
 
-- Legacy `README.md` Chinese + `README.en.md` English is a release-surface mismatch.
-- Migrate the release surface before publishing.
-- `publish-check.mjs` fails this mismatch by default.
+### Preview
 
-Pass-through exception:
+Follow [readme-visuals.md](readme-visuals.md). Prefer a representative actual screenshot or case under Preview. If no suitable material is available, generate a workflow and pain-point illustration from verified capabilities; 16:9 is acceptable. Either form satisfies the visual duty when accurately scoped and approved. A generated capability illustration may instead sit in Overview without a Preview heading; do not add a replacement heading solely to name the image. Identify a generated illustration in the image or alt text; it explains the product rather than proving execution. Use useful alt text. Prefer evidence of a principal task or outcome, not merely the most convenient screenshot. If only a relevant supporting-feature preview is available, keep its scope accurate and record the core-output display gap for review. Prefer a self-explanatory image with no caption; if clarification is necessary, use at most one short line identifying the result or scope. A screenshot of one component is not proof of the whole product. Record the selected form, screenshot/case source or generation prompt and rationale, sample provenance where relevant, rights and approval in the internal review, not paragraphs under the image. Conditions that materially change use belong beside the relevant action.
 
-- If the user explicitly says to preserve the old README, not migrate README, or publish the current files as-is, keep the old layout.
-- In pass-through releases, report the old layout as a warning and run `node scripts/publish-check.mjs --allow-legacy-readme`.
+If neither an actual screenshot/case nor a grounded generated illustration is suitable, keep Preview and state the specific constraint visibly in both languages, in the section body or a nested omission subsection. The checker recognizes these forms. An explicitly authorized legacy pass-through may retain a standalone Why No Preview Image / 暂无配图的原因 heading, with a framework warning; it is not a second default structure. Missing both a preview and a concrete reason is FAIL. A candidate omission is WARNING requiring human review, not proof that its stated constraint is accurate or adequate. Follow [readme-checks.md](readme-checks.md) for supported Markdown forms and automation limits.
 
-When GitHub repository description is updated, use English by default even if a pass-through release temporarily retains old README files.
+### Features
 
-## README style variants
+Make the main capabilities easy to scan. Use a two-column user-facing table: `Capability` + `What it helps you do` (Chinese: `能力` + `它能帮你做什么`). Do not use a three-column implementation table such as `Capability / Input / Output` or `能力 / 处理内容 / 输出结果` as the main feature table.
 
-Use the Standard high-conversion structure by default. It is the safest choice for most public skill repositories because it helps users quickly understand, trust, install, and use the skill without reading implementation details first.
+Order by the product brief: principal outcomes and main user tasks first, supporting or finishing capabilities after them. Distinguish built-in, optional and conditional capabilities when it affects expectations. Explain benefits without unsupported performance or compatibility claims. This section answers “what can I do”; component names and routing details belong in How It Works.
 
-Standard is not a traditional technical README. It is a user-facing product README. Its default decision path is:
+### Installation
 
-```text
-What is this product?
-How does it solve it?
-How do I install and use it?
-```
+Follow [install-section.md](install-section.md). Divide Installation into Requirements / 配置要求 and Quick Installation / 快速安装. Requirements starts with a short explanation, followed by an Item / Requirement (项目 / 要求) table whose rows are named by actual environment/tool needs, not repeated Basic / 基本 labels. Distinguish core requirements from optional needs. Quick Installation then shows the actual install action and concise completion feedback. For ordinary Skill users, list the Agent client and the minimum core runtime version, plus required accounts or materials only when genuinely necessary for first use. Do not expose package manifests, transitive dependency names or implementation versions that the Agent can manage. Retain technical versions when they affect the reader's choice or the intended developer audience.
 
-The default Standard section order is:
+Give one copy-ready installation request with the public repository URL: check the core environment, prepare missing core requirements, install, and verify installation plus discovery/loading or actual readiness. Prepare optional image, video and platform integrations only when requested. Never promise successful automatic setup on every client; missing permissions or unavailable tools must be reported truthfully. Keep operating-system implementation paths and internal test matrices in deeper documentation. Disclose a known limitation here only if it changes the reader's ability to start.
 
-```text
-1. Title
-2. Language switch
-3. Audience-and-value opening
-4. Program or Page Screenshot
-5. Who Is This For?
-6. What It Does
-7. Core Capabilities
-8. Platform Compatibility
-9. One-command Install / Install
-10. Quick Start
-11. Usage Examples
-12. How It Works
-13. Repository Structure
-14. Requirements
-15. License
-```
+Applications and CLI/library projects use their actual supported method with a minimal verification action. Installation remains before Quick Start.
 
-Standard writing rules:
+### Quick Start
 
-- Lead with audience and user value, not feature inventory or repository structure.
-- The opening should name the target users, the manual/fragmented work being replaced, the durable result created, and the downstream work it enables.
-- Put platform compatibility before installation so users know whether the skill fits their agent runtime before they install it.
-- Put installation before quick start, and keep quick start as a single section.
-- Use short, concept-dense language.
-- Prefer user-facing results over internal file names.
-- Sort core capabilities by real user importance, from highest to lowest. Do not list them by implementation order unless that order matches user value.
-- In Chinese READMEs, quick-start prompts and usage examples must be written in Chinese. In English READMEs, quick-start prompts and usage examples must be written in English.
-- Installation must be one copy-ready natural-language request addressed to the current Agent and include the public repository URL.
-- Do not expose `git clone`, directory copying, platform-specific skill paths, manual installation, dependency commands, or restart instructions in the default README install flow. The installing Agent owns those decisions and reports the verified result.
-- Provide a copy-ready prompt for direct use.
-- Put deeper CLI details in usage examples or reference docs, not in the main README unless the command is part of first successful use.
-- Include visual evidence in both READMEs by default. Output-producing skills without a UI use approved real results; unavailable visuals require a concrete reason under `Why No Preview Image` / `暂无配图的原因`, repeated in the publish summary. For a Program or Page Screenshot, use a real screenshot captured by the agent:
-  - for a web page, open the page in a browser and capture the page;
-  - for a desktop/app program, launch the real program and capture the UI;
-  - insert the screenshot near the top of both `README.md` and `README.zh.md`;
-  - store the image in the repository, usually under `assets/`;
-  - before publishing, show the screenshot to the user and wait for confirmation.
-- Do not use a mock screenshot when a real page or program can be opened. If real user data should not be exposed, use safe sample data while keeping the real UI, and state that clearly in the final pre-publish summary.
-- Move technical details, long configuration matrices, and repository internals behind the main value path or into references/docs.
+Show a small task representing the product's main value. For ordinary Skill users, default to one brief introduction and one short conversational request for this product's core task. The user supplies a topic, goal or existing material; the Agent asks for necessary missing information. Do not require a task card, internal Skill ID, output path or a full process specification unless actually necessary for the product.
 
-Use the hero badge structure when the user wants a more promotional first screen or when the skill has strong product positioning. This style uses a centered opening block, shields.io badges, a bold value statement, quick navigation links, and language links.
+Do not require a paragraph after the request. Omit generic explanations such as “this is only a sample topic,” “you can replace it,” and repeated narration of what the Agent will do. Add a result/location note only when the reader genuinely needs it to act. The writer must check input availability, concrete action, result location, success judgment and next step using [readme-review.md](readme-review.md). These five review questions are internal checks, not five compulsory public labels or paragraphs. Do not promise optional-service results without disclosing their conditions. A command or UI action is appropriate for a product whose audience uses it.
 
-Available templates:
+### Usage Examples
 
-```text
-templates/README.md           Standard English README, GitHub default
-templates/README.zh.md        Standard Chinese README
-templates/README.practical-tool.md     Practical utility English README for rule/checklist/example-heavy skills
-templates/README.practical-tool.zh.md  Practical utility Chinese README for rule/checklist/example-heavy skills
-templates/README.hero.md      Hero/badge English README
-templates/README.hero.zh.md   Hero/badge Chinese README
-```
+Derive examples from the principal tasks in the product brief, cover the main outcomes, and place supporting or finishing tasks last. Use a familiar scenario title and a short natural request. Add a brief result or condition only when it helps the reader act. Avoid repetitive “Input / Conditions / Output” task cards for ordinary users. Do not duplicate Quick Start or fabricate scenarios. Developer-facing products may need real parameters and commands; keep what their readers genuinely use.
 
-Full README reference example:
+### How It Works
 
-```text
-references/readme-full-agent-evolution.md
-```
+For a collection, list every included sub-Skill with a friendly name, exact identifier and one-line plain-language responsibility. Exact identifiers belong in this inventory; do not force readers to type them in ordinary requests. For a single Skill or application, explain its actual principal components without inventing sub-Skills. Distinguish bundled components, optional plugins and external dependencies.
 
-Do not let the hero block replace substantive documentation. After the hero block, keep the same core sections: audience fit, what it does, capabilities, platform compatibility, install, quick start, usage examples, how it works, structure, requirements, and license.
+Explain the entry point, component collaboration and any supported direct-use routes. Distinguish planning from execution when separate components perform those jobs. Use a short workflow or Mermaid diagram only when it explains the mechanism. Where tasks can use selected components independently, say so; do not imply that every request runs the entire pipeline. Avoid narrating internal authoring discussions or overwhelming the reader with script internals.
 
-Use the practical utility structure when a skill is more useful as a manual or rulebook than as a short product page. This pattern works well for rewriting tools, review tools, lint/check tools, prompt tools, and skills with many examples or detectable patterns.
+### Repository Structure
 
-Practical utility structure:
+Follow [repo-structure.md](repo-structure.md). Generate a compact tree from actual files, ordered by functional importance: core entry points or capability directories first, execution/configuration next, supporting assets/docs next, README and license files last. Show the principal directories and explain what they contain. Choose this project's actual order rather than an alphabetical listing or a case-specific tree. A short tree may summarize repeated children when the complete inventory is already in How It Works.
 
-```text
-1. Title
-2. Language switch
-3. Optional source/adaptation statement
-4. Project overview
-5. Installation
-6. Installation verification
-7. Basic usage
-8. Usage scenarios with input/output examples
-9. Detected patterns, rule categories, or capability taxonomy
-10. File guide
-11. Manual workflow
-12. Key principles
-13. Before/after example comparison
-14. Warning list, checklist, or FAQ
-15. Contribution
-16. References
-17. License
-18. Final usage note
-```
+Explain any difference between repository contents and what installation loads. Link detailed usage, configuration, contribution or developer documents here. Do not imply an absent directory is required. Keep drafts, caches and task-specific records out of the public tree unless deliberately included and useful.
 
-This structure was inspired by the public README of `op7418/Humanizer-zh`, which is effective because it combines installation, direct usage, concrete scenarios, rule categories, manual workflow, example comparison, references, and license in a single readable document.
+### License
 
-## Required baseline
+State the actual license and link to the license file. Use MIT by default only when choosing a license for original work and the user has not specified another; do not overwrite an existing or upstream license by inference.
 
-Every public skill README should quickly answer:
+Explain third-party materials, trademarks and upstream attribution boundaries where applicable. Do not imply that the repository license relicenses every referenced or bundled asset. Follow [review-decisions.md](review-decisions.md) for new or changed identity and attribution findings; reuse unchanged explicit scoped decisions rather than asking repeatedly. Do not automatically remove attributions or invent ownership.
 
-- what this skill does,
-- who it is for,
-- what capabilities it provides,
-- what its practical advantages are,
-- how to install it,
-- how to verify it works,
-- how to use it,
-- what it looks like when it has a page or program UI,
-- whether it supports Codex, Claude Code, and OpenClaw,
-- what the repository contains,
-- what license and copyright limits apply.
+### About Me
 
-If the user does not specify a license, use MIT.
+Use only verified, approved public information about the author or maintainer and any project motivation. Match the role to the publication purpose; personal Skill sharing may call for a practitioner/developer identity rather than a teaching title. Do not rewrite an approved identity without authority. When the owner wants a relationship with users, briefly connect identity, sharing value and a contact invitation, followed by an approved public contact route. An invitation alone does not establish a usable route; record a missing route internally without inventing one. Personal biography and contact values belong in project materials, not generic templates. Organization-maintained projects may introduce the actual maintaining organization under the same agreed title.
 
-For Standard READMEs, answer these baseline questions through the user decision path rather than a long technical checklist. Do not force sections like `Repository Structure`, `Capabilities`, or `Usage Examples` into the top-level README when they make the page feel slower or more technical than needed.
+Do not infer a biography from a GitHub handle, copyright line or Git commit author. Do not add private contact details, an invented professional background or unapproved social links. Reuse matching approved public facts; ask only for information that is actually missing and necessary. A concise approved maintainer statement is sufficient. If none is available, record the unresolved item in the local review rather than fabricate a publish-ready section.
+
+## Content boundaries
+
+These rules apply to the entire README, not only heading names.
+
+Exclude version change histories, “what is new” summaries, bug-fix chronicles, upgrade or migration instructions, repository release procedures, developer maintenance logs, internal verification records and the authoring conversation. Keep these in changelogs, release notes, CONTRIBUTING or developer references. Never hide them inside Overview, Features, examples or the closing paragraph.
+
+Keep facts needed for current use: required dependency versions, current capability conditions, genuine limitations, account access, license restrictions and necessary approval steps in the product itself. A product whose purpose includes publishing content or maintaining software may describe and demonstrate that current capability. The words “publish,” “update” or a version number alone do not indicate forbidden history.
+
+Do not add a default standalone limitations section. Explain an actual constraint at the point where it changes installation or use. Do not remove material conditions in the name of brevity.
+
+Remove internal collaboration wording such as “after asking,” “add this rule to your prompt,” “rerun setup,” “征得你同意,” “加进提示词” or “重跑 setup” when it describes the authoring process. Product-required confirmation or authorization is legitimate user-facing behavior and must remain understandable.
+
+## Style variants and depth
+
+Standard, Hero and Practical Tool share the same ten-section order and information requirements.
+
+- Standard is the default product introduction.
+- Hero may change the opening presentation, use a centered title, badges and navigation, but cannot move Quick Start before Installation or imply unverified compatibility through badges.
+- Practical Tool may use richer examples, rule categories, before/after comparisons and checklists inside the relevant sections. Long rulebooks, FAQs and maintenance procedures belong in linked documents.
+
+Use the smallest amount of text that explains the facts completely. Avoid repeating benefits, component inventories and instructions across sections. Explain unfamiliar terms at first use. Keep essential conditions close to their relevant action. Prefer user-facing results to file names except where exact identifiers are needed for use or navigation.
+
+The six templates under templates/ are starting points. [readme-full-agent-evolution.md](readme-full-agent-evolution.md) is a historical content example, not a current order or scope standard.
+
+## Natural writing for the audience
+
+Write as if explaining a product to another person. “Remove AI-like writing” here means editing observable text, not using an AI-detector score:
+
+- Lead with a concrete job and result; replace abstract process slogans and unneeded jargon.
+- Use short conversational example requests. Do not make the user specify internal operations the Agent can handle.
+- Use tables for requirements and component inventories; keep ordinary use guidance in connected short prose.
+- Delete duplicate explanations, defensive caveats and public review/task-card fields. Place each essential condition once at the action it affects.
+- Keep technical facts, full component inventory, rights and actual limits accurate. Concision never means inventing simplicity or hiding a material condition.
+- Avoid filler for missing author facts. Keep the draft section and record the missing approved content internally; do not treat the draft as release-ready.
+
+Templates contain writer comments. Resolve placeholders and remove writer comments before release; do not copy instructions into product prose. Review both languages with [readme-review.md](readme-review.md) and record evidence in [the internal review template](../templates/readme-review-record.md).
 
 ## Repository description
 
-Create a concise GitHub repository description for every published skill.
+Generate one concise sentence matching the Overview value proposition. Use English by default; use Chinese when explicitly requested for a Chinese-facing repository. Prefer 80–140 English characters or 35–80 Chinese characters where practical. Say what the product helps the reader do and why it matters; avoid an empty label, only the repository name or unsupported claims.
 
-Rules:
+## Validation and change impact
 
-- Keep it to one sentence.
-- Use English by default.
-- Prefer 80-140 English characters, or 35-80 Chinese characters when the user explicitly requests Chinese.
-- Explain what the skill does and why it matters.
-- Avoid generic text such as "Agent skill", "README", or only the repository name.
-- Do not use unsupported compatibility or security claims.
-- Match the first-screen value proposition in `README.md`.
+Before a publisher-managed release or update:
 
-Useful patterns:
+- Review both languages against the same framework, section duties and verified project facts.
+- Apply three independent semantic acceptance checks: Quick Start represents core value; examples cover main tasks in priority order; Overview/Features/Quick Start/Usage Examples agree with the product brief. A failure prevents README acceptance even when formatting checks or engineering scores are high. Report it as a manual finding; existing scripts do not automatically determine product meaning.
+- Review the diff for changes to capability, usage, installation, dependencies, support, outputs, components, structure, templates, scripts, rights or metadata; update current product information in both READMEs when affected.
+- For a genuinely no-impact change, record the reason and use `--readme-no-impact` only after review. No-impact does not waive existing README quality or visual gates.
+- Preserve explicitly requested pass-through content and report the exception; do not claim it meets the new standard.
+- Check actual image rendering and user understanding as well as file existence, links, section order and tables.
+- Report automated checks and semantic review separately. A checker PASS is not proof that ordinary readers understand the README; an engineering-hygiene score is not a reader-quality score.
+- For a before/after writing evaluation, agree the dimensions and 10-point rubric before scoring, retain the original and revised outputs, and apply the same rubric to both with evidence. Do not score a proposed framework as if its generated results already existed.
 
-```text
-Publish local agent skills as clean, installable, promotion-ready single-skill GitHub repositories.
-```
+Use [publish-checklist.md](publish-checklist.md) for release checks and [readme-checks.md](readme-checks.md) for current automated coverage. Record unsupported syntax or other remaining gaps; static framework regression does not certify semantic acceptance.
 
-```text
-Package a local skill with README, license, safety checks, and compatibility review for GitHub release.
-```
+## Visual capture workflow
 
-## Conversion principle
+Program or Page Screenshot is a legacy label for actual UI evidence; the current section is Preview / 效果预览.
 
-Write the README to reduce three kinds of friction:
+- for a web page, open the page in a browser and capture its actual running interface;
+- for a desktop/app program, launch the real program and capture its actual UI;
+- for output-producing Skills, reuse a representative approved real case/result when available;
+- if no suitable screenshot/case is available, generate a verified workflow and pain-point illustration; 16:9 is permitted; this can be the primary Preview;
+- identify the generated image as an illustration, not proof of execution, passed checks or compatibility;
+- store assets in the repository, usually assets/, and embed them in both languages;
+- show the screenshot to the user, or show the selected case/generated illustration, before publication when it is new or changed; reuse approval only for unchanged applicable assets.
 
-- comprehension friction: what is this, who is it for, and why does it matter?
-- trust friction: how does it work, what are the boundaries, and is it safe to use?
-- action friction: how can the reader install it, verify it, and get the first useful result quickly?
-
-The first screen should make the value proposition clear before the reader scrolls. Prefer concrete benefits over broad claims:
-
-- save time,
-- reduce repeated manual work,
-- improve consistency,
-- lower operational risk,
-- make a workflow easier to reuse,
-- make expert behavior easier to trigger.
-
-Use comparison carefully. It is acceptable to explain why the skill is better than ad hoc prompting or manual steps, but avoid attacking other tools or making unsupported claims.
-
-## Audience fit section
-
-Audience fit is required, but it does not need a separate `Who Is This For?` section. Put it in the opening value paragraph by default so readers immediately understand whether the skill is relevant to them.
-
-Include two parts:
-
-- target users: the people, roles, or teams the skill is designed for,
-- target workflows: the situations where the skill is useful.
-
-Use concrete language. Avoid generic statements such as "for anyone who uses AI." A good audience statement should qualify the reader and reduce wrong expectations.
-
-## README depth
-
-Choose the smallest README structure that explains the skill clearly.
-
-Use the Standard high-conversion README by default:
-
-```text
-1. Title
-2. Language switch
-3. Audience-and-value opening
-4. Who Is This For?
-5. What It Does
-6. Core Capabilities
-7. Platform Compatibility
-8. Install
-9. Quick Start
-10. Usage Examples
-11. How It Works
-12. Repository Structure
-13. Requirements
-14. License
-```
-
-Use a fuller README only when the skill truly needs more detail, but keep the same top-level reading path:
-
-```text
-1. Title
-2. Language switch
-3. Audience-and-value opening
-4. Who Is This For?
-5. What It Does
-6. Core Capabilities
-7. Platform Compatibility
-8. Install
-9. Quick Start
-10. Usage Examples
-11. How It Works
-12. Repository Structure
-13. Requirements
-14. License
-```
-
-Omit a limitations section by default.
-
-## Tone
-
-Write clearly and practically. Avoid hype.
-
-The README should explain:
-
-- why this skill exists,
-- what real pain it solves,
-- who should install it,
-- what outcome the user can expect after installation,
-- what it can do,
-- how it works,
-- what design choices make it useful,
-- what advantages it has over ad hoc prompting or manual work,
-- why the mechanism is trustworthy, when that is not obvious,
-- how to install and use it.
-
-## First successful use
-
-Every README should include a short path to the first useful result. This can be a `Quick Start`, `Try It`, or a prominent verification example.
-
-The first-use path should include:
-
-- the simplest install step, ideally one line,
-- a copy-ready prompt or command to run,
-- what success looks like,
-- where to go next for normal usage.
-
-## Diagrams
-
-Prefer Mermaid for GitHub-native rendering.
-
-Use a core workflow diagram when the skill has a meaningful process. Do not add a diagram just to fill a template.
-
-```mermaid
-flowchart TD
-    A["Input"] --> B["Classify"]
-    B --> C["Act"]
-    C --> D["Verify"]
-```
-
-ASCII diagrams are acceptable for compact mechanisms:
-
-```text
-Signal -> Triage -> Route -> Store -> Validate -> Promote -> Prune
-```
-
-## Install section
-
-Read `references/install-section.md` before writing the installation section.
-
-The Standard README should ask the current Agent to install the public repository URL. This is the complete default installation flow:
-
-```text
-Install this Skill for me:
-https://github.com/owner/repo
-```
-
-The Chinese README should use the equivalent Chinese request. The README may add one short result sentence: the Agent will choose the installation method for the current client, check dependencies, and verify that the Skill loads.
-
-Do not add a default manual-install section. Do not list skill directories, `git clone`, copy/move steps, dependency commands, or restart instructions. If installation fails, the current Agent should diagnose the real environment interactively instead of making every reader scan hypothetical fallback steps.
-
-Only add a manual installation section when the user explicitly requests it or the repository is intentionally designed for a non-Agent audience.
-
-## Design philosophy section
-
-This section is optional. Add it only when the broader engineering idea helps users understand why the skill works or when the skill explicitly builds on a known method.
-
-For agent/context skills, it is acceptable to cite public context-engineering ideas such as:
-
-- Andrej Karpathy's Software 2.0 / Software 3.0 / LLM OS framing.
-- Anthropic's context engineering articles.
-- LangChain's context engineering articles.
-- Tobi Lutke's "context engineering over prompt engineering" framing.
-
-Be careful:
-
-- Say "inspired by" or "borrows the engineering lens".
-- Do not imply endorsement, affiliation, or participation.
-- Add a disclaimer when naming public figures or companies.
-- Do not let references displace practical installation and usage guidance.
-
-## Forbidden top-level README sections
-
-Standard skill READMEs must not include top-level `Update`, `Updating`, `Publish`, `Publishing`, `Maintenance`, `更新`, `更新方式`, `维护`, or `发布` sections.
-
-Keep update, release, publishing, and maintenance/dev-workflow instructions inside the publisher workflow, release checklist, `CONTRIBUTING`, or internal references. The target skill README should stay focused on what the product is, what pain it solves, how it works, how to install it, and how to use it.
-
-## Repository structure section
-
-Include a repository structure section for public skill repositories. Generate the tree from actual files. Do not imply that `references/`, `scripts/`, `adapters/`, or `evals/` are required when they are not present.
-
-## Platform compatibility section
-
-For public release, evaluate compatibility with Codex, Claude Code, and OpenClaw before publishing. Also evaluate operating-system compatibility with macOS and Windows when the skill includes scripts, installers, path handling, shell commands, browser automation, filesystem operations, or external CLIs. Linux compatibility is optional unless the user, repository, or documented runtime explicitly requires it.
-
-In the README, keep platform compatibility user-facing and concise. Use one sentence that names the compatible platforms.
-
-```markdown
-Compatible with Codex, Claude Code, and OpenClaw.
-```
-
-Do not put internal testing statuses such as `Supported`, `Partial`, `Unsupported`, or `Not tested` in the README unless the user explicitly asks for a detailed compatibility matrix. Keep those statuses in the pre-publish report to the user.
-
-## License and copyright section
-
-Use the heading `License`. Include an explicit license section. If the user does not specify a license, use MIT and state that the repository is provided under the MIT License. Put copyright, third-party content, trademark, and upstream reference notes inside this section instead of using a separate heading. Do not claim that bundled third-party content, public references, brand names, or upstream materials are relicensed unless that is true.
-
-Before publishing, treat third-party names, platform names, copyright notices, trademark notices, upstream references, external license-limit notes, author names, maintainer names, private emails, personal usernames, social handles, generator/tool watermarks, and Git commit author/signature metadata as review items. Allow neutral references to design style, design language, and company names such as Apple, Anthropic, and Meta when they are only design or compatibility context and do not imply ownership, endorsement, copied assets, or relicensing. Treat README and LICENSE findings involving other third parties as high-priority review items when they include attribution, copyright, trademark, source, license, generated-by, or ownership language. Do not remove findings automatically. List them and let the user decide whether to keep them, anonymize them, replace them with organization identity, rewrite them, add attribution, or remove them.
-
-## README quality checklist
-
-- The first screen explains value clearly.
-- The first screen gives a reason to install or try the skill.
-- The intended user is clear.
-- The audience fit statement names target users and target workflows.
-- Capabilities are scannable.
-- The README reduces comprehension, trust, and action friction.
-- There is a short first-success path.
-- Examples are copy-pasteable.
-- Platform compatibility with Codex, Claude Code, and OpenClaw is tested where possible and stated accurately.
-- OS compatibility with macOS and Windows is tested or reviewed when the skill has runtime scripts, installers, shell commands, path assumptions, filesystem behavior, or external CLIs; missing macOS or Windows validation is reported before publishing. Linux is optional unless explicitly required.
-- Repository structure matches actual files.
-- Installation assumes a public GitHub repo.
-- MIT is used when the user has not requested another license.
-- No personal local paths remain.
-- No user-specific memory files are referenced.
+Preserve aspect ratio, rights and privacy, and follow the detailed review in [readme-visuals.md](readme-visuals.md). A generated illustration may explain a concept, but must not masquerade as a screenshot or execution evidence.

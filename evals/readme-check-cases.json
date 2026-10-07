@@ -1,0 +1,617 @@
+{
+  "frozen_at_utc": "2026-10-07T07:27:24.545931+00:00",
+  "method": "Synthetic document fixtures. Each case has one frozen expected diagnostic/acceptance contract; run the identical corpus against both checker revisions. 1 point per case; passed/40*10. No claim of reader or semantic quality.",
+  "base": {
+    "README.md": "# Example Skill\n\nEnglish | [中文](./README.zh.md)\n\n## Overview\n\nA writing Skill for authors who turn notes into articles.\n\n## Preview\n\n![Article result](./assets/result.png)\n\n## Features\n\n| Capability | What it helps you do |\n|---|---|\n| Writing | Turn notes into an article. |\n\n## Installation\n\n### Requirements\n\nStart with a supported Agent client; optional image services can wait.\n\n| Item | Requirement |\n|---|---|\n| Agent client | Codex or another verified Skills client. |\n\n### Quick Installation\n\nSend this request to your Agent client:\n\n```text\nInstall this Skill: https://github.com/example/writing-skill\nCheck the core environment, prepare missing requirements, then install and verify loading. Optional services can wait.\n```\n\n## Quick Start\n\nStart by creating an article:\n\n```text\nHelp me turn these notes into an article.\n```\n\n## Usage Examples\n\n```text\nWrite a short social post based on this article.\n```\n\n## How It Works\n\nThe Skill organizes your notes and drafts text in your Agent client.\n\n## Repository Structure\n\n```text\nwriting-skill/\n├── SKILL.md\n├── assets/\n├── README.md\n├── README.zh.md\n└── LICENSE\n```\n\n## License\n\nMIT. See [LICENSE](./LICENSE).\n\n## About Me\n\nAn independent developer sharing practical content tools.\n",
+    "README.zh.md": "# 示例 Skill\n\n[English](./README.md) | 中文\n\n## 项目简介\n\n这套写作 Skill 帮内容创作者把资料写成文章。\n\n## 效果预览\n\n![文章成果](./assets/result.png)\n\n## 核心功能\n\n| 能力 | 它能帮你做什么 |\n|---|---|\n| 写作 | 把资料写成文章。 |\n\n## 安装\n\n### 配置要求\n\n先准备好支持 Skills 的 Agent 客户端，其他服务用到时再配置。\n\n| 项目 | 要求 |\n|---|---|\n| Agent 客户端 | Codex 等已核实支持的客户端。 |\n\n### 快速安装\n\n打开 Agent 客户端，把这段话发给 Agent：\n\n```text\n帮我安装写作 Skill：https://github.com/example/writing-skill\n先检查基础环境，缺什么帮我补齐，再安装并检查能否加载。其他功能用到时再配置。\n```\n\n## 快速开始\n\n先试着写一篇文章：\n\n```text\n帮我把这些资料写成一篇公众号文章。\n```\n\n## 使用示例\n\n```text\n把这篇文章改成一篇小红书笔记。\n```\n\n## 工作原理\n\n整理资料后写成正文，由当前 Agent 客户端交付。\n\n## 目录结构\n\n```text\nwriting-skill/\n├── SKILL.md\n├── assets/\n├── README.md\n├── README.zh.md\n└── LICENSE\n```\n\n## 许可\n\n采用 MIT，见 [LICENSE](./LICENSE)。\n\n## 关于我\n\n分享实用内容工具的独立开发者。\n"
+  },
+  "cases": [
+    {
+      "id": "D01",
+      "group": "结构",
+      "label": "正确十模块双语稿不误报",
+      "expected": {
+        "type": "no_readme_fail"
+      }
+    },
+    {
+      "id": "D02",
+      "group": "结构",
+      "label": "缺About Me独立诊断",
+      "expected": {
+        "type": "issue",
+        "pattern": "missing.*About Me",
+        "file": "README.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.md",
+        "## About Me\n\nAn independent developer sharing practical content tools.",
+        ""
+      ]
+    },
+    {
+      "id": "D03",
+      "group": "结构",
+      "label": "模块顺序颠倒独立诊断",
+      "expected": {
+        "type": "issue",
+        "pattern": "section order",
+        "file": "README.md",
+        "level": "FAIL"
+      },
+      "swap": true,
+      "replace": [
+        "README.md",
+        "## Overview",
+        "## TEMP"
+      ]
+    },
+    {
+      "id": "D04",
+      "group": "结构",
+      "label": "重复模块独立诊断",
+      "expected": {
+        "type": "issue",
+        "pattern": "duplicate section",
+        "file": "README.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.md",
+        "## License",
+        "## Overview\n\nRepeated description.\n\n## License"
+      ]
+    },
+    {
+      "id": "D05",
+      "group": "结构",
+      "label": "额外更新历史模块阻断",
+      "expected": {
+        "type": "issue",
+        "pattern": "unexpected section",
+        "file": "README.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.md",
+        "## License",
+        "## Changelog\n\nRelease changes.\n\n## License"
+      ]
+    },
+    {
+      "id": "D06",
+      "group": "结构",
+      "label": "仅中文稿缺模块也阻断",
+      "expected": {
+        "type": "issue",
+        "pattern": "missing.*工作原理",
+        "file": "README.zh.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.zh.md",
+        "## 工作原理\n\n整理资料后写成正文，由当前 Agent 客户端交付。",
+        ""
+      ]
+    },
+    {
+      "id": "D07",
+      "group": "结构",
+      "label": "空模块不算完整",
+      "expected": {
+        "type": "issue",
+        "pattern": "empty section",
+        "file": "README.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.md",
+        "An independent developer sharing practical content tools.",
+        "<!-- invisible author -->"
+      ]
+    },
+    {
+      "id": "D08",
+      "group": "结构",
+      "label": "代码中的假标题不计模块",
+      "expected": {
+        "type": "issue",
+        "pattern": "missing.*About Me",
+        "file": "README.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.md",
+        "## About Me\n\nAn independent developer sharing practical content tools.",
+        "```markdown\n## About Me\nAn example only.\n```"
+      ]
+    },
+    {
+      "id": "D09",
+      "group": "安装与表格",
+      "label": "Features三列表不能漏检",
+      "expected": {
+        "type": "issue",
+        "pattern": "two-column",
+        "file": "README.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.md",
+        "| Capability | What it helps you do |\n|---|---|\n| Writing | Turn notes into an article. |",
+        "| Capability | Input | Output |\n|---|---|---|\n| Writing | Notes | Article |"
+      ]
+    },
+    {
+      "id": "D10",
+      "group": "安装与表格",
+      "label": "缺安装子模块阻断",
+      "expected": {
+        "type": "issue",
+        "pattern": "installation subsections",
+        "file": "README.zh.md",
+        "level": "FAIL"
+      },
+      "expected_file": "README.zh.md",
+      "replace": [
+        "README.zh.md",
+        "### 快速安装",
+        "**快速安装**"
+      ]
+    },
+    {
+      "id": "D11",
+      "group": "安装与表格",
+      "label": "配置要求不能仅表格",
+      "expected": {
+        "type": "issue",
+        "pattern": "requirements explanation",
+        "file": "README.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.md",
+        "Start with a supported Agent client; optional image services can wait.",
+        ""
+      ]
+    },
+    {
+      "id": "D12",
+      "group": "安装与表格",
+      "label": "重复Basic分类阻断",
+      "expected": {
+        "type": "issue",
+        "pattern": "named requirement",
+        "file": "README.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.md",
+        "| Agent client | Codex or another verified Skills client. |",
+        "| Basic | Codex. |\n| Basic | Python. |"
+      ]
+    },
+    {
+      "id": "D13",
+      "group": "安装与表格",
+      "label": "自然中文安装请求应识别",
+      "expected": {
+        "type": "no_readme_fail"
+      }
+    },
+    {
+      "id": "D14",
+      "group": "安装与表格",
+      "label": "开发者安装命令不套Agent限制",
+      "expected": {
+        "type": "no_readme_fail"
+      },
+      "args": [
+        "--readme-audience=developer"
+      ],
+      "replace": [
+        "README.md",
+        "Install this Skill: https://github.com/example/writing-skill\nCheck the core environment, prepare missing requirements, then install and verify loading. Optional services can wait.",
+        "npm install example-tool"
+      ]
+    },
+    {
+      "id": "D15",
+      "group": "安装与表格",
+      "label": "Agent默认安装不暴露clone命令",
+      "expected": {
+        "type": "issue",
+        "pattern": "install requires rewrite",
+        "file": "README.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.md",
+        "Install this Skill: https://github.com/example/writing-skill",
+        "git clone https://github.com/example/writing-skill"
+      ]
+    },
+    {
+      "id": "D16",
+      "group": "链接",
+      "label": "坏相对文档链接阻断",
+      "expected": {
+        "type": "issue",
+        "pattern": "broken local link",
+        "file": "README.zh.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.zh.md",
+        "采用 MIT，见 [LICENSE](./LICENSE)。",
+        "采用 MIT，见 [更多说明](./docs/missing.md)。"
+      ]
+    },
+    {
+      "id": "D17",
+      "group": "链接",
+      "label": "坏锚点阻断",
+      "expected": {
+        "type": "issue",
+        "pattern": "broken local link",
+        "file": "README.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.md",
+        "MIT. See [LICENSE](./LICENSE).",
+        "MIT. See [Start](#not-here)."
+      ]
+    },
+    {
+      "id": "D18",
+      "group": "链接",
+      "label": "编码空格/引用链接/锚点可用",
+      "expected": {
+        "type": "no_readme_fail"
+      },
+      "files": {
+        "docs/guide one.md": "# Guide\n\nSee the instructions.\n"
+      },
+      "replace": [
+        "README.md",
+        "MIT. See [LICENSE](./LICENSE).",
+        "MIT. See [Guide][guide] and [Start](#quick-start).\n\n[guide]: <docs/guide%20one.md>"
+      ]
+    },
+    {
+      "id": "D19",
+      "group": "链接",
+      "label": "引用链接未定义阻断",
+      "expected": {
+        "type": "issue",
+        "pattern": "broken local link",
+        "file": "README.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.md",
+        "MIT. See [LICENSE](./LICENSE).",
+        "MIT. See [Guide][absent]."
+      ]
+    },
+    {
+      "id": "D20",
+      "group": "链接",
+      "label": "代码内坏链接是示例不误报",
+      "expected": {
+        "type": "no_readme_fail"
+      },
+      "replace": [
+        "README.md",
+        "The Skill organizes your notes and drafts text in your Agent client.",
+        "The Skill drafts text.\n\n````markdown\n[Not a link](missing.md)\n```nested\n## Fake\n```\n````"
+      ]
+    },
+    {
+      "id": "D21",
+      "group": "链接",
+      "label": "越界本地链接阻断",
+      "expected": {
+        "type": "issue",
+        "pattern": "broken local link",
+        "file": "README.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.md",
+        "MIT. See [LICENSE](./LICENSE).",
+        "MIT. See [Outside](../outside.md)."
+      ]
+    },
+    {
+      "id": "D22",
+      "group": "配图",
+      "label": "Preview节内省略理由变警告非FAIL",
+      "expected": {
+        "type": "visual_status",
+        "file": "README.zh.md",
+        "status": "omitted_with_reason",
+        "warning": true
+      },
+      "replace": [
+        "README.zh.md",
+        "![文章成果](./assets/result.png)",
+        "现有成果包含客户限制传播的资料，目前尚无获准展示的脱敏案例，所以暂时无法提供公开成果图。"
+      ]
+    },
+    {
+      "id": "D23",
+      "group": "配图",
+      "label": "Preview嵌套省略标题可用",
+      "expected": {
+        "type": "visual_status",
+        "file": "README.md",
+        "status": "omitted_with_reason",
+        "warning": true
+      },
+      "replace": [
+        "README.md",
+        "![Article result](./assets/result.png)",
+        "### Why No Preview Image\n\nAvailable results contain restricted client data and no sanitized sample has been approved yet."
+      ]
+    },
+    {
+      "id": "D24",
+      "group": "配图",
+      "label": "仅徽章不能作为成果",
+      "expected": {
+        "type": "issue",
+        "pattern": "missing preview",
+        "file": "README.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.md",
+        "![Article result](./assets/result.png)",
+        "![Build badge](https://img.shields.io/badge/pass-green)"
+      ]
+    },
+    {
+      "id": "D25",
+      "group": "配图",
+      "label": "坏图片不能被其他图掩盖",
+      "expected": {
+        "type": "issue",
+        "pattern": "image is invalid",
+        "file": "README.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.md",
+        "![Article result](./assets/result.png)",
+        "![Article result](./assets/result.png)\n![Broken](./assets/missing.png)"
+      ]
+    },
+    {
+      "id": "D26",
+      "group": "配图",
+      "label": "图在别处不满足Preview",
+      "expected": {
+        "type": "issue",
+        "pattern": "missing preview",
+        "file": "README.md",
+        "level": "FAIL"
+      },
+      "append": {
+        "README.md": "\n![Result outside Preview](./assets/result.png)\n"
+      },
+      "replace": [
+        "README.md",
+        "![Article result](./assets/result.png)",
+        ""
+      ]
+    },
+    {
+      "id": "D27",
+      "group": "配图",
+      "label": "外链图只待人工验证",
+      "expected": {
+        "type": "visual_status",
+        "file": "README.md",
+        "status": "external_review",
+        "warning": true
+      },
+      "replace": [
+        "README.md",
+        "![Article result](./assets/result.png)",
+        "![Article result](https://example.com/result.png)"
+      ]
+    },
+    {
+      "id": "D28",
+      "group": "配图",
+      "label": "无UI一句话不能免图",
+      "expected": {
+        "type": "issue",
+        "pattern": "missing preview",
+        "file": "README.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.md",
+        "![Article result](./assets/result.png)",
+        "No UI."
+      ]
+    },
+    {
+      "id": "D29",
+      "group": "占位",
+      "label": "正文模板占位阻断",
+      "expected": {
+        "type": "issue",
+        "pattern": "unresolved placeholder",
+        "file": "README.zh.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.zh.md",
+        "这套写作 Skill 帮内容创作者把资料写成文章。",
+        "{{用一句普通话介绍产品}}"
+      ]
+    },
+    {
+      "id": "D30",
+      "group": "占位",
+      "label": "安装请求占位阻断",
+      "expected": {
+        "type": "issue",
+        "pattern": "unresolved placeholder",
+        "file": "README.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.md",
+        "https://github.com/example/writing-skill",
+        "{{repo-url}}"
+      ]
+    },
+    {
+      "id": "D31",
+      "group": "占位",
+      "label": "模板内部写作注释不得发布",
+      "expected": {
+        "type": "issue",
+        "pattern": "writer guidance",
+        "file": "README.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.md",
+        "An independent developer sharing practical content tools.",
+        "An independent developer.\n\n<!-- Writer guidance: resolve placeholders before release. -->"
+      ]
+    },
+    {
+      "id": "D32",
+      "group": "报告与边界",
+      "label": "FAIL即使工程高分也不写Release-ready",
+      "expected": {
+        "type": "honest_blocked_report"
+      },
+      "replace": [
+        "README.md",
+        "MIT. See [LICENSE](./LICENSE).",
+        "MIT. See [Guide](./missing.md)."
+      ]
+    },
+    {
+      "id": "D33",
+      "group": "报告与边界",
+      "label": "自动通过仍报告人工审阅未完成",
+      "expected": {
+        "type": "manual_review_required"
+      }
+    },
+    {
+      "id": "D34",
+      "group": "报告与边界",
+      "label": "legacy/no-impact不豁免坏链接",
+      "expected": {
+        "type": "issue",
+        "pattern": "broken local link",
+        "file": "README.md",
+        "level": "FAIL"
+      },
+      "args": [
+        "--allow-legacy-readme",
+        "--readme-no-impact"
+      ],
+      "replace": [
+        "README.md",
+        "MIT. See [LICENSE](./LICENSE).",
+        "MIT. See [Guide](./missing.md)."
+      ]
+    },
+    {
+      "id": "D35",
+      "group": "报告与边界",
+      "label": "legacy保留旧框架只警告不误称新标准",
+      "expected": {
+        "type": "legacy_warning"
+      },
+      "args": [
+        "--allow-legacy-readme"
+      ],
+      "replace": [
+        "README.md",
+        "## Features",
+        "## Capabilities"
+      ]
+    },
+    {
+      "id": "D36",
+      "group": "报告与边界",
+      "label": "错误受众参数明确失败",
+      "expected": {
+        "type": "issue",
+        "pattern": "Invalid README audience",
+        "level": "FAIL"
+      },
+      "args": [
+        "--readme-audience=invalid"
+      ]
+    },
+    {
+      "id": "D37",
+      "group": "报告与边界",
+      "label": "维护软件的当前功能不因update关键词误报",
+      "expected": {
+        "type": "no_readme_fail"
+      },
+      "replace": [
+        "README.md",
+        "| Writing | Turn notes into an article. |",
+        "| Update dashboard | Refresh current reports from new notes. |"
+      ]
+    },
+    {
+      "id": "D38",
+      "group": "双语",
+      "label": "中文语言切换坏链接阻断",
+      "expected": {
+        "type": "issue",
+        "pattern": "broken local link",
+        "file": "README.zh.md",
+        "level": "FAIL"
+      },
+      "replace": [
+        "README.zh.md",
+        "[English](./README.md)",
+        "[English](./missing-english.md)"
+      ]
+    },
+    {
+      "id": "D39",
+      "group": "双语",
+      "label": "Markdown可见标题忽略注释和代码",
+      "expected": {
+        "type": "no_readme_fail"
+      },
+      "replace": [
+        "README.md",
+        "The Skill organizes your notes and drafts text in your Agent client.",
+        "The Skill drafts text.\n\n<!-- ## Changelog -->\n\n```markdown\n## Legacy\n```"
+      ]
+    },
+    {
+      "id": "D40",
+      "group": "报告与边界",
+      "label": "格式通过不宣称核心语义已判定",
+      "expected": {
+        "type": "manual_review_required"
+      },
+      "replace": [
+        "README.md",
+        "Help me turn these notes into an article.",
+        "List the files in this folder."
+      ]
+    }
+  ]
+}

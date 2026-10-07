@@ -58,11 +58,22 @@ for (const relativePath of [
   "templates/README.zh.md",
   "templates/README.hero.md",
   "templates/README.hero.zh.md",
+  "templates/README.practical-tool.md",
+  "templates/README.practical-tool.zh.md",
+  "templates/readme-review-record.md",
+  "references/readme-review.md",
+  "references/readme-checks.md",
   "templates/LICENSE-MIT",
   "templates/gitignore",
   "scripts/publish-check.mjs",
   "scripts/readme-visuals.mjs",
   "scripts/readme-visuals.test.mjs",
+  "scripts/readme-document.mjs",
+  "scripts/readme-check.mjs",
+  "scripts/readme-document.test.mjs",
+  "scripts/readme-check.test.mjs",
+  "scripts/review-decisions.test.mjs",
+  "evals/readme-check-cases.json",
   "references/readme-visuals.md",
   "scripts/smoke-test.mjs",
 ]) {
@@ -107,6 +118,8 @@ const languageSwitchFiles = [
   "templates/README.zh.md",
   "templates/README.hero.md",
   "templates/README.hero.zh.md",
+  "templates/README.practical-tool.md",
+  "templates/README.practical-tool.zh.md",
 ];
 
 let languageSwitchOk = true;
@@ -174,20 +187,21 @@ if (exists("scripts/publish-check.mjs")) {
       stdio: "pipe",
       timeout: 15000,
     });
-    pass("publish-check script runs");
+    pass("current package passes publish-check");
   } catch (error) {
     const output = `${error.stdout?.toString() ?? ""}${error.stderr?.toString() ?? ""}`.slice(-1200);
-    fail("publish-check script runs", output);
+    fail("current package passes publish-check", output);
   }
 }
 
 try {
-  execFileSync(process.execPath, ["--test", "scripts/readme-visuals.test.mjs"], {
+  const tests = fs.readdirSync(path.join(skillRoot, "scripts")).filter(name => name.endsWith(".test.mjs")).sort().map(name => `scripts/${name}`);
+  execFileSync(process.execPath, ["--test", ...tests], {
     cwd: skillRoot, stdio: "pipe", timeout: 30000,
   });
-  pass("README visual regression tests");
+  pass("README and review-decision regression tests");
 } catch (error) {
-  fail("README visual regression tests", `${error.stdout ?? ""}${error.stderr ?? ""}`.slice(-1600));
+  fail("README and review-decision regression tests", `${error.stdout ?? ""}${error.stderr ?? ""}`.slice(-1600));
 }
 
 const summary = {

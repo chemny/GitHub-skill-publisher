@@ -5,6 +5,7 @@ import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { inspectReadmeVisuals } from "./readme-visuals.mjs";
+import { inspectReadme, manualReadmeReview } from "./readme-check.mjs";
 
 const args = process.argv.slice(2);
 const jsonOnly = args.includes("--json");
@@ -15,6 +16,11 @@ const root = process.cwd();
 const reportPath = path.resolve(root, reportPathArg);
 const results = [];
 const readmeVisuals = {};
+const readmeChecks = {};
+const readmeAudience = args.find(arg => arg.startsWith("--readme-audience="))?.split("=")[1] ?? "agent";
+if (!["agent", "developer"].includes(readmeAudience)) {
+  results.push({ level: "FAIL", title: "Invalid README audience", detail: "Use --readme-audience=agent or --readme-audience=developer." });
+}
 
 const visibility = args.find((arg) => arg.startsWith("--visibility="))?.slice(13);
 const digest = (value) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
@@ -54,53 +60,11 @@ function exists(rel) {
 }
 
 function read(rel) {
-  return fs.readFileSync(path.join(root, rel), "utf8");
+  return fs.readFileSync(path.join(root, rel), "utf8").replace(/\r\n/g, "\n");
 }
 
 function escapeRegExp(value) {
   return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-function markdownSection(content, names) {
-  const headings = [...content.matchAll(/^##\s+(.+?)\s*$/gim)];
-  for (let i = 0; i < headings.length; i += 1) {
-    const title = headings[i][1].trim().replace(/[#*`]/g, "");
-    if (!names.some((name) => new RegExp(`^${escapeRegExp(name)}$`, "i").test(title))) continue;
-    const start = headings[i].index + headings[i][0].length;
-    const end = i + 1 < headings.length ? headings[i + 1].index : content.length;
-    return content.slice(start, end).trim();
-  }
-  return "";
-}
-
-function fencedCodeBlocks(content) {
-  return [...content.matchAll(/```[a-zA-Z0-9_-]*\n([\s\S]*?)```/g)].map((m) => m[1]);
-}
-
-function commandLines(blocks) {
-  return blocks
-    .flatMap((block) => block.split(/\r?\n/))
-    .map((line) => line.trim())
-    .filter((line) => line && !line.startsWith("#"));
-}
-
-function firstMarkdownTable(section) {
-  const lines = section.split(/\r?\n/);
-  for (let i = 0; i < lines.length - 1; i += 1) {
-    if (!/^\s*\|.+\|\s*$/.test(lines[i])) continue;
-    if (!/^\s*\|(?:\s*:?-{3,}:?\s*\|)+\s*$/.test(lines[i + 1])) continue;
-    const table = [];
-    for (let j = i; j < lines.length; j += 1) {
-      if (!/^\s*\|.+\|\s*$/.test(lines[j])) break;
-      table.push(lines[j]);
-    }
-    return table;
-  }
-  return [];
-}
-
-function tableColumnCount(line) {
-  return line.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").length;
 }
 
 function cleanYamlScalar(value) {
@@ -136,7 +100,7 @@ function skillVersionFromFrontmatter(block) {
 
 function git(args) {
   try {
-    return execFileSync("git", args, { cwd: root, encoding: "utf8" }).trim();
+    return execFileSync("git", args, { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();
   } catch {
     return "";
   }
@@ -177,14 +141,15 @@ const readmeImpactRules = [
   [/^SKILL\.md$/, "skill behavior, triggers, or public value may have changed"],
   [/^scripts\//, "scripts, commands, checks, or runtime requirements may have changed"],
   [/^templates\//, "generated README/output structure may have changed"],
-  [/^references\/(?:install-section|platform-compatibility|readme-style|repo-structure|skill-completeness|security-checklist|publish-checklist|update-workflow|github-workflow)\.md$/, "public workflow, install, compatibility, or release rules may have changed"],
+  [/^references\/(?:install-section|platform-compatibility|readme-style|readme-review|readme-checks|readme-visuals|pre-publish-flow|repo-structure|skill-completeness|security-checklist|publish-checklist|update-workflow|github-workflow)\.md$/, "public workflow, install, compatibility, or release rules may have changed"],
   [/^(?:package|pnpm-lock|package-lock|yarn\.lock|requirements|pyproject|uv\.lock|Cargo|go\.mod|deno)\b/, "dependencies or runtime requirements may have changed"],
   [/^(?:adapters|assets|evals)\//, "platform support, examples, visuals, or verification assets may have changed"],
   [/^\.env\.example$/, "configuration requirements may have changed"],
   [/^LICENSE$/, "license or copyright terms may have changed"],
 ];
 const readmeImpactFiles = changedFiles.filter((rel) => readmeImpactRules.some(([pattern]) => pattern.test(rel)));
-if (readmeImpactFiles.length > 0 && !readmeChanged) {
+const readmePairUpdated = changedFileSet.has("README.md") && changedFileSet.has("README.zh.md");
+if (readmeImpactFiles.length > 0 && !(allowLegacyReadme ? readmeChanged : readmePairUpdated)) {
   const detail = `Changed files that may affect README content: ${readmeImpactFiles.slice(0, 12).join(", ")}${readmeImpactFiles.length > 12 ? ", ..." : ""}. Update README.md and README.zh.md, or rerun with --readme-no-impact only after reviewing the diff and documenting why README does not need to change.`;
   if (allowReadmeUnchanged) {
     add("WARNING", "README unchanged after explicit no-impact review", detail);
@@ -256,27 +221,6 @@ if (hasReadme) {
     }
   }
 
-  const structureChecks = [
-    ["README missing audience/value opening", /(?:面向|适合谁|谁适合|适用人群|目标用户|Who Is This For|for .{0,40}(?:users|teams|authors))/i],
-    ["README missing Agent-directed install section", /(?:^##\s*(?:怎么安装|安装|Install|Installation)(?:\s|$))/im],
-    ["README missing quick start or first-use path", /(?:^##\s*(?:快速开始|使用方式|怎么使用|Quick Start|Usage)(?:\s|$)|验证|verification prompt|first successful)/im],
-    ["README missing core capabilities", /(?:^##\s*(?:核心能力|功能|Capabilities|Core Capabilities)(?:\s|$))/im],
-    ["README missing usage examples", /(?:^##\s*(?:使用示例|Usage Examples)(?:\s|$))/im],
-    ["README missing how-it-works section", /(?:^##\s*(?:工作原理|How It Works)(?:\s|$))/im],
-    ["README missing requirements or configuration", /(?:^##\s*(?:运行要求|依赖|配置|Requirements|Configuration)(?:\s|$)|\.env|环境变量)/im],
-    ["README missing platform compatibility", /(?:^##\s*(?:平台兼容性|Platform Compatibility)(?:\s|$)|Codex|Claude Code|OpenClaw)/im],
-    ["README missing repository or file structure", /(?:^##\s*(?:仓库结构|目录结构|文件结构|Repository Structure|File Guide)(?:\s|$))/im],
-    ["README missing license", /(?:^##\s*(?:License|协议|许可证)(?:\s|$)|MIT)/im],
-  ];
-
-  for (const [title, pattern] of structureChecks) {
-    if (pattern.test(readme)) continue;
-    if (allowLegacyReadme) {
-      add("WARNING", title, "Current README structure was preserved by explicit pass-through; it does not fully match the default release template.");
-    } else {
-      add("FAIL", title, "Upgrade README.md to the current default structure before publishing, or use --allow-legacy-readme only for an explicit pass-through release.");
-    }
-  }
 
 }
 
@@ -293,40 +237,15 @@ for (const rel of ["README.md", "README.zh.md"]) {
     if (pattern.test(content)) add("FAIL", `README contains ${label}`, `${rel}: rewrite as product-facing install/result copy.`);
   }
 
-  const install = markdownSection(content, ["安装", "怎么安装", "一键安装", "Install", "One-Command Install", "Installation"]);
-  if (install) {
-    if (!isMarketplace) {
-      const hasRepoUrl = /https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+/i.test(install);
-      const hasInstallIntent = /(?:install\s+this\s+skill\s+for\s+me|帮我安装(?:这个|一下)?\s*Skill|请帮我安装(?:这个|一下)?\s*Skill)/i.test(install);
-      const exposesManualFlow = /(?:\bgit\s+clone\b|\b(?:cp|mv)\s+-|copy|复制|移动).{0,50}(?:folder|directory|目录|文件夹)|(?:\.agents|\.codex|\.claude|\.openclaw)\/skills|手动安装|manual\s+install|重新开启|重新打开|重启|restart|rescan|pip(?:3)?\s+install|npm\s+install/i.test(install);
-      if (!hasRepoUrl || !hasInstallIntent || exposesManualFlow) {
-        add(
-          "FAIL",
-          "README install requires rewrite",
-          `${rel}: rewrite the main install section as one copy-ready request asking the current Agent to install the public GitHub repository URL; remove clone, directory, manual-install, dependency, and restart instructions.`
-        );
-      }
-    }
-  }
+  const document = inspectReadme(content, root, rel, { audience: readmeAudience, legacy: allowLegacyReadme });
+  readmeChecks[rel] = document;
+  for (const finding of document.findings) add(finding.level, finding.title, finding.detail);
+  if (allowLegacyReadme) add("WARNING", "README preserved by explicit pass-through", `${rel}: structural/format departures are warnings; this does not certify the current framework or waive broken links, placeholders, visuals or safety gates.`);
 
-  const core = markdownSection(content, ["核心能力", "功能", "Capabilities", "Core Capabilities"]);
-  if (core) {
-    const table = firstMarkdownTable(core);
-    if (table.length > 0) {
-      const columns = tableColumnCount(table[0]);
-      if (columns !== 2) {
-        add("FAIL", "README core capabilities table is not two-column", `${rel}: use capability + what it helps the user do.`);
-      }
-      if (/(?:处理内容|输出结果|^.*\bInput\b.*$|^.*\bOutput\b.*$|What it handles)/im.test(table[0])) {
-        add("FAIL", "README core capabilities table uses implementation-oriented columns", `${rel}: write user-facing capability + benefit columns.`);
-      }
-    }
-  }
-
-  const visuals = inspectReadmeVisuals(content, root);
+  const visuals = inspectReadmeVisuals(content, root, { previewOnly: !allowLegacyReadme });
   readmeVisuals[rel] = visuals;
   if (visuals.invalidImages.length) add("FAIL", "README preview image is invalid or missing", `${rel}: ${visuals.invalidImages.join(", ")}`);
-  if (visuals.status === "missing") add("FAIL", "README missing preview image or omission reason", `${rel}: embed a real output/UI image, or explain the specific constraint in 'Why No Preview Image' / '暂无配图的原因'. No UI alone is not an exemption; badges do not count.`);
+  if (visuals.status === "missing") add("FAIL", "README missing preview image or omission reason", `${rel}: embed a real output/UI image, or explain the specific constraint within Preview / 效果预览. No UI alone is not an exemption; badges do not count.`);
   if (visuals.status === "omitted_with_reason") add("WARNING", "README preview omitted with reason", `${rel}: ${visuals.omissionReason} Repeat this reason in the final publish summary; review whether an existing output could be shown.`);
   if (visuals.externalImages.length) add("WARNING", "README external preview requires verification", `${rel}: ${visuals.externalImages.join(", ")}. Verify rendering and access before release; this offline check does not fetch URLs.`);
 }
@@ -411,7 +330,7 @@ function shouldScanThirdPartyReview(rel) {
   // templates/ holds {{placeholder}} scaffolding meant to be filled per-skill;
   // flagging its built-in attribution boilerplate is not actionable.
   if (/^templates\//.test(rel) || rel.includes("/templates/")) return false;
-  if (/^references\/(?:security-checklist|publish-checklist|readme-style|pre-publish-flow)\.md$/.test(rel)) return false;
+  if (/^references\/(?:security-checklist|publish-checklist|readme-style|pre-publish-flow|readme-review|readme-checks)\.md$/.test(rel)) return false;
   return true;
 }
 
@@ -424,7 +343,7 @@ function shouldScanIdentityReview(rel) {
   if (/^(?:smoke-test-report|publish-check-report|se-quality-report)\.json$/i.test(path.basename(rel))) return false;
   if (rel === "scripts/publish-check.mjs" || rel.endsWith("/scripts/publish-check.mjs")) return false;
   if (/^templates\//.test(rel) || rel.includes("/templates/")) return false;
-  if (/^references\/(?:security-checklist|publish-checklist|readme-style|pre-publish-flow)\.md$/.test(rel)) return false;
+  if (/^references\/(?:security-checklist|publish-checklist|readme-style|pre-publish-flow|readme-review|readme-checks)\.md$/.test(rel)) return false;
   return true;
 }
 
@@ -683,8 +602,9 @@ const status = fail.length > 0 ? "FAIL" : warning.length > 0 ? "WARNING" : "PASS
 // not a guess. 5 categories x 20 = 100.
 // ---------------------------------------------------------------------------
 const hasResult = (substr) => results.some((r) => r.title.includes(substr));
-const readmeMissingCount = results.filter((r) => r.title.startsWith("README missing")).length;
-const structureFrac = Math.max(0, 10 - readmeMissingCount) / 10;
+const sectionCount = Object.values(readmeChecks).reduce((n, doc) => n + doc.expectedSections.filter(s => doc.sections.includes(s)).length, 0);
+const structureProblems = Object.values(readmeChecks).some(doc => doc.findings.some(r => /section|two-column|subsections|requirements|requirement rows/.test(r.title)));
+const structureFrac = structureProblems ? Math.min(0.9, sectionCount / 20) : sectionCount / 20;
 const readmeModernOk =
   !hasResult("must be English") &&
   !hasResult("Missing README.zh.md") &&
@@ -709,7 +629,7 @@ const scorecardSpec = [
   ["Structure & hygiene", [
     ["SKILL.md within size budget", skillWeightOk, 5],
     ["no orphan files", orphanFiles.length === 0, 5],
-    ["no broken references", !hasResult("Broken referenced file"), 5],
+    ["no broken references", !hasResult("Broken referenced file") && !hasResult("broken local link"), 5],
     [".gitignore present", exists(".gitignore"), 3],
     ["no tracked junk", !hasResult("Tracked generated"), 2],
   ]],
@@ -747,16 +667,21 @@ const scorecard = scorecardSpec.map(([category, items]) => {
 });
 const engineeringScore = Math.round((scoreTotal / scoreMax) * 100);
 const band =
-  engineeringScore >= 90 ? "A · Release-ready" :
+  engineeringScore >= 90 ? "A · Strong engineering" :
   engineeringScore >= 75 ? "B · Good" :
   engineeringScore >= 60 ? "C · Needs work" :
-  "D · Not ready";
+  "D · Weak engineering";
 
+const manualReview = manualReadmeReview();
 const report = {
   readmeVisuals,
+  readmeChecks,
+  manualReview,
   reviewDecisions: { schemaVersion: 1, scope: reviewScope, visibility: visibility ?? "unknown", storage: approvalFile ? "git-common-dir/publisher-review-decisions.json" : null },
   summary: {
     status,
+    readiness: fail.length ? "blocked" : "review_required",
+    readmeAudience,
     failed: fail.length,
     warnings: warning.length,
     engineeringScore,
@@ -783,9 +708,10 @@ if (jsonOnly) {
   }
 
   if (status === "PASS") {
-    console.log("- No blocking issues found.");
+    console.log("- No automated blocking issues found; manual README review remains required.");
   }
 
+  console.log(`\nREADME review: ${report.summary.readiness}; product meaning and visual authenticity are not certified automatically.`);
   console.log(`\nEngineering score: ${engineeringScore}/100  (${band})`);
   for (const cat of scorecard) {
     console.log(`- ${cat.category}: ${cat.earned}/${cat.max}`);

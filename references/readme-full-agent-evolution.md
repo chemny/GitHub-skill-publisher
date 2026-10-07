@@ -2,7 +2,9 @@
 
 > A self-evolving skill that turns user corrections, preferences, task reflections, repeated mistakes, and workflow lessons into durable agent operating knowledge.
 
-[中文](README.md) | English
+English historical example. A Chinese version of this example is not bundled.
+
+For the current README framework, follow [readme-style.md](readme-style.md).
 
 Agent Evolution is a single-skill package for agents that need to improve over time without depending on a pile of manual notes or fragile prompt tweaks.
 

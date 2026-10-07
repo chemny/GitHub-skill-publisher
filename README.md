@@ -1,151 +1,134 @@
-# GitHub-skill-publisher
+# GitHub Skill Publisher
 
-English · [中文](README.zh.md)
+English | [中文](./README.zh.md)
 
-Identity and attribution reviews now reuse explicit repository-scoped approvals. The checker reads local Git-metadata receipts when run with `--visibility=private` or `--visibility=public`; changed findings require a new decision. Receipts never authorize publishing. See [review decisions](references/review-decisions.md). Run `node --test scripts/review-decisions.test.mjs` to verify reuse, invalidation and revocation.
+## Overview
 
-Publish a local agent skill to GitHub **safely and consistently**, and give it a **quantified engineering-quality check** before release. It inspects the real files, runs three layers of checks, lays out a release checklist, and only commits and pushes after you confirm — it never publishes on its own.
+GitHub Skill Publisher helps you turn a local Skill into a GitHub repository you can share: write bilingual READMEs, review publication readiness, address findings, then publish with your authorization and verify the result.
 
-README visual checks now require a real UI/output image or a specific visible omission reason in both languages. Badges, hidden comments and fenced examples do not count; broken local image paths block release. See [visual evidence rules](references/readme-visuals.md). Run `node --test scripts/readme-visuals.test.mjs` to verify the checks.
+![Capability illustration: Skill preparation, pre-publication review, and GitHub publication; includes dependencies, compatibility, safety and rights checks](./assets/publisher-hero-v4.png)
 
-## Why No Preview Image
+It is for authors who have built a Skill and want to share it, with help organizing files, usage instructions and publication concerns. By default, each Skill has its own repository, with the Skill entry point at the repository root.
 
-The current deliverables are terminal text and structured JSON audit reports; this package does not yet contain a captured result image. The report fields and workflow are documented below. A fabricated screenshot would not demonstrate a real check, so a visual preview remains pending rather than being claimed as complete.
+## Features
 
-## Who Is This For?
-
-- Authors who have written an agent skill and want to publish it to GitHub.
-- Maintainers of several skill repositories who want README / license / structure / checks to stay consistent.
-- Anyone who wants to scan for secrets, local paths, and private dependencies before release — and to know whether the skill is actually well built.
-
-## What Problem It Solves
-
-Publishing a skill by hand hits three traps: **inconsistent quality** (thin README, drifting structure, forgotten license, empty repo description), **security leaks** (API keys, local paths, private files, or someone else's copyrighted content in examples), and **no objective gauge** (nobody can say whether it's good before it ships). This skill turns those into a repeatable flow plus automated checks and quantified scores.
-
-## Core Capabilities
-
-| Capability | What It Helps You Do |
+| Capability | What it helps you do |
 |---|---|
-| Pre-publish review | Check README, required files, Git state, sensitive data, dependencies, and compatibility before release. |
-| Three-layer scoring | Produce reproducible scores for package consistency, release hygiene, and software-engineering quality. |
-| Sensitive-data scan | Catch API keys, tokens, accounts, local paths, logs, and caches before they reach a public repository. |
-| Third-party / attribution review | Surface upstream references, copyright/trademark notices, and external license terms for a deliberate decision. |
-| Bilingual README + repo description | Create or repair the English-default README, Chinese companion, and GitHub first-screen description. |
-| Multi-shape support | Recognize single-skill and marketplace repos, then flag phrasing that can break cross-agent installation. |
-| Current Skill metadata validation | Read semantic versions from `metadata.version` and block legacy top-level version fields before release. |
+| Organize a Skill repository | Identify the entry point, supporting files and dependencies; separate material to share from local drafts and caches. |
+| Write bilingual READMEs | Understand the Skill's main purpose, then explain its features, installation, usage and structure so users know where to begin. |
+| Check publication readiness | Locate missing files, broken links, image problems, sensitive information, and identity or rights questions that need review. |
+| Publish to GitHub | With your explicit instruction to publish, prepare repository details, commit and push, then verify the remote result. Requires GitHub account access. |
+| Modify an existing Skill | Make the requested local changes and update affected descriptions; your instruction determines whether to publish. |
+| Review engineering quality | Assess structure, reuse and robustness to prioritize improvements; a score does not prove tested functionality or readable copy. |
 
-## Three-Layer Quality Check (the core value)
+## Installation
 
-Three checks run before release, each answering a different question — all **report-only, never push**:
+### Requirements
 
-| Tool | Question it answers | Output |
-|---|---|---|
-| `smoke-test.mjs` | Is the package self-consistent? | Per-item self-check of required files / references / templates (PASS/FAIL) |
-| `publish-check.mjs` | **Can I publish?** | Release gate `PASS/WARNING/FAIL` + engineering-hygiene score (metadata / docs / structure / security / tooling, 5 groups, 0–100) |
-| `se-quality.mjs` | **As software, is it well built?** | Software-engineering quality score (completeness / openness / reusability / cohesion / coupling / robustness, 0–100) |
+Use an Agent client that can read Skills and run local commands. Prepare the core tools first; GitHub login is needed only when you want to operate a GitHub repository.
 
-The scoring stays **honest**: only deterministic checks (`det`) count toward the number; heuristic signals (`proxy`) are advisory and never scored; inapplicable items are marked `N/A` and excluded; and it states plainly that it **does not test functional correctness** — so the score never gives false confidence.
+| Item | Requirement |
+|---|---|
+| Agent client | For example, Codex, Claude Code or OpenClaw; installation and loading depend on the client. |
+| Node.js | Used by the check scripts; the project's check configuration uses version 22. |
+| Git | Used to inspect file changes, repository state and commit history. |
+| GitHub CLI (optional) | Use `gh` with an appropriately authorized account when operating GitHub repositories. |
 
-Before publishing, `publish-check.mjs` also reviews License and copyright signals, author or maintainer names, private emails, personal usernames, third-party attribution, generator/tool watermarks, and Git commit author/signature metadata. Neutral design-language or company references such as Apple, Anthropic, and Meta are allowed when they do not imply ownership, endorsement, copied assets, or relicensing; README and LICENSE findings involving other third parties are highlighted for user decision. The script never rewrites identity, attribution, or Git history automatically.
+Local checks have run on macOS. Actual installation and use on Windows, Linux and different Agent clients still need verification. If a step cannot be completed in your environment, the Agent should explain why. See [compatibility details](./references/platform-compatibility.md).
 
-## Platform Compatibility
+### Quick Installation
 
-Works with Codex, Claude Code, OpenClaw, and 50+ skills-compatible runtimes. It recognizes both **single-skill repos** and **marketplace collection repos** (`.claude-plugin/marketplace.json`), and flags "only works in runtime X" phrasing that would make other agents refuse to install the skill.
+Send this request to the Agent you are using:
 
-The check scripts are tested on macOS, Linux, and Windows through GitHub Actions. Windows requires Node.js, Git, and GitHub CLI (`gh`) to be available in `PATH` for the corresponding check or publish step.
+> Install this Skill for me: https://github.com/chemny/GitHub-skill-publisher . Check Node.js and Git first and prepare any missing core tools, then install the Skill and verify that the client can find and load it. Leave GitHub login until I need to publish.
 
-For skills published through this workflow, macOS and Windows compatibility must be tested or reviewed before release when scripts, installers, path handling, shell commands, browser automation, filesystem operations, or external CLIs are involved. Linux compatibility is optional unless the project explicitly requires it.
-
-## Install
-
-Send this to your Agent:
-
-```text
-Install this Skill for me:
-https://github.com/chemny/GitHub-skill-publisher
-```
-
-The Agent will choose the installation method for the current client, check dependencies, and verify that the Skill loads.
+When finished, ask the Agent to report the installation location, whether loading works, and any unmet requirements.
 
 ## Quick Start
 
-Tell your Agent:
+After installation, open the folder of the Skill you want to share and check whether it is ready:
 
-```text
-Use GitHub-skill-publisher to check whether the current skill is ready to publish to GitHub.
-```
-
-You get a pre-publish result: the release-gate verdict, both quality scores, README/structure/required-file status, sensitive data, dependencies, compatibility, Git state, and next steps.
+> Check this Skill and tell me what needs fixing before I publish it to GitHub.
 
 ## Usage Examples
 
-Prepare a publishable repo:
+### Prepare a Skill to share
 
-```text
-Use GitHub-skill-publisher to turn the current skill into a publishable GitHub repository.
-```
+> I've been using this Skill locally. Help me organize it into a repository suitable for GitHub.
 
-Just see the scores, do not publish:
+### Make the README easy to understand
 
-```text
-Use GitHub-skill-publisher to run publish-check and se-quality and show me the scores and deductions — do not publish yet.
-```
+> Rewrite this Skill's English and Chinese READMEs so a first-time reader knows what it does and how to install and use it.
 
-Check risks before release:
+### Publish a prepared Skill
 
-```text
-Use GitHub-skill-publisher to check this skill for API keys, accounts, local paths, private files, or hard dependencies on other skills.
-```
+> Publish this Skill to my GitHub. Use the Skill's name for the repository and make it public.
 
-Edit and publish:
+### Modify and publish together
 
-```text
-Use GitHub-skill-publisher to edit and publish this skill to GitHub.
-```
+> Make the README's installation instructions clearer, then sync the changes to GitHub once the checks pass.
+
+A request to modify files leads to local changes. An explicit request to modify and publish continues to publication after checks pass. Sensitive information, failed checks, unverified compatibility or an unclear repository target will pause the workflow for an explanation.
+
+### Check what should stay private
+
+> Check this repository for keys, private paths and material whose rights need review.
+
+### Choose improvements to tackle first
+
+> Review this Skill's engineering quality. What is most worth improving first?
 
 ## How It Works
 
-It relies on three kinds of files:
+The Agent reads your Skill to understand its main purpose and files, then organizes the repository, writes the introduction and runs checks. It operates GitHub only when publication conditions are met and you have explicitly authorized publication.
 
-- `templates/` — README and LICENSE templates.
-- `references/` — publish flow, README style, compatibility and security checklists.
-- `scripts/` — local check scripts that **only report problems, never change anything**:
+This is one standalone Skill, with no bundled sub-Skills. Its main components are:
 
-```bash
-node scripts/smoke-test.mjs      # package self-consistency
-node scripts/publish-check.mjs   # release gate + engineering-hygiene score
-node scripts/se-quality.mjs      # software-engineering quality score
-```
+| Component | Role |
+|---|---|
+| `SKILL.md` | The Agent entry point: work sequence, authorization and publication boundaries. |
+| `references/` | Detailed guidance for writing, installation, visuals, compatibility, safety and publication checks. |
+| `templates/` | Standard, Hero and Practical Tool READMEs, each in English and Chinese, for a regular introduction, a prominent opening presentation or a utility needing more scenarios. Also includes license, ignore-file and internal review-record templates. |
+| `scripts/` | Publication-readiness checks, engineering-quality analysis and checks of Publisher's own files and templates. |
+| `evals/` | Check scenarios and regression cases used when maintaining the rules. |
+| `examples/` | An approved README illustration case with reusable practices and product-specific choices clearly separated. |
 
-These scripts never commit, push, create repos, delete files, or touch GitHub. Any publish action requires your explicit authorization, with one more confirmation before pushing.
+Each check serves a different purpose:
+
+- **Publication-readiness check**: inspects the current project's documentation, files, safety and Git state, producing `publish-check-report.json`. Results indicate a pass, required review or a blocker; the engineering-hygiene score is not permission to publish.
+- **Engineering-quality analysis**: produces `se-quality-report.json`, distinguishing directly verifiable items from advisory estimates. It supplements the publication check rather than replacing it.
+- **Publisher self-check**: validates this Skill's supporting files, templates and check tools, producing `smoke-test-report.json`. It cannot prove that another Skill works; other projects still need their own tests.
+
+The check tools write local reports. The Agent handles commits, pushes and repository creation according to your authorization. After automated checks, a person still needs to review product fit, examples, bilingual facts and the scope of visual evidence.
 
 ## Repository Structure
 
 ```text
 GitHub-skill-publisher/
-├── SKILL.md
-├── README.md / README.zh.md
-├── LICENSE
-├── .gitignore
-├── evals/
-├── references/        # publish flow, README style, security/compat/completeness checklists
-├── scripts/
-│   ├── smoke-test.mjs
-│   ├── publish-check.mjs
-│   └── se-quality.mjs
-└── templates/         # README / LICENSE / .gitignore templates
+├── SKILL.md                 # Agent entry point
+├── references/              # Writing and publication guidance
+├── templates/               # Three bilingual README styles and supporting templates
+├── scripts/                 # Check tools and tests
+├── evals/                   # Check cases
+├── assets/                  # README capability illustration
+├── examples/                # Approved illustration reference case
+├── .github/workflows/       # Automated check configuration
+├── .gitignore               # Local-file ignore rules
+├── README.md                # English introduction
+├── README.zh.md             # Chinese introduction
+└── LICENSE                  # License
 ```
 
-## Requirements
+Installation needs `SKILL.md` and its referenced guidance, templates and tools, not just the entry file. Generated reports are not required installation content: publication and engineering reports go into the project being checked; the Publisher self-check report goes into this Skill's directory.
 
-- An Agent environment that can read a local `SKILL.md` (Codex, Claude Code, OpenClaw, etc.).
-- `git` — to inspect repo state, commit history, and remotes.
-- Node.js — to run the check scripts under `scripts/`.
-- GitHub CLI `gh` — only for creating repos, updating metadata, or pushing.
-- On Windows, make sure `git`, `node`, and `gh` are available in `PATH` before running the scripts or publishing.
+Further reading: [README writing standard](./references/readme-style.md), [copy review method](./references/readme-review.md), [checker coverage](./references/readme-checks.md), [illustration reference case](./examples/readme-visual/publisher-capability.md), and [GitHub workflow](./references/github-workflow.md).
 
 ## License
 
-This repository uses the MIT License.
+This project uses the [MIT License](./LICENSE). Referenced third-party materials, trademarks and upstream content remain subject to their own terms.
 
-Third-party names, platform names, and upstream references remain subject to their original terms.
+## About Me
+
+Author: 美名 Neo, an independent developer focused on practical AI.
+
+If you need help learning or applying AI, feel free to get in touch!

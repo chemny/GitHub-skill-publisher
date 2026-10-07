@@ -57,15 +57,17 @@ If macOS or Windows compatibility is partial, broken, or not checked, tell the u
 - [ ] Node.js scripts use `path.join`, `path.resolve`, `path.relative`, and `path.sep` instead of hardcoded `/` path assumptions for filesystem operations.
 - [ ] External CLIs required on Windows, such as `git`, `node`, `python`, or `gh`, are documented and expected to be available in `PATH`.
 
-## README compatibility sentence
+## README compatibility and conditions
 
-Add or verify a short compatibility sentence in the README when publishing for broad use:
+Follow [readme-style.md](readme-style.md): put reader-relevant support and minimum core runtime conditions in the Installation table before the install action, not in a separate top-level compatibility section. Keep detailed OS entry points and internal test status in the review or deeper documentation; surface a limitation only when it changes the ability to start. Optional integration environments are prepared on demand by the Agent.
 
-```markdown
-Compatible with Codex, Claude Code, and OpenClaw.
-```
+Name supported clients only when evidence justifies the claim. If support is partial or untested and that affects the reader, explain the actual boundary plainly. Do not hide it to keep the sentence short. For example: “Tested with Codex; Claude Code and OpenClaw have not been tested yet.” Static review must not be described as a successful runtime test.
 
-Do not put internal statuses such as `Supported`, `Partial`, `Unsupported`, or `Not tested` in the README unless the user explicitly asks for a detailed compatibility matrix. Use those statuses in the pre-publish report to the user.
+Keep internal status labels and detailed test matrices in the pre-publish report unless explicitly requested in the README. A concise user-facing statement of an untested platform is required when relevant; it is not an internal testing log.
+
+Distinguish core dependencies, optional integrations and platform-specific capabilities. State required versions, account access or external services where they affect installation or use. Successful installation, CI or testing of one component does not establish support for every integration or OS.
+
+For a collection, apply the root-level SKILL.md checks below to the actual component entry points and authorized collection layout; see [repo-structure.md](repo-structure.md).
 
 ## Reporting format
 
