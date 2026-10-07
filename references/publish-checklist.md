@@ -147,7 +147,7 @@ Run this checklist before publishing a skill repository. [readme-style.md](readm
 
 ## Portability
 
-- [ ] Compatibility with Codex, Claude Code, and OpenClaw has been tested where possible.
+- [ ] Compatibility with Codex and Claude Code has been tested where possible.
 - [ ] OS compatibility with macOS and Windows has been tested where possible or explicitly reviewed when direct testing is unavailable.
 - [ ] Missing macOS or Windows validation is reported to the user before publishing and treated as a pause point.
 - [ ] Linux compatibility is treated as optional unless the user, repository, or documented runtime explicitly requires Linux.

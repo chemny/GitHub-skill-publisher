@@ -1,6 +1,6 @@
 ---
 name: GitHub-skill-publisher
-description: Use this skill when the user wants to publish, update, package, document, or synchronize an agent skill to GitHub. It captures a single-skill-per-repository workflow, bilingual README writing style, GitHub repository creation, commit/push updates, publish readiness checks, Codex/Claude Code/OpenClaw compatibility checks, portability checks, and security review for public skill repositories.
+description: Use this skill when the user wants to publish, update, package, document, or synchronize an agent skill to GitHub. It captures a single-skill-per-repository workflow, bilingual README writing style, GitHub repository creation, commit/push updates, publish readiness checks, Codex/Claude Code compatibility checks, portability checks, and security review for public skill repositories.
 metadata:
   version: "0.1.0"
 ---
@@ -135,7 +135,7 @@ Inspect -> Understand product and main tasks -> Prepare facts / resolve gaps -> 
    - Check whether the skill is complete and whether it has hard dependencies on other skills or private local resources.
    - If a dependency is required, document it clearly or bundle/adapter-isolate it before publishing.
 10. Test runtime and operating-system compatibility where possible.
-   - Target agent runtimes are Codex, Claude Code, and OpenClaw.
+   - Target agent runtimes are Codex and Claude Code.
    - Required target operating systems are macOS and Windows when the skill includes scripts, installers, path handling, shell commands, browser automation, filesystem operations, or external CLIs.
    - Linux compatibility is optional. Test or review it when it is easy or relevant, but do not treat missing Linux validation as a release blocker by default.
    - If macOS or Windows cannot be tested or reviewed before publishing, stop before GitHub publication and tell the user what has not been checked.

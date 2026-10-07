@@ -57,7 +57,7 @@ export function inspectReadme(content, root, filename, { audience = 'agent', leg
       if (audience === 'agent') {
         const hasUrl = /https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+/i.test(action);
         const hasIntent = /\binstall\b|安装/i.test(action);
-        const manual = /\bgit\s+clone\b|(?:\.agents|\.codex|\.claude|\.openclaw)\/skills|手动安装|manual\s+install|pip(?:3)?\s+install|npm\s+install/i.test(action);
+        const manual = /\bgit\s+clone\b|\.[a-z][a-z0-9._-]*\/skills|手动安装|manual\s+install|pip(?:3)?\s+install|npm\s+install/i.test(action);
         if (!hasUrl || !hasIntent || manual) add('README install requires rewrite', 'Give one natural Agent installation request with the public repository URL.', actionHeading.line);
       } else if (!markdownView(action).prose.trim() && !markdownView(action).blocks.some(b => b.text.trim())) add('README installation action is empty', 'Use the supported install command or action for this audience.', actionHeading.line);
     }

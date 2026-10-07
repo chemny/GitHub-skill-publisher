@@ -29,7 +29,7 @@ GitHub Skill Publisher 帮你把本地 Skill 整理成可分享的 GitHub 仓库
 
 | 项目 | 要求 |
 |---|---|
-| Agent 客户端 | 例如 Codex、Claude Code 或 OpenClaw；实际安装和加载方式由客户端决定。 |
+| Agent 客户端 | 例如 Codex 或 Claude Code；实际安装和加载方式由客户端决定。 |
 | Node.js | 检查脚本使用 Node.js；项目的检查配置采用 22 版。 |
 | Git | 用于查看文件变更、仓库状态和提交记录。 |
 | GitHub CLI（按需） | 操作 GitHub 仓库时使用 `gh`，并登录有相应权限的账号。 |

@@ -7,8 +7,9 @@ The default target agent runtimes are:
 ```text
 Codex
 Claude Code
-OpenClaw
 ```
+
+Only these two clients are in the default compatibility review. Do not add other clients as checks, unresolved review items or publication gates without an explicit user request.
 
 The required target operating systems are:
 
@@ -61,7 +62,7 @@ If macOS or Windows compatibility is partial, broken, or not checked, tell the u
 
 Follow [readme-style.md](readme-style.md): put reader-relevant support and minimum core runtime conditions in the Installation table before the install action, not in a separate top-level compatibility section. Keep detailed OS entry points and internal test status in the review or deeper documentation; surface a limitation only when it changes the ability to start. Optional integration environments are prepared on demand by the Agent.
 
-Name supported clients only when evidence justifies the claim. If support is partial or untested and that affects the reader, explain the actual boundary plainly. Do not hide it to keep the sentence short. For example: “Tested with Codex; Claude Code and OpenClaw have not been tested yet.” Static review must not be described as a successful runtime test.
+Name supported clients only when evidence justifies the claim. If support is partial or untested and that affects the reader, explain the actual boundary plainly. Do not hide it to keep the sentence short. For example: “Tested with Codex; Claude Code has not been tested yet.” Static review must not be described as a successful runtime test.
 
 Keep internal status labels and detailed test matrices in the pre-publish report unless explicitly requested in the README. A concise user-facing statement of an untested platform is required when relevant; it is not an internal testing log.
 
@@ -77,7 +78,6 @@ Before publishing, report compatibility clearly:
 Platform compatibility:
 - Codex: Supported / Partial / Unsupported / Not tested — [reason]
 - Claude Code: Supported / Partial / Unsupported / Not tested — [reason]
-- OpenClaw: Supported / Partial / Unsupported / Not tested — [reason]
 OS compatibility:
 - macOS: Supported / Partial / Unsupported / Not tested — [reason]
 - Windows: Supported / Partial / Unsupported / Not tested — [reason]
@@ -90,8 +90,8 @@ If macOS or Windows is `Partial`, `Unsupported`, or `Not tested`, stop before pu
 
 Prefer clear support claims:
 
-- "Designed to be portable across Codex, Claude Code, and OpenClaw."
-- "Tested with Codex. Claude Code and OpenClaw are not yet tested."
+- "Designed to be portable across Codex and Claude Code."
+- "Tested with Codex. Claude Code is not yet tested."
 - "Requires GitHub CLI (`gh`) for repository creation; README writing still works without it."
 
 Avoid vague claims:

@@ -29,7 +29,7 @@ Use an Agent client that can read Skills and run local commands. Prepare the cor
 
 | Item | Requirement |
 |---|---|
-| Agent client | For example, Codex, Claude Code or OpenClaw; installation and loading depend on the client. |
+| Agent client | For example, Codex or Claude Code; installation and loading depend on the client. |
 | Node.js | Used by the check scripts; the project's check configuration uses version 22. |
 | Git | Used to inspect file changes, repository state and commit history. |
 | GitHub CLI (optional) | Use `gh` with an appropriately authorized account when operating GitHub repositories. |

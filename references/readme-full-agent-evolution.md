@@ -14,7 +14,7 @@ It gives your agent a practical evolution loop:
 Capture signal -> Triage -> Risk-grade -> Store -> Auto-promote safe learnings -> Review risky changes -> Prune stale rules
 ```
 
-It supports Codex, Claude Code, OpenClaw, and generic agent environments that can load local `SKILL.md`-style instructions.
+It supports Codex, Claude Code, and generic agent environments that can load local `SKILL.md`-style instructions.
 
 ---
 
@@ -201,7 +201,6 @@ The Agent will choose the installation method for the current client, check depe
 | Platform | Core Skill | Memory Templates | 6-Hour Background Scan | Low-Risk Auto-Promotion |
 |---|---:|---:|---:|---:|
 | Codex | yes | yes | yes, via Codex automation | yes |
-| OpenClaw | yes | yes | if host scheduler is available | yes, when scheduled |
 | Claude Code | yes | yes | if hooks or cron are available | yes, when scheduled |
 | Generic CLI | yes | yes | only with `AGENT_EVOLUTION_SCAN_COMMAND` | command-dependent |
 
@@ -310,13 +309,11 @@ agent-evolution/
 │   └── generic-scan-prompt.md
 ├── adapters/
 │   ├── codex.md
-│   ├── claude-code.md
-│   └── openclaw.md
+│   └── claude-code.md
 ├── scripts/
 │   ├── detect-platform.sh
 │   ├── install-codex.sh
 │   ├── install-claude-code.sh
-│   ├── install-openclaw.sh
 │   ├── install-generic-cron.sh
 │   ├── verify-install.sh
 │   ├── log-event.mjs

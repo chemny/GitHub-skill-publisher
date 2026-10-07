@@ -41,7 +41,7 @@ English | [中文](./README.zh.md)
 
 | Item | Requirement |
 |---|---|
-| Agent client | {{Verified supported clients, for example Codex, Claude Code or OpenClaw}} |
+| Agent client | {{Verified supported clients, for example Codex or Claude Code}} |
 | Core environment | {{Minimum core runtime and version; omit if unnecessary. The Agent helps prepare missing requirements}} |
 | {{Optional capability}} (when needed) | {{Corresponding tool, service or account; omit if irrelevant}} |
 

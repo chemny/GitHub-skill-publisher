@@ -71,7 +71,7 @@ Map Overview, Features, Quick Start and Usage Examples to that brief before writ
 
 Use this product's actual priority, not a universal ranking copied from a case. Layout is a core task for a layout product; video tools may be core requirements for a video product. Do not force content-writing examples or Python requirements onto unrelated Skills, apps or CLI/library projects.
 
-Terminology: use Agent client / Agent 客户端 for Codex, Claude Code, OpenClaw or another verified host application; use Agent for the actor receiving requests. Do not substitute generic AI assistant / AI 助手 for the client name in this framework. Keep prompts conversational without changing the technical role.
+Terminology: use Agent client / Agent 客户端 for Codex, Claude Code or another verified host application; use Agent for the actor receiving requests. Do not substitute generic AI assistant / AI 助手 for the client name in this framework. Keep prompts conversational without changing the technical role.
 
 ## Section requirements
 

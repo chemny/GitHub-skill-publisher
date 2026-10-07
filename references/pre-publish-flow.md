@@ -44,7 +44,7 @@ flowchart TD
     M["Skill Completeness Check<br/>SKILL.md, README, LICENSE, references, templates"] --> N{"Can publish as<br/>an independent skill?"}
     N -- "No" --> O["Fix missing files, broken references, or hard dependencies"]
     O --> I
-    N -- "Yes" --> P["Compatibility Check<br/>Codex, Claude Code, OpenClaw"]
+    N -- "Yes" --> P["Compatibility Check<br/>Codex, Claude Code"]
     P --> Q{"Compatibility risk?"}
     Q -- "Yes" --> R["Report risk and options"]
     Q -- "No" --> S["Final Pre-publish Summary"]
@@ -88,7 +88,7 @@ Include:
 - Identity/attribution metadata review: author names, maintainer names, private emails, personal usernames, social handles, generator/tool watermarks, and Git commit author/signature metadata that require a user decision.
 - Completeness result: `SKILL.md`, README files, `LICENSE`, references, templates, scripts, and assets.
 - Dependency result: other skills, private directories, unpublished scripts, and platform-specific assumptions.
-- Runtime compatibility result for Codex, Claude Code, and OpenClaw.
+- Runtime compatibility result for Codex and Claude Code.
 - OS compatibility result for required targets macOS and Windows, including any Windows-specific requirements or limitations. Linux is optional unless the user, repository, or documented runtime explicitly requires it.
 - GitHub metadata: repository description and license.
 - Warnings, failures, and remaining risks.
